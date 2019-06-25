@@ -7,6 +7,7 @@ module.exports = {
   },
   "extends": [
     "eslint:recommended",
+    "plugin:react/recommended"
   ],
   "parser": "babel-eslint",
   "parserOptions": {
@@ -16,7 +17,15 @@ module.exports = {
     "ecmaVersion": 2018,
     "sourceType": "module"
   },
+  "plugins": [
+    "react"
+  ],
   "rules": {
+    "indent": [
+      "error",
+      2
+    ],
+    "react/display-name": 0,
     "linebreak-style": [
       "error",
       "unix"
@@ -28,4 +37,4 @@ module.exports = {
     "no-console": "off",
     "no-inline-comments": "off",
   }
-};
+}

@@ -1,6 +1,6 @@
 const path = require("path")
 
-const coreConfig = {
+const clientConfig = {
   context: path.resolve(__dirname, "src"),
   entry: "./index",
   devtool: "source-map",
@@ -10,7 +10,24 @@ const coreConfig = {
   },
   module: {
     rules: [
-      { test: /\.js$/, exclude: /node_modules/, loader: "babel-loader" }
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: "babel-loader"
+      },
+      {
+        test: /\.(png|jpg|jpeg|gif)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[name]_[hash].[ext]',
+              outputPath: '/images',
+              publicPath: '/images'
+            },
+          },
+        ],
+      }
     ]
   }
 }
@@ -34,4 +51,4 @@ const testServerConfig = {
   }
 }
 
-module.exports = [coreConfig, testServerConfig]
+module.exports = [clientConfig, testServerConfig]

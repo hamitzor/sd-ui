@@ -1,15 +1,19 @@
 import express from "express"
-
 import path from "path"
+import config from "../app.config"
 
 const app = express()
 
-const publicDirectory = express.static(path.resolve(__dirname))
+const publicJsDir = path.resolve(__dirname)
+const publicDir = path.resolve(__dirname, "..", "public")
 
-app.use(publicDirectory)
+app.use("/public/js", express.static(publicJsDir))
+app.use("/public", express.static(publicDir))
 
-app.get("/", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "../index.html"))
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "../public/index.html"))
 })
 
-app.listen(3005, () => { console.log("Serving at http://localhost:3005") })
+const { domain, port } = config
+
+app.listen(port, domain, () => { console.log(`Serving at http://${domain}:${port}`) })
