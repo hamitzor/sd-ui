@@ -1,3 +1,3 @@
-import AdminHeader from './AdminHeader'
+const AdminHeader = require('./AdminHeader')
 
-export default AdminHeader
+module.exports = AdminHeader

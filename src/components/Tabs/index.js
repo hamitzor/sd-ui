@@ -1,3 +1,3 @@
-import Tabs from './Tabs'
+const Tabs = require('./Tabs')
 
-export default Tabs
+module.exports = Tabs

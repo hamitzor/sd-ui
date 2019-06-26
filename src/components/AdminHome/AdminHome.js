@@ -1,23 +1,23 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import withStyles from 'react-jss'
-import classNames from 'classnames'
-import Flex from '../Flex'
-import AdminHeader from '../AdminHeader'
-import AdminFooter from '../AdminFooter'
-import Panel from '../Panel'
-import { withAdminContext } from '../../context/AdminContext'
-import { Redirect } from 'react-router-dom'
-import Image from '../Image'
-import Text from '../Text'
-import Expansion from '../Expansion'
-import Button from '../Button'
-import Icon from '../Icon'
-import Test from '../Test'
-import { MdAdd, MdList, MdCheck, MdBlock, MdGroup, MdPersonAdd, MdInsertDriveFile, MdMenu, MdClose, MdAccountCircle } from 'react-icons/md'
-import { Link } from 'react-router-dom'
-import { CSSTransition } from 'react-transition-group'
-import IconButton from '../IconButton'
+const React = require('react')
+const PropTypes = require('prop-types')
+const withStyles = require('react-jss').default
+const classNames = require('classnames')
+const Flex = require('../Flex')
+const AdminHeader = require('../AdminHeader')
+const AdminFooter = require('../AdminFooter')
+const Panel = require('../Panel')
+const { withAdminContext } = require('../../context/AdminContext')
+const { Redirect } = require('react-router-dom')
+const Image = require('../Image')
+const Text = require('../Text')
+const Expansion = require('../Expansion')
+const Button = require('../Button')
+const Icon = require('../Icon')
+const Test = require('../Test')
+const { MdAdd, MdList, MdCheck, MdBlock, MdGroup, MdPersonAdd, MdInsertDriveFile, MdMenu, MdClose, MdAccountCircle } = require('react-icons/md')
+const { Link } = require('react-router-dom')
+const { CSSTransition } = require('react-transition-group')
+const IconButton = require('../IconButton')
 
 
 const styles = theme => {
@@ -188,7 +188,7 @@ class AdminHome extends React.Component {
             <Text size='big'>Hamit Zor</Text>
             <Text size='small'>Super Admin</Text>
           </Flex>
-          <Link to={`${match.path}/dashboard`}><Button radius={0} fullWidth justifyContent='left' color="default" >Dashboard</Button></Link>
+          <Link to={`${match.path}/dashboard`}><Button radius={0} fullWidth justifyContent='left' color='default' >Dashboard</Button></Link>
           <Expansion animate={animate} open={true} label='Blogs'>
             <div className={classes['inner-navbar']}>
               <InnerNav to='blos/new' ><Icon><MdAdd /></Icon>New Blog</InnerNav>
@@ -229,9 +229,9 @@ class AdminHome extends React.Component {
       })
 
       return (
-        <Flex wrap="nowrap" fullWidth={false} className={displayClasses} direction='column' parent>
+        <Flex wrap='nowrap' fullWidth={false} className={displayClasses} direction='column' parent>
           <AdminHeader>
-            <Flex className={classes['header-content']} justify="between" parent>
+            <Flex className={classes['header-content']} justify='between' parent>
               <IconButton
                 size={2}
                 color='white'
@@ -276,7 +276,7 @@ class AdminHome extends React.Component {
     }
 
     return !adminContext.auth ? <Redirect to={`${match.path}/login`} /> : (
-      <Flex className={rootClasses} parent wrap="nowrap" >
+      <Flex className={rootClasses} parent wrap='nowrap' >
         {animate ?
           (<CSSTransition
             in={openLeftNavbar}
@@ -315,4 +315,4 @@ const styledAdminHome = withAdminContext(withStyles(styles)(AdminHome))
 
 styledAdminHome.displayName = 'AdminHome'
 
-export default styledAdminHome
+module.exports = styledAdminHome

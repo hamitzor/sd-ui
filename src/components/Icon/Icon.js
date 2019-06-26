@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types'
+const PropTypes = require('prop-types')
 
 const Icon = props => {
   return props.children
@@ -10,4 +10,4 @@ Icon.propTypes = {
 
 Icon.displayName = 'Icon'
 
-export default Icon
+module.exports = Icon

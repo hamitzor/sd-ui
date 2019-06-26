@@ -1,3 +1,3 @@
-import PopupHeader from './PopupHeader'
+const PopupHeader = require('./PopupHeader')
 
-export default PopupHeader
+module.exports = PopupHeader

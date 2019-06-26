@@ -1,3 +1,3 @@
-import Flex from './Flex'
+const Flex = require('./Flex')
 
-export default Flex
+module.exports = Flex

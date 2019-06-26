@@ -1,3 +1,3 @@
-import PopupBody from './PopupBody'
+const PopupBody = require('./PopupBody')
 
-export default PopupBody
+module.exports = PopupBody

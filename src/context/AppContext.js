@@ -1,4 +1,5 @@
-import React, { createContext } from 'react'
+const React = require('react')
+const { createContext } = require('react')
 const { Provider: AppProvider, Consumer: AppConsumer } = createContext()
 
 
@@ -14,4 +15,4 @@ const withAppContext = (Component) => (
 withAppContext.displayName = 'withAppContext'
 
 
-export { AppProvider, AppConsumer, withAppContext }
+module.exports = { AppProvider, AppConsumer, withAppContext }

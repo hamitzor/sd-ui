@@ -1,10 +1,10 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { Route, Switch } from 'react-router-dom'
-import AdminLogin from '../AdminLogin'
-import AdminHome from '../AdminHome'
-import { withAppContext } from '../../context/AppContext'
-import { AdminProvider } from '../../context/AdminContext'
+const React = require('react')
+const PropTypes = require('prop-types')
+const { Route, Switch } = require('react-router-dom')
+const AdminLogin = require('../AdminLogin')
+const AdminHome = require('../AdminHome')
+const { withAppContext } = require('../../context/AppContext')
+const { AdminProvider } = require('../../context/AdminContext')
 
 
 class Admin extends React.Component {
@@ -86,4 +86,4 @@ Admin.propTypes = {
   appContext: PropTypes.object.isRequired,
 }
 
-export default withAppContext(Admin)
+module.exports = withAppContext(Admin)

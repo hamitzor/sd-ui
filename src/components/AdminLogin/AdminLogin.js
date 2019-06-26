@@ -1,26 +1,26 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import withStyles from 'react-jss'
-import classNames from 'classnames'
-import Flex from '../Flex'
-import AdminHeader from '../AdminHeader'
-import AdminFooter from '../AdminFooter'
-import Panel from '../Panel'
-import InputBase from '../InputBase'
-import InputContainer from '../InputContainer'
-import InputExtension from '../InputExtension'
-import Button from '../Button'
-import IconButton from '../IconButton'
-import Icon from '../Icon'
-import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa'
-import { IoMdKey, IoIosPerson, IoMdClose } from 'react-icons/io'
-import Control from '../Control'
-import Text from '../Text'
-import Alert from '../Alert'
-import { withAdminContext } from '../../context/AdminContext'
-import { Redirect } from 'react-router-dom'
-import Anchor from '../Anchor'
-import { Link } from 'react-router-dom'
+const React = require('react')
+const PropTypes = require('prop-types')
+const withStyles = require('react-jss').default
+const classNames = require('classnames')
+const Flex = require('../Flex')
+const AdminHeader = require('../AdminHeader')
+const AdminFooter = require('../AdminFooter')
+const Panel = require('../Panel')
+const InputBase = require('../InputBase')
+const InputContainer = require('../InputContainer')
+const InputExtension = require('../InputExtension')
+const Button = require('../Button')
+const IconButton = require('../IconButton')
+const Icon = require('../Icon')
+const { FaRegEye, FaRegEyeSlash } = require('react-icons/fa')
+const { IoMdKey, IoIosPerson, IoMdClose } = require('react-icons/io')
+const Control = require('../Control')
+const Text = require('../Text')
+const Alert = require('../Alert')
+const { withAdminContext } = require('../../context/AdminContext')
+const { Redirect } = require('react-router-dom')
+const Anchor = require('../Anchor')
+const { Link } = require('react-router-dom')
 
 const statusErrorMap = {
   404: 'Username or password is wrong',
@@ -273,7 +273,7 @@ class AdminLogin extends React.Component {
         <AdminHeader>
           <div className={classes['header-content']}>
             <Anchor className={classes.logo}>
-              <Link to="/admin"><Text tag="h4" color="white">Hamit Zor - Admin</Text></Link>
+              <Link to='/admin'><Text tag='h4' color='white'>Hamit Zor - Admin</Text></Link>
             </Anchor>
           </div>
         </AdminHeader>
@@ -393,4 +393,4 @@ const styledAdminLogin = withAdminContext(withStyles(styles)(AdminLogin))
 
 styledAdminLogin.displayName = 'AdminLogin'
 
-export default styledAdminLogin
+module.exports = styledAdminLogin

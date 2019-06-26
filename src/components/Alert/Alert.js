@@ -1,8 +1,8 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import withStyles from 'react-jss'
-import classNames from 'classnames'
-import { CSSTransition } from 'react-transition-group'
+const React = require('react')
+const PropTypes = require('prop-types')
+const withStyles = require('react-jss').default
+const classNames = require('classnames')
+const { CSSTransition } = require('react-transition-group')
 
 const justify = ['left', 'right', 'unset']
 const align = ['top', 'bottom', 'unset']
@@ -176,4 +176,4 @@ const styledAlert = withStyles(styles)(Alert)
 
 styledAlert.displayName = 'Alert'
 
-export default styledAlert
+module.exports = styledAlert

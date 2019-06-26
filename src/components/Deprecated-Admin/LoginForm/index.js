@@ -1,3 +1,3 @@
-import LoginForm from './LoginForm'
+const LoginForm = require('./LoginForm')
 
 export default LoginForm

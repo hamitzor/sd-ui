@@ -1,12 +1,12 @@
-import "core-js/stable"
-import "regenerator-runtime/runtime"
+require('core-js/stable')
+require('regenerator-runtime/runtime')
 
-import React from "react"
-import { render } from "react-dom"
-import App from "./components/App"
-import { ThemeProvider } from "react-jss"
-import theme from "./theme/"
-import { BrowserRouter as Router } from "react-router-dom"
+const React = require('react')
+const { render } = require('react-dom')
+const App = require('./components/App')
+const { ThemeProvider } = require('react-jss')
+const theme = require('./theme/')
+const { BrowserRouter: Router } = require('react-router-dom')
 
 
 
@@ -16,5 +16,5 @@ render(
       <App />
     </Router>
   </ThemeProvider>,
-  document.getElementById("root")
+  document.getElementById('root')
 )

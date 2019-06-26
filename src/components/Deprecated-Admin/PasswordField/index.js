@@ -1,4 +1,4 @@
-import PasswordField from './PasswordField'
+const PasswordField = require('./PasswordField')
 
 
 export default PasswordField

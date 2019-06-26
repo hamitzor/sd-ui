@@ -1,3 +1,3 @@
-import StyleFixer from './StyleFixer'
+const StyleFixer = require('./StyleFixer')
 
-export default StyleFixer
+module.exports = StyleFixer

@@ -1,3 +1,3 @@
-import AdminHome from './AdminHome'
+const AdminHome = require('./AdminHome')
 
-export default AdminHome
+module.exports = AdminHome

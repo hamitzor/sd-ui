@@ -1,8 +1,8 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import withStyles from 'react-jss'
-import childrenTypeChecker from '../../../custom_modules/children-type-checker'
-import classNames from 'classnames'
+const React = require('react')
+const PropTypes = require('prop-types')
+const withStyles = require('react-jss').default
+const childrenTypeChecker = require('../../../custom_modules/children-type-checker')
+const classNames = require('classnames')
 
 const color = ['primary', 'secondary', 'error']
 
@@ -107,4 +107,4 @@ const styledPopupHeader = withStyles(styles)(PopupHeader)
 
 styledPopupHeader.displayName = 'PopupHeader'
 
-export default styledPopupHeader
+module.exports = styledPopupHeader

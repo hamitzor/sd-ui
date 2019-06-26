@@ -1,3 +1,3 @@
-import InputContainer from './InputContainer'
+const InputContainer = require('./InputContainer')
 
-export default InputContainer
+module.exports = InputContainer

@@ -1,27 +1,27 @@
 /*
 
 
-import React, { Fragment } from 'react'
-import PropTypes from 'prop-types'
-import classNames from 'classnames'
-import { withStyles } from '@material-ui/core/styles'
-import Grid from '@material-ui/core/Grid'
-import Typography from '@material-ui/core/Typography'
-import withAdminContext from '../../../context/adminContext'
-import { Redirect } from 'react-router-dom'
-import LoginHeader from '../LoginHeader'
-import LoginFooter from '../LoginFooter'
-import LoginForm from '../LoginForm'
+const React, { Fragment } = require('react')
+const PropTypes = require('prop-types')
+const classNames = require('classnames')
+const { withStyles } = require('@material-ui/core/styles')
+const Grid = require('@material-ui/core/Grid')
+const Typography = require('@material-ui/core/Typography')
+const withAdminContext = require('../../../context/adminContext')
+const { Redirect } = require('react-router-dom')
+const LoginHeader = require('../LoginHeader')
+const LoginFooter = require('../LoginFooter')
+const LoginForm = require('../LoginForm')
 
 //@TODO this regex will be used while registering new admins from the panel
 //const passwordRegex = /^(?=^[a-zA-Z0-9\.\?\_\-\*]*$)(?=.*[\.\?\_\-\*])(?=^.{8,20}$).*$/
 
 
 const statusErrorMap = {
-  404: "Username or password is wrong",
-  400: "Username or password is not set",
-  403: "This actino is not allowed",
-  500: "Internal server error"
+  404: 'Username or password is wrong',
+  400: 'Username or password is not set',
+  403: 'This actino is not allowed',
+  500: 'Internal server error'
 }
 
 const styles = theme => {
@@ -161,12 +161,12 @@ class Login extends React.Component {
       onAlertClose: this.handleAlertClose
     }
 
-    return auth ? <Redirect to="/admin" /> : (
+    return auth ? <Redirect to='/admin' /> : (
       <Fragment>
         <LoginHeader />
-        <Grid container justify="center" alignItems="center" className={classes.content}>
+        <Grid container justify='center' alignItems='center' className={classes.content}>
           <Grid item xs={12} sm={6} md={4} lg={3}>
-            <Typography variant="h4" gutterBottom>Admin Login</Typography>
+            <Typography variant='h4' gutterBottom>Admin Login</Typography>
             <LoginForm {...loginFormProps} />
           </Grid>
         </Grid>

@@ -1,11 +1,11 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import withStyles from 'react-jss'
-import classNames from 'classnames'
-import Icon from '../Icon'
-import { MdExpandMore, MdExpandLess } from "react-icons/md"
-import Button from '../Button'
-import { CSSTransition } from 'react-transition-group'
+const React = require('react')
+const PropTypes = require('prop-types')
+const withStyles = require('react-jss').default
+const classNames = require('classnames')
+const Icon = require('../Icon')
+const { MdExpandMore, MdExpandLess } = require('react-icons/md')
+const Button = require('../Button')
+const { CSSTransition } = require('react-transition-group')
 
 
 const color = ['default', 'primary', 'secondary']
@@ -244,4 +244,4 @@ const styledExpansion = withStyles(styles)(Expansion)
 
 styledExpansion.displayName = 'Expansion'
 
-export default styledExpansion
+module.exports = styledExpansion

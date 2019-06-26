@@ -1,3 +1,3 @@
-import Expansion from './Expansion'
+const Expansion = require('./Expansion')
 
-export default Expansion
+module.exports = Expansion

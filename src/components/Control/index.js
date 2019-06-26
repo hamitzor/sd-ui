@@ -1,3 +1,3 @@
-import Control from './Control'
+const Control = require('./Control')
 
-export default Control
+module.exports = Control

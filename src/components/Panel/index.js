@@ -1,3 +1,3 @@
-import Panel from './Panel'
+const Panel = require('./Panel')
 
-export default Panel
+module.exports = Panel

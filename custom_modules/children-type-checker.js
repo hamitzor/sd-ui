@@ -1,7 +1,7 @@
-import React from 'react'
+const React = require('react')
 
 
-export default (rule) => (props, propName, componentName) => {
+module.exports = (rule) => (props, propName, componentName) => {
   const children = props[propName]
   let displayName = ''
 

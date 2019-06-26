@@ -1,31 +1,31 @@
-import React from 'react'
-import withStyles from 'react-jss'
-import InputBase from '../InputBase'
-import InputContainer from '../InputContainer'
-import InputExtension from '../InputExtension'
-import Button from '../Button'
-import IconButton from '../IconButton'
-import Icon from '../Icon'
-import { FaRegEye, FaRegEyeSlash, FaTimes } from 'react-icons/fa'
-import Control from '../Control'
-import Panel from '../Panel'
-import Flex from '../Flex'
-import ListItem from '../ListItem'
-import List from '../List'
-import Select from '../Select'
-import Popup from '../Popup'
-import PopupBody from '../PopupBody'
-import PopupHeader from '../PopupHeader'
-import PopupFooter from '../PopupFooter'
-import PopupHeaderTitle from '../PopupHeaderTitle'
-import PopupHeaderExtension from '../PopupHeaderExtension'
-import Alert from '../Alert'
-import Expansion from '../Expansion'
-import Badge from '../Badge'
-import Tab from '../Tab'
-import Tabs from '../Tabs'
-import Anchor from '../Anchor'
-import Text from '../Text'
+const React = require('react')
+const withStyles = require('react-jss').default
+const InputBase = require('../InputBase')
+const InputContainer = require('../InputContainer')
+const InputExtension = require('../InputExtension')
+const Button = require('../Button')
+const IconButton = require('../IconButton')
+const Icon = require('../Icon')
+const { FaRegEye, FaRegEyeSlash, FaTimes } = require('react-icons/fa')
+const Control = require('../Control')
+const Panel = require('../Panel')
+const Flex = require('../Flex')
+const ListItem = require('../ListItem')
+const List = require('../List')
+const Select = require('../Select')
+const Popup = require('../Popup')
+const PopupBody = require('../PopupBody')
+const PopupHeader = require('../PopupHeader')
+const PopupFooter = require('../PopupFooter')
+const PopupHeaderTitle = require('../PopupHeaderTitle')
+const PopupHeaderExtension = require('../PopupHeaderExtension')
+const Alert = require('../Alert')
+const Expansion = require('../Expansion')
+const Badge = require('../Badge')
+const Tab = require('../Tab')
+const Tabs = require('../Tabs')
+const Anchor = require('../Anchor')
+const Text = require('../Text')
 
 const styles = theme => {
   return {
@@ -159,7 +159,7 @@ class Test extends React.Component {
     </Panel>
     const animate = theme.width() !== 'xs'
     return (
-      <Flex justify="center" parent>
+      <Flex justify='center' parent>
         <Flex xs={12} lg={8}>
           <Panel className={classes.input}>
             <Tabs active={this.state.activeTab} onChange={(e, id) => { this.setState({ activeTab: id }) }}>
@@ -196,14 +196,14 @@ class Test extends React.Component {
           <Panel className={classes.input}>
             <Expansion
               buttonProps={{
-                badge: <Badge shine value="23" maxValue={500} color="primary" />
-              }} style={{ maxWidth: 330 }} label="Test Expansion">
+                badge: <Badge shine value='23' maxValue={500} color='primary' />
+              }} style={{ maxWidth: 330 }} label='Test Expansion'>
               {expansionChildren}
             </Expansion>
           </Panel>
 
           <Panel className={classes.input}>
-            <Expansion label="Test Expansion">
+            <Expansion label='Test Expansion'>
               <List
                 hoverable
                 onSelect={(e, i) => {
@@ -216,24 +216,24 @@ class Test extends React.Component {
             </Expansion>
           </Panel>
           <Panel className={classes.input}>
-            <Button badge={<Badge shine value="500" maxValue={99} />} color="primary" type="filled" onClick={this.handleAlertOpen}>Open Alert</Button>
+            <Button badge={<Badge shine value='500' maxValue={99} />} color='primary' type='filled' onClick={this.handleAlertOpen}>Open Alert</Button>
           </Panel>
           <Panel className={classes.input}>
-            <Button badge={<Badge value="23" maxValue={500} color="primary" />} color="error" type="filled" onClick={this.handlePopupOpen}>Open Popup</Button>
+            <Button badge={<Badge value='23' maxValue={500} color='primary' />} color='error' type='filled' onClick={this.handlePopupOpen}>Open Popup</Button>
           </Panel>
           <Panel className={classes.input}>
-            <Anchor color="primary" href="https://www.google.com">Primary Link</Anchor><br />
-            <Anchor color="secondary" href="https://www.google.com">Secondary Link</Anchor><br />
-            <Anchor color="default" href="https://www.google.com">Default Link</Anchor><br />
-            <Anchor color="error" href="https://www.google.com">Error Link</Anchor>
+            <Anchor color='primary' href='https://www.google.com'>Primary Link</Anchor><br />
+            <Anchor color='secondary' href='https://www.google.com'>Secondary Link</Anchor><br />
+            <Anchor color='default' href='https://www.google.com'>Default Link</Anchor><br />
+            <Anchor color='error' href='https://www.google.com'>Error Link</Anchor>
           </Panel>
-          <Alert fixed align="top" justify="right" color="error" open={this.state.alertOpen} onClose={this.handleAlertClose} fullWidth={theme.width() === 'xs'} animate={animate}>
-            <Flex wrap="nowrap" parent justify="between">
+          <Alert fixed align='top' justify='right' color='error' open={this.state.alertOpen} onClose={this.handleAlertClose} fullWidth={theme.width() === 'xs'} animate={animate}>
+            <Flex wrap='nowrap' parent justify='between'>
               <div style={{ color: theme.color.white }}>Login attempt was unsuccessful and this alert is longer than it should be</div>
               <IconButton
                 style={{ marginLeft: 10 }}
                 size={1}
-                color="white"
+                color='white'
                 onClick={this.handleAlertClose}>
                 <Icon>
                   <FaTimes />
@@ -242,7 +242,7 @@ class Test extends React.Component {
             </Flex>
           </Alert>
           <Popup open={this.state.popupOpen} onClose={this.handlePopupClose} fullScreen={theme.width() === 'xs'} animate={animate}>
-            <PopupHeader color="secondary" style={{ justifyContent: 'space-between' }}>
+            <PopupHeader color='secondary' style={{ justifyContent: 'space-between' }}>
               <PopupHeaderTitle>
                 Are you sure ?
               </PopupHeaderTitle>
@@ -250,7 +250,7 @@ class Test extends React.Component {
                 <PopupHeaderExtension>
                   <IconButton
                     size={1}
-                    color="white"
+                    color='white'
                     onClick={this.handlePopupClose}>
                     <Icon>
                       <FaTimes />
@@ -266,10 +266,10 @@ class Test extends React.Component {
             <PopupFooter>
               <Flex
                 parent
-                justify="end"
+                justify='end'
                 style={{ paddingBottom: 5 }}>
-                <Button onClick={this.handlePopupClose} style={{ marginRight: 10 }} color="default">Nope</Button>
-                <Button color="secondary" onClick={this.handlePopupClose}>Yeap</Button>
+                <Button onClick={this.handlePopupClose} style={{ marginRight: 10 }} color='default'>Nope</Button>
+                <Button color='secondary' onClick={this.handlePopupClose}>Yeap</Button>
               </Flex>
             </PopupFooter>
           </Popup>
@@ -282,13 +282,13 @@ class Test extends React.Component {
               onChange={(e) => { this.setState({ selectValue: e.target.value }) }}
               value={this.state.selectValue}
               animate={animate} >
-              <option value="">Choose a color</option>
-              <option value="red">I choose red</option>
-              <option value="blue">I choose blue</option>
-              <option value="pink">I choose pink, I am lover</option>
-              <option value="gree">I choose green</option>
-              <option value="black">I listen metal</option>
-              <option value="white">I am god</option>
+              <option value=''>Choose a color</option>
+              <option value='red'>I choose red</option>
+              <option value='blue'>I choose blue</option>
+              <option value='pink'>I choose pink, I am lover</option>
+              <option value='gree'>I choose green</option>
+              <option value='black'>I listen metal</option>
+              <option value='white'>I am god</option>
             </Select>
           </Panel>
           <Panel className={classes.input}>
@@ -300,13 +300,13 @@ class Test extends React.Component {
               onChange={(e) => { this.setState({ selectValue: e.target.value }) }}
               value={this.state.selectValue}
               animate={animate} >
-              <option value="">Choose a color</option>
-              <option value="red">I choose red</option>
-              <option value="blue">I choose blue</option>
-              <option value="pink">I choose pink, I am lover</option>
-              <option value="gree">I choose green</option>
-              <option value="black">I listen metal</option>
-              <option value="white">I am God</option>
+              <option value=''>Choose a color</option>
+              <option value='red'>I choose red</option>
+              <option value='blue'>I choose blue</option>
+              <option value='pink'>I choose pink, I am lover</option>
+              <option value='gree'>I choose green</option>
+              <option value='black'>I listen metal</option>
+              <option value='white'>I am God</option>
             </Select>
           </Panel>
           <Panel className={classes.input}>
@@ -457,7 +457,7 @@ class Test extends React.Component {
             radius={1}
             padding={1}
             className={classes.input}>
-            <Text tag="p">
+            <Text tag='p'>
               They say that most web apps are just HTML forms. Well, forms need validation and thankfully, HTML5 comes with many great in-built form validation capabilities for things like email, numbers, max, min, etc. You can even write your own validation rules with patterns. In this article, I will talk about how you can leverage HTML5 validation while overriding the boring defaults, so you can display validation errors as fancy as you like. I will be working with Vuejs but you can always follow along even if you don’t use Vue. Let’s start with a modified version of the Checkout form from bootstrap examples so we don’t have to worry too much about styling. You can clone the starter here. The setup should look something like this: HTML Validation with Vuejs Starter The default HTML5 validation doesn’t show all the form errors at once. The irony though is that the browser actually knows all the invalid fields once a user submits, so now all we have to do is check for them and then display however we like. Let’s now add an id to our form and a listener that captures the submit event using Vuejs.
             </Text>
           </Panel>
@@ -508,4 +508,4 @@ class Test extends React.Component {
   }
 }
 
-export default withStyles(styles)(Test)
+module.exports = withStyles(styles)(Test)

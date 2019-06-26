@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "build": "webpack --mode production",
-    "start": "nodemon dist/bundle.server.js",
+    "start": "nodemon -r source-map-support/register dist/bundle.server.js --app-config /home/hamit/projects/js/sd-web-api/sd-config.json",
     "watch": "webpack --watch --mode development"
   },
   "dependencies": {

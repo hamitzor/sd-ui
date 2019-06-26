@@ -1,8 +1,8 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import withStyles from 'react-jss'
-import classNames from 'classnames'
-import childrenTypeChecker from '../../../custom_modules/children-type-checker'
+const React = require('react')
+const PropTypes = require('prop-types')
+const withStyles = require('react-jss').default
+const classNames = require('classnames')
+const childrenTypeChecker = require('../../../custom_modules/children-type-checker')
 
 
 
@@ -284,9 +284,9 @@ const Button = props => {
       {badge}
       <div className={contentClasses}>
         {[
-          headIcons.length > 0 && <div className={headIconClasses} key="first-icons">{headIcons}</div>,
-          <div className={`BUTTON_TEXT ${TextClasses}`} key="text">{Text}</div>,
-          tailIcons.length > 0 && <div className={tailIconClasses} key="last-icons">{tailIcons}</div>
+          headIcons.length > 0 && <div className={headIconClasses} key='first-icons'>{headIcons}</div>,
+          <div className={`BUTTON_TEXT ${TextClasses}`} key='text'>{Text}</div>,
+          tailIcons.length > 0 && <div className={tailIconClasses} key='last-icons'>{tailIcons}</div>
         ]}
       </div>
     </button>
@@ -330,4 +330,4 @@ const styledButton = withStyles(styles)(Button)
 
 styledButton.displayName = 'Button'
 
-export default styledButton
+module.exports = styledButton

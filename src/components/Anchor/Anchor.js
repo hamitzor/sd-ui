@@ -1,7 +1,7 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import withStyles from 'react-jss'
-import classNames from 'classnames'
+const React = require('react')
+const PropTypes = require('prop-types')
+const withStyles = require('react-jss').default
+const classNames = require('classnames')
 
 
 const color = ['default', 'primary', 'secondary', 'error', 'white']
@@ -125,4 +125,4 @@ const styledAnchor = withStyles(styles)(Anchor)
 
 styledAnchor.displayName = 'Anchor'
 
-export default styledAnchor
+module.exports = styledAnchor

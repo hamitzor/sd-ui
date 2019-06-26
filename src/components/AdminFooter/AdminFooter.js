@@ -1,9 +1,9 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import withStyles from 'react-jss'
-import classNames from 'classnames'
-import Flex from '../Flex'
-import Text from '../Text'
+const React = require('react')
+const PropTypes = require('prop-types')
+const withStyles = require('react-jss').default
+const classNames = require('classnames')
+const Flex = require('../Flex')
+const Text = require('../Text')
 
 const styles = theme => {
   return {
@@ -40,9 +40,9 @@ const AdminFooter = props => {
   })
 
   return (
-    <Flex className={rootClasses} justify="center" alignItems="center" parent>
+    <Flex className={rootClasses} justify='center' alignItems='center' parent>
       <Flex className={containerClasses} xs={12}>
-        <Text size="small" color="white">© 2011 Hamit Zor All Rights Reserved</Text>
+        <Text size='small' color='white'>© 2011 Hamit Zor All Rights Reserved</Text>
       </Flex>
     </Flex>
   )
@@ -61,4 +61,4 @@ const styledAdminFooter = withStyles(styles)(AdminFooter)
 
 styledAdminFooter.displayName = 'AdminFooter'
 
-export default styledAdminFooter
+module.exports = styledAdminFooter

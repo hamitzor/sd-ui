@@ -1,3 +1,3 @@
-import Popup from './Popup'
+const Popup = require('./Popup')
 
-export default Popup
+module.exports = Popup

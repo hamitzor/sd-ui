@@ -1,16 +1,16 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import classNames from 'classnames'
-import CheckCircleIcon from '@material-ui/icons/CheckCircle'
-import ErrorIcon from '@material-ui/icons/Error'
-import InfoIcon from '@material-ui/icons/Info'
-import CloseIcon from '@material-ui/icons/Close'
-import green from '@material-ui/core/colors/green'
-import amber from '@material-ui/core/colors/amber'
-import IconButton from '@material-ui/core/IconButton'
-import SnackbarContent from '@material-ui/core/SnackbarContent'
-import WarningIcon from '@material-ui/icons/Warning'
-import { withStyles } from '@material-ui/core/styles'
+const React = require('react')
+const PropTypes = require('prop-types')
+const classNames = require('classnames')
+const CheckCircleIcon = require('@material-ui/icons/CheckCircle')
+const ErrorIcon = require('@material-ui/icons/Error')
+const InfoIcon = require('@material-ui/icons/Info')
+const CloseIcon = require('@material-ui/icons/Close')
+const green = require('@material-ui/core/colors/green')
+const amber = require('@material-ui/core/colors/amber')
+const IconButton = require('@material-ui/core/IconButton')
+const SnackbarContent = require('@material-ui/core/SnackbarContent')
+const WarningIcon = require('@material-ui/icons/Warning')
+const { withStyles } = require('@material-ui/core/styles')
 
 const iconVariantMap = {
   success: CheckCircleIcon,
@@ -66,7 +66,7 @@ const AlertContent = props => {
       }
       action={[
         <IconButton
-          key="close"
+          key='close'
           color='inherit'
           className={classes.close}
           onClick={handleClose}

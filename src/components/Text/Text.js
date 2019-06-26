@@ -1,7 +1,7 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import withStyles from 'react-jss'
-import classNames from 'classnames'
+const React = require('react')
+const PropTypes = require('prop-types')
+const withStyles = require('react-jss').default
+const classNames = require('classnames')
 
 
 
@@ -131,4 +131,4 @@ const styledText = withStyles(styles)(Text)
 
 styledText.displayName = 'Text'
 
-export default styledText
+module.exports = styledText

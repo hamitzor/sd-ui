@@ -1,15 +1,15 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import withStyles from 'react-jss'
-import classNames from 'classnames'
-import Icon from '../Icon'
-import { FaCaretDown } from "react-icons/fa"
-import Button from '../Button'
-import Color from 'color'
-import ListItem from '../ListItem'
-import List from '../List'
-import { CSSTransition } from 'react-transition-group'
-import childrenTypeChecker from '../../../custom_modules/children-type-checker'
+const React = require('react')
+const PropTypes = require('prop-types')
+const withStyles = require('react-jss').default
+const classNames = require('classnames')
+const Icon = require('../Icon')
+const { FaCaretDown } = require('react-icons/fa')
+const Button = require('../Button')
+const Color = require('color')
+const ListItem = require('../ListItem')
+const List = require('../List')
+const { CSSTransition } = require('react-transition-group')
+const childrenTypeChecker = require('../../../custom_modules/children-type-checker')
 
 const transitionTime = 150
 
@@ -33,7 +33,7 @@ const selectElementColorStyles = theme => color.reduce((acc, val) => {
   acc = {
     ...acc,
     [`select-element-color-${val}`]: {
-      backgroundImage: `url("data:image/svg+xml;utf8,<svg height='29' viewBox='0 0 24 24' width='29' xmlns='http://www.w3.org/2000/svg'><path style='fill:${calculatedColor};' d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>")`,
+      backgroundImage: `url('data:image/svg+xml;utf8,<svg height='29' viewBox='0 0 24 24' width='29' xmlns='http://www.w3.org/2000/svg'><path style='fill:${calculatedColor};' d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>')`,
     }
   }
   return acc
@@ -326,7 +326,7 @@ class Select extends React.Component {
           <Button
             onClick={this.handleClick}
             disabled={disabled}
-            type="light"
+            type='light'
             radius={2}
             className={buttonClasses}
             color={color}
@@ -418,4 +418,4 @@ const styledSelect = withStyles(styles)(Select)
 
 styledSelect.displayName = 'Select'
 
-export default styledSelect
+module.exports = styledSelect

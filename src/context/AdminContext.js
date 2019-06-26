@@ -1,4 +1,5 @@
-import React, { createContext } from 'react'
+const React = require('react')
+const { createContext } = require('react')
 const { Provider: AdminProvider, Consumer: AdminConsumer } = createContext()
 
 
@@ -12,4 +13,4 @@ const withAdminContext = (Component) => (
 )
 
 
-export { AdminProvider, AdminConsumer, withAdminContext }
+module.exports = { AdminProvider, AdminConsumer, withAdminContext } 

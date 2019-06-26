@@ -1,11 +1,12 @@
-import React, { Fragment } from 'react'
-import { AppProvider } from '../context/AppContext'
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
-import { getWidth } from '../theme/getWidth'
-import Test from './Test'
-import StyleFixer from './StyleFixer'
-import Admin from './Admin'
-import config from '../../app.config'
+const React = require('react')
+const { Fragment } = require('react')
+const { AppProvider } = require('../context/AppContext')
+const { BrowserRouter: Router, Route, Switch } = require('react-router-dom')
+const { getWidth } = require('../theme/getWidth')
+const Test = require('./Test')
+const StyleFixer = require('./StyleFixer')
+const Admin = require('./Admin')
+const config = require('../../app.config')
 
 
 class App extends React.Component {
@@ -51,4 +52,4 @@ class App extends React.Component {
   }
 }
 
-export default App
+module.exports = App

@@ -1,3 +1,3 @@
-import IconButton from './IconButton'
+const IconButton = require('./IconButton')
 
-export default IconButton
+module.exports = IconButton

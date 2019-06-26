@@ -1,3 +1,3 @@
-import PopupHeaderTitle from './PopupHeaderTitle'
+const PopupHeaderTitle = require('./PopupHeaderTitle')
 
-export default PopupHeaderTitle
+module.exports = PopupHeaderTitle

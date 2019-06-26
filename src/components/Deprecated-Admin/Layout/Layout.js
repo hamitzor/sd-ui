@@ -3,17 +3,17 @@
 
 
 
-import React from 'react'
-import PropTypes from 'prop-types'
-import { withStyles } from '@material-ui/core/styles'
-import AppBar from '@material-ui/core/AppBar'
-import Toolbar from '@material-ui/core/Toolbar'
-import Typography from '@material-ui/core/Typography'
-import IconButton from '@material-ui/core/IconButton'
-import AccountCircle from '@material-ui/icons/AccountCircle'
-import withAdminContext from '../../../context/adminContext'
-import { Link } from 'react-router-dom'
-import Footer from '../Footer'
+const React = require('react')
+const PropTypes = require('prop-types')
+const { withStyles } = require('@material-ui/core/styles')
+const AppBar = require('@material-ui/core/AppBar')
+const Toolbar = require('@material-ui/core/Toolbar')
+const Typography = require('@material-ui/core/Typography')
+const IconButton = require('@material-ui/core/IconButton')
+const AccountCircle = require('@material-ui/icons/AccountCircle')
+const withAdminContext = require('../../../context/adminContext')
+const { Link } = require('react-router-dom')
+const Footer = require('../Footer')
 
 const styles = theme => {
 
@@ -78,28 +78,28 @@ class Layout extends React.Component {
     return (
       <div className={classes.root}>
         <AppBar
-          position="static"
+          position='static'
           classes={{
             root: classes.AppBarRoot
           }}>
           <Toolbar>
             <Link
-              to="/admin"
+              to='/admin'
               style={{
                 color: 'inherit',
                 textDecoration: 'none'
               }}
               className={classes.grow}>
               <Typography
-                variant="h6"
-                color="inherit">
+                variant='h6'
+                color='inherit'>
                 hamitzor.com | Admin Panel
               </Typography>
             </Link>
             {auth && (
               <div>
                 <IconButton
-                  color="inherit"
+                  color='inherit'
                   disabled={performingLogout}
                   onClick={this.handleLogout}>
                   <AccountCircle />

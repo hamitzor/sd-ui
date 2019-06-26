@@ -1,9 +1,9 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import withStyles from 'react-jss'
-import classNames from 'classnames'
-import crypto from 'crypto'
-import { FaRegCheckSquare, FaRegSquare, FaDotCircle, FaRegCircle } from 'react-icons/fa'
+const React = require('react')
+const PropTypes = require('prop-types')
+const withStyles = require('react-jss').default
+const classNames = require('classnames')
+const crypto = require('crypto')
+const { FaRegCheckSquare, FaRegSquare, FaDotCircle, FaRegCircle } = require('react-icons/fa')
 
 
 const color = ['default', 'primary', 'secondary']
@@ -208,4 +208,4 @@ const styledControl = withStyles(styles)(Control)
 
 styledControl.displayName = 'Control'
 
-export default styledControl
+module.exports = styledControl

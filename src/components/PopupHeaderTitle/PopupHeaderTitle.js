@@ -1,5 +1,5 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+const React = require('react')
+const PropTypes = require('prop-types')
 
 const PopupHeaderTitle = props => {
   return <span className={props.className}>{props.children}</span>
@@ -12,4 +12,4 @@ PopupHeaderTitle.propTypes = {
 
 PopupHeaderTitle.displayName = 'PopupHeaderTitle'
 
-export default PopupHeaderTitle
+module.exports = PopupHeaderTitle

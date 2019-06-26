@@ -1,6 +1,6 @@
-import theme from './theme'
-import { transitionTime } from './theme'
+const theme = require('./theme')
+const { transitionTime } = require('./theme')
 
 
-export { transitionTime }
-export default theme
+module.exports = { transitionTime }
+module.exports = theme

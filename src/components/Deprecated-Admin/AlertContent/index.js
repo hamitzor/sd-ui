@@ -1,4 +1,4 @@
-import AlertContent from './AlertContent'
+const AlertContent = require('./AlertContent')
 
 
 export default AlertContent

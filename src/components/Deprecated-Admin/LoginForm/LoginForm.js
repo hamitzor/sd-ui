@@ -1,16 +1,16 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import classNames from 'classnames'
-import { withStyles } from '@material-ui/core/styles'
-import TextField from '@material-ui/core/TextField'
-import Grid from '@material-ui/core/Grid'
-import AccountCircle from '@material-ui/icons/AccountCircle'
-import Paper from '@material-ui/core/Paper'
-import VpnKey from '@material-ui/icons/VpnKey'
-import withContext from '../../../context/adminContext'
-import Button from '@material-ui/core/Button'
-import PasswordField from '../PasswordField'
-import Alert from '../Alert'
+const React = require('react')
+const PropTypes = require('prop-types')
+const classNames = require('classnames')
+const { withStyles } = require('@material-ui/core/styles')
+const TextField = require('@material-ui/core/TextField')
+const Grid = require('@material-ui/core/Grid')
+const AccountCircle = require('@material-ui/icons/AccountCircle')
+const Paper = require('@material-ui/core/Paper')
+const VpnKey = require('@material-ui/icons/VpnKey')
+const withContext = require('../../../context/adminContext')
+const Button = require('@material-ui/core/Button')
+const PasswordField = require('../PasswordField')
+const Alert = require('../Alert')
 
 
 //@TODO this regex will be used while registering new admins from the panel
@@ -59,11 +59,11 @@ const LoginForm = props => {
 
   return (
     <Paper className={classes.Paper}>
-      <Grid container justify="center">
+      <Grid container justify='center'>
         <Grid item xs={11} sm={10} >
-          <Grid container alignItems="flex-end" justify="center" className={classNames(classes.marginBottom)}>
+          <Grid container alignItems='flex-end' justify='center' className={classNames(classes.marginBottom)}>
             <Grid item xs={2}>
-              <AccountCircle color="primary" />
+              <AccountCircle color='primary' />
             </Grid>
             <Grid item xs={9}>
               <TextField
@@ -71,16 +71,16 @@ const LoginForm = props => {
                 error={!validUsername}
                 label={validUsername ? 'Username' : 'Please enter username'}
                 onFocus={onFocus('username')}
-                InputProps={{ spellCheck: false, autoComplete: "off" }}
+                InputProps={{ spellCheck: false, autoComplete: 'off' }}
                 value={username}
                 onChange={onChange('username')}
                 onKeyDown={onKeyDown}
               />
             </Grid>
           </Grid>
-          <Grid container alignItems="flex-end" justify="center">
+          <Grid container alignItems='flex-end' justify='center'>
             <Grid item xs={2}>
-              <VpnKey color="primary" />
+              <VpnKey color='primary' />
             </Grid>
             <Grid item xs={9}>
               <PasswordField
@@ -92,13 +92,13 @@ const LoginForm = props => {
               />
             </Grid>
           </Grid>
-          <Grid container alignItems="flex-end" justify="center">
+          <Grid container alignItems='flex-end' justify='center'>
             <Grid item xs={6} className={classes.marginTop}>
               <Button
                 disabled={busy}
                 onClick={onSubmit}
-                variant="contained"
-                color="primary"
+                variant='contained'
+                color='primary'
                 className={classes.submitButton}>
                 Login
               </Button>

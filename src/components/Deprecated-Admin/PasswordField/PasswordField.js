@@ -1,13 +1,13 @@
-import React from 'react'
-import FormControl from '@material-ui/core/FormControl'
-import InputLabel from '@material-ui/core/InputLabel'
-import Input from '@material-ui/core/Input'
-import InputAdornment from '@material-ui/core/InputAdornment'
-import IconButton from '@material-ui/core/IconButton'
-import Visibility from '@material-ui/icons/Visibility'
-import VisibilityOff from '@material-ui/icons/VisibilityOff'
-import { withStyles } from '@material-ui/core/styles'
-import PropTypes from 'prop-types'
+const React = require('react')
+const FormControl = require('@material-ui/core/FormControl')
+const InputLabel = require('@material-ui/core/InputLabel')
+const Input = require('@material-ui/core/Input')
+const InputAdornment = require('@material-ui/core/InputAdornment')
+const IconButton = require('@material-ui/core/IconButton')
+const Visibility = require('@material-ui/icons/Visibility')
+const VisibilityOff = require('@material-ui/icons/VisibilityOff')
+const { withStyles } = require('@material-ui/core/styles')
+const PropTypes = require('prop-types')
 
 const styles = theme => ({
   root: {
@@ -45,18 +45,18 @@ class PasswordField extends React.Component {
 
     return (
       <FormControl>
-        <InputLabel error={error} htmlFor="password-field">{!error ? 'Password' : 'Please enter password'}</InputLabel>
+        <InputLabel error={error} htmlFor='password-field'>{!error ? 'Password' : 'Please enter password'}</InputLabel>
         <Input
           error={error}
           disabled={disabled}
-          id="password-field"
+          id='password-field'
           type={show ? 'text' : 'password'}
           value={value}
           onChange={onChange}
           onFocus={onFocus}
           onKeyDown={onKeyDown}
           endAdornment={
-            <InputAdornment position="end">
+            <InputAdornment position='end'>
               <IconButton onClick={this.handleShow}>
                 {show ? <Visibility color='primary' /> : <VisibilityOff color='primary' />}
               </IconButton>

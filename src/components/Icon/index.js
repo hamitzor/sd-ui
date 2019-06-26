@@ -1,3 +1,3 @@
-import Icon from './Icon'
+const Icon = require('./Icon')
 
-export default Icon
+module.exports = Icon

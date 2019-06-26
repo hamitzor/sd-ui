@@ -1,3 +1,3 @@
-import AdminFooter from './AdminFooter'
+const AdminFooter = require('./AdminFooter')
 
-export default AdminFooter
+module.exports = AdminFooter

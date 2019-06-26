@@ -1,3 +1,3 @@
-import Image from './Image'
+const Image = require('./Image')
 
-export default Image
+module.exports = Image

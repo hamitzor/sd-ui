@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types'
+const PropTypes = require('prop-types')
 
 const PopupHeaderExtension = props => {
   return props.children
@@ -10,4 +10,4 @@ PopupHeaderExtension.propTypes = {
 
 PopupHeaderExtension.displayName = 'PopupHeaderExtension'
 
-export default PopupHeaderExtension
+module.exports = PopupHeaderExtension

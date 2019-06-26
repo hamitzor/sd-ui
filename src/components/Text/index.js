@@ -1,3 +1,3 @@
-import Text from './Text'
+const Text = require('./Text')
 
-export default Text
+module.exports = Text

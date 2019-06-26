@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types'
+const PropTypes = require('prop-types')
 
 const PopupFooter = props => {
   return props.children
@@ -10,4 +10,4 @@ PopupFooter.propTypes = {
 
 PopupFooter.displayName = 'PopupFooter'
 
-export default PopupFooter
+module.exports = PopupFooter

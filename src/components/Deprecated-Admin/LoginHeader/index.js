@@ -1,3 +1,3 @@
-import LoginHeader from './LoginHeader'
+const LoginHeader = require('./LoginHeader')
 
 export default LoginHeader

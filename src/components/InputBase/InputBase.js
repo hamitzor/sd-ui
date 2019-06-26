@@ -1,7 +1,7 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import withStyles from 'react-jss'
-import classNames from 'classnames'
+const React = require('react')
+const PropTypes = require('prop-types')
+const withStyles = require('react-jss').default
+const classNames = require('classnames')
 
 const styles = theme => {
   return {
@@ -95,4 +95,4 @@ const styledInputBase = withStyles(styles)(InputBase)
 
 styledInputBase.displayName = 'InputBase'
 
-export default styledInputBase
+module.exports = styledInputBase

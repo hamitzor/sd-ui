@@ -1,3 +1,3 @@
-import InputBase from './InputBase'
+const InputBase = require('./InputBase')
 
-export default InputBase
+module.exports = InputBase

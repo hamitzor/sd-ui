@@ -1,3 +1,3 @@
-import Badge from './Badge'
+const Badge = require('./Badge')
 
-export default Badge
+module.exports = Badge

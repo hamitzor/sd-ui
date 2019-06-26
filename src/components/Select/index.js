@@ -1,3 +1,3 @@
-import Select from './Select'
+const Select = require('./Select')
 
-export default Select
+module.exports = Select

@@ -1,3 +1,3 @@
-import LoginFooter from './LoginFooter'
+const LoginFooter = require('./LoginFooter')
 
 export default LoginFooter

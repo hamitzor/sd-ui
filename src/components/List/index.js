@@ -1,3 +1,3 @@
-import List from './List'
+const List = require('./List')
 
-export default List
+module.exports = List

@@ -1,8 +1,8 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import withStyles from 'react-jss'
-import classNames from 'classnames'
-import childrenTypeChecker from '../../../custom_modules/children-type-checker'
+const React = require('react')
+const PropTypes = require('prop-types')
+const withStyles = require('react-jss').default
+const classNames = require('classnames')
+const childrenTypeChecker = require('../../../custom_modules/children-type-checker')
 
 const styles = () => {
   return {
@@ -82,4 +82,4 @@ const styledList = withStyles(styles)(List)
 
 styledList.displayName = 'List'
 
-export default styledList
+module.exports = styledList

@@ -1,3 +1,3 @@
-import Alert from './Alert'
+const Alert = require('./Alert')
 
-export default Alert
+module.exports = Alert

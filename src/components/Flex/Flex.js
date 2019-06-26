@@ -1,8 +1,8 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import withStyles from 'react-jss'
-import classNames from 'classnames'
-import { breakpointNames } from '../../theme/breakpoints'
+const React = require('react')
+const PropTypes = require('prop-types')
+const withStyles = require('react-jss').default
+const classNames = require('classnames')
+const { breakpointNames } = require('../../theme/breakpoints')
 
 const propToCssValue = (val) => {
   if (typeof val === 'string') {
@@ -234,4 +234,4 @@ const StyledFlex = withStyles(styles)(Flex)
 
 StyledFlex.displayName = 'Flex'
 
-export default StyledFlex
+module.exports = StyledFlex

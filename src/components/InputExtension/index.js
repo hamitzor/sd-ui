@@ -1,3 +1,3 @@
-import InputExtension from './InputExtension'
+const InputExtension = require('./InputExtension')
 
-export default InputExtension
+module.exports = InputExtension

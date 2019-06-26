@@ -1,3 +1,3 @@
-import Anchor from './Anchor'
+const Anchor = require('./Anchor')
 
-export default Anchor
+module.exports = Anchor

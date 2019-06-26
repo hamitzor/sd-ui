@@ -1,8 +1,8 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import withStyles from 'react-jss'
-import classNames from 'classnames'
-import Color from 'color'
+const React = require('react')
+const PropTypes = require('prop-types')
+const withStyles = require('react-jss').default
+const classNames = require('classnames')
+const Color = require('color')
 
 
 
@@ -117,4 +117,4 @@ const styledPanel = withStyles(styles)(Image)
 
 styledPanel.displayName = 'Panel'
 
-export default styledPanel
+module.exports = styledPanel

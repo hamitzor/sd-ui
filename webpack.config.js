@@ -1,19 +1,19 @@
-const path = require("path")
+const path = require('path')
 
-const clientConfig = {
-  context: path.resolve(__dirname, "src"),
-  entry: "./index",
-  devtool: "source-map",
+const client = {
+  context: path.resolve(__dirname, 'src'),
+  entry: './index',
+  devtool: 'source-map',
   output: {
-    path: path.resolve(__dirname, "dist"),
-    filename: "bundle.js"
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'bundle.js'
   },
   module: {
     rules: [
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: "babel-loader"
+        loader: 'babel-loader'
       },
       {
         test: /\.(png|jpg|jpeg|gif)$/,
@@ -32,23 +32,42 @@ const clientConfig = {
   }
 }
 
-const testServerConfig = {
-  context: path.resolve(__dirname, "src"),
-  entry: "./index.server",
-  devtool: "source-map",
+const testServer = {
+  context: path.resolve(__dirname, 'src'),
+  entry: './index.server',
+  devtool: 'source-map',
   output: {
-    path: path.resolve(__dirname, "dist"),
-    filename: "bundle.server.js"
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'bundle.server.js'
   },
-  target: "node",
+  target: 'node',
   node: {
     __dirname: false
   },
   module: {
     rules: [
-      { test: /\.js$/, exclude: /node_modules/, loader: "babel-loader" }
+      { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader' }
     ]
   }
 }
 
-module.exports = [clientConfig, testServerConfig]
+const configLoader = {
+  context: path.resolve(__dirname, 'src'),
+  entry: './index.config',
+  devtool: 'source-map',
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'bundle.server.js'
+  },
+  target: 'node',
+  node: {
+    __dirname: false
+  },
+  module: {
+    rules: [
+      { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader' }
+    ]
+  }
+}
+
+module.exports = [client, testServer, configLoader]

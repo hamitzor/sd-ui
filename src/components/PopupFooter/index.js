@@ -1,3 +1,3 @@
-import PopupFooter from './PopupFooter'
+const PopupFooter = require('./PopupFooter')
 
-export default PopupFooter
+module.exports = PopupFooter

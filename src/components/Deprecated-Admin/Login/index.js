@@ -1,4 +1,4 @@
-import Login from './Login'
+const Login = require('./Login')
 
 
 export default Login

@@ -1,40 +1,40 @@
 module.exports = {
-  "env": {
-    "browser": true,
-    "commonjs": true,
-    "es6": true,
-    "node": true
+  'env': {
+    'browser': true,
+    'commonjs': true,
+    'es6': true,
+    'node': true
   },
-  "extends": [
-    "eslint:recommended",
-    "plugin:react/recommended"
+  'extends': [
+    'eslint:recommended',
+    'plugin:react/recommended'
   ],
-  "parser": "babel-eslint",
-  "parserOptions": {
-    "ecmaFeatures": {
-      "jsx": true
+  'parser': 'babel-eslint',
+  'parserOptions': {
+    'ecmaFeatures': {
+      'jsx': true
     },
-    "ecmaVersion": 2018,
-    "sourceType": "module"
+    'ecmaVersion': 2018,
+    'sourceType': 'module'
   },
-  "plugins": [
-    "react"
+  'plugins': [
+    'react'
   ],
-  "rules": {
-    "indent": [
-      "error",
+  'rules': {
+    'indent': [
+      'error',
       2
     ],
-    "react/display-name": 0,
-    "linebreak-style": [
-      "error",
-      "unix"
+    'react/display-name': 0,
+    'linebreak-style': [
+      'error',
+      'unix'
     ],
-    "semi": [
-      "error",
-      "never"
+    'semi': [
+      'error',
+      'never'
     ],
-    "no-console": "off",
-    "no-inline-comments": "off",
+    'no-console': 'off',
+    'no-inline-comments': 'off',
   }
 }

@@ -1,6 +1,6 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import withStyles from 'react-jss'
+const React = require('react')
+const PropTypes = require('prop-types')
+const withStyles = require('react-jss').default
 
 const styles = theme => ({
   '@global': {
@@ -23,7 +23,7 @@ const styles = theme => ({
   },
 })
 
-const StyleFixer = () => <div id="style-fixer"></div>
+const StyleFixer = () => <div id='style-fixer'></div>
 
 StyleFixer.propTypes = {
   classes: PropTypes.object
@@ -33,4 +33,4 @@ const StyledStyleFixer = withStyles(styles)(StyleFixer)
 
 StyledStyleFixer.displayName = 'StyleFixer'
 
-export default StyledStyleFixer
+module.exports = StyledStyleFixer

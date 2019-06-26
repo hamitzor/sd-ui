@@ -1,8 +1,8 @@
-import React from "react"
-import { withStyles } from "@material-ui/core/styles"
-import Grid from '@material-ui/core/Grid'
-import Typography from '@material-ui/core/Typography'
-import PropTypes from 'prop-types'
+const React = require('react')
+const { withStyles } = require('@material-ui/core/styles')
+const Grid = require('@material-ui/core/Grid')
+const Typography = require('@material-ui/core/Typography')
+const PropTypes = require('prop-types')
 
 const styles = theme => {
   const { spacing: {
@@ -33,20 +33,20 @@ const LoginFooter = props => {
 
   return (
     <footer>
-      <Grid className={classes.footerGrid} container justify="space-between" alignItems="center">
+      <Grid className={classes.footerGrid} container justify='space-between' alignItems='center'>
         <Grid item xs={12} sm={7}>
           <Typography
             className={classes.footerText}
-            variant="body1"
-            align={width === "xs" ? "center" : "left"}
-            color="inherit">{copyrightStatement}</Typography>
+            variant='body1'
+            align={width === 'xs' ? 'center' : 'left'}
+            color='inherit'>{copyrightStatement}</Typography>
         </Grid>
         <Grid item xs={12} sm={5}>
           <Typography
             className={classes.footerText}
-            variant="body1"
-            align={width === "xs" ? "center" : "right"}
-            color="inherit">{email}</Typography>
+            variant='body1'
+            align={width === 'xs' ? 'center' : 'right'}
+            color='inherit'>{email}</Typography>
         </Grid>
       </Grid>
     </footer>

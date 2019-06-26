@@ -1,7 +1,7 @@
-import React from 'react'
-import Snackbar from '@material-ui/core/Snackbar'
-import PropTypes from 'prop-types'
-import AlertContent from '../AlertContent'
+const React = require('react')
+const Snackbar = require('@material-ui/core/Snackbar')
+const PropTypes = require('prop-types')
+const AlertContent = require('../AlertContent')
 
 
 

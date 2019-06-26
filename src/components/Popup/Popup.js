@@ -1,11 +1,11 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import withStyles from 'react-jss'
-import classNames from 'classnames'
-import { breakpointNames } from '../../theme/breakpoints'
-import Panel from '../Panel'
-import childrenTypeChecker from '../../../custom_modules/children-type-checker'
-import { CSSTransition } from 'react-transition-group'
+const React = require('react')
+const PropTypes = require('prop-types')
+const withStyles = require('react-jss').default
+const classNames = require('classnames')
+const { breakpointNames } = require('../../theme/breakpoints')
+const Panel = require('../Panel')
+const childrenTypeChecker = require('../../../custom_modules/children-type-checker')
+const { CSSTransition } = require('react-transition-group')
 
 const width = breakpointNames.filter(x => x !== 'xs')
 
@@ -219,4 +219,4 @@ const styledPopup = withStyles(styles)(Popup)
 
 styledPopup.displayName = 'Popup'
 
-export default styledPopup
+module.exports = styledPopup

@@ -1,3 +1,3 @@
-import ListItem from './ListItem'
+const ListItem = require('./ListItem')
 
-export default ListItem
+module.exports = ListItem

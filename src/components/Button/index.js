@@ -1,3 +1,3 @@
-import Button from './Button'
+const Button = require('./Button')
 
-export default Button
+module.exports = Button

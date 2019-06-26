@@ -1,8 +1,8 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import withStyles from 'react-jss'
-import classNames from 'classnames'
-import Flex from '../Flex'
+const React = require('react')
+const PropTypes = require('prop-types')
+const withStyles = require('react-jss').default
+const classNames = require('classnames')
+const Flex = require('../Flex')
 
 
 const styles = theme => {
@@ -32,7 +32,7 @@ const AdminHeader = props => {
 
 
   return (
-    <Flex className={rootClasses} justify="center" alignItems="center" parent>
+    <Flex className={rootClasses} justify='center' alignItems='center' parent>
       {children}
     </Flex>
   )
@@ -53,4 +53,4 @@ const styledAdminHeader = withStyles(styles)(AdminHeader)
 
 styledAdminHeader.displayName = 'AdminHeader'
 
-export default styledAdminHeader
+module.exports = styledAdminHeader

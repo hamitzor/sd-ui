@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types'
+const PropTypes = require('prop-types')
 
 const InputExtension = props => {
   return props.children
@@ -10,4 +10,4 @@ InputExtension.propTypes = {
 
 InputExtension.displayName = 'InputExtension'
 
-export default InputExtension
+module.exports = InputExtension

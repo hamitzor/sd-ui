@@ -1,12 +1,12 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import withStyles from 'react-jss'
-import classNames from 'classnames'
-import childrenTypeChecker from '../../../custom_modules/children-type-checker'
-import Icon from '../Icon'
-import IconButton from '../IconButton'
-import { FaChevronRight, FaChevronLeft } from 'react-icons/fa'
-import isTouchDevice from 'is-touch-device'
+const React = require('react')
+const PropTypes = require('prop-types')
+const withStyles = require('react-jss').default
+const classNames = require('classnames')
+const childrenTypeChecker = require('../../../custom_modules/children-type-checker')
+const Icon = require('../Icon')
+const IconButton = require('../IconButton')
+const { FaChevronRight, FaChevronLeft } = require('react-icons/fa')
+const isTouchDevice = require('is-touch-device')
 
 
 const color = ['default', 'primary', 'secondary']
@@ -232,4 +232,4 @@ const styledTabs = withStyles(styles)(Tabs)
 
 styledTabs.displayName = 'Tabs'
 
-export default styledTabs
+module.exports = styledTabs

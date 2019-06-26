@@ -1,3 +1,3 @@
-import AdminLogin from './AdminLogin'
+const AdminLogin = require('./AdminLogin')
 
-export default AdminLogin
+module.exports = AdminLogin

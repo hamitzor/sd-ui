@@ -1,8 +1,8 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import withStyles from 'react-jss'
-import classNames from 'classnames'
-import Button from '../Button'
+const React = require('react')
+const PropTypes = require('prop-types')
+const withStyles = require('react-jss').default
+const classNames = require('classnames')
+const Button = require('../Button')
 
 
 const color = ['default', 'primary', 'secondary']
@@ -82,4 +82,4 @@ const styledTab = withStyles(styles)(Tab)
 
 styledTab.displayName = 'Tab'
 
-export default styledTab
+module.exports = styledTab

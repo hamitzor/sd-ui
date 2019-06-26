@@ -1,3 +1,3 @@
-import Test from './Test'
+const Test = require('./Test')
 
-export default Test
+module.exports = Test

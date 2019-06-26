@@ -1,3 +1,3 @@
-import Admin from './Admin'
+const Admin = require('./Admin')
 
 export default Admin
