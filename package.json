@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "build": "webpack --mode production",
-    "start": "nodemon -r source-map-support/register dist/bundle.server.js --app-config /home/hamit/projects/js/sd-web-api/sd-config.json",
+    "start": "nodemon -r source-map-support/register dist/bundle.server.js",
     "watch": "webpack --watch --mode development"
   },
   "dependencies": {
@@ -29,9 +29,13 @@
     "react-dom": "^16.8.6",
     "react-icons": "^3.7.0",
     "react-jss": "^8.6.1",
+    "react-redux": "^7.1.0",
     "react-router-dom": "^5.0.1",
     "react-transition-group": "^4.1.1",
     "redux": "^4.0.1",
+    "redux-devtools": "^3.5.0",
+    "redux-devtools-dock-monitor": "^1.1.3",
+    "redux-devtools-log-monitor": "^1.4.0",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
     "regenerator-runtime": "^0.13.2",

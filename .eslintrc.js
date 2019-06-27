@@ -21,10 +21,6 @@ module.exports = {
     'react'
   ],
   'rules': {
-    'indent': [
-      'error',
-      2
-    ],
     'react/display-name': 0,
     'linebreak-style': [
       'error',

@@ -1,6 +1,6 @@
 const express = require('express')
 const path = require('path')
-const config = require('../app.config')
+const { config } = require('./util/config-loader')
 
 const app = express()
 

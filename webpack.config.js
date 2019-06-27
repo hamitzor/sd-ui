@@ -51,23 +51,5 @@ const testServer = {
   }
 }
 
-const configLoader = {
-  context: path.resolve(__dirname, 'src'),
-  entry: './index.config',
-  devtool: 'source-map',
-  output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.server.js'
-  },
-  target: 'node',
-  node: {
-    __dirname: false
-  },
-  module: {
-    rules: [
-      { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader' }
-    ]
-  }
-}
 
-module.exports = [client, testServer, configLoader]
+module.exports = [client, testServer]

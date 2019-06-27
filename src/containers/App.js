@@ -3,9 +3,9 @@ const { Fragment } = require('react')
 const { AppProvider } = require('../context/AppContext')
 const { BrowserRouter: Router, Route, Switch } = require('react-router-dom')
 const { getWidth } = require('../theme/getWidth')
-const Test = require('./Test')
-const StyleFixer = require('./StyleFixer')
-const Admin = require('./Admin')
+const Test = require('../components/Test')
+const StyleFixer = require('../components/StyleFixer')
+const Admin = require('../components/Admin')
 const config = require('../../app.config')
 
 

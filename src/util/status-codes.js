@@ -1,4 +1,4 @@
-const codes = require('./codes-loader')
+const { codes } = require('./config-loader')
 
 
 const CV_STATUSES = codes.cv_status
