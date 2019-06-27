@@ -2,3 +2,5 @@ node_modules/**
 dist/**
 yarn.lock
 .vscode/**
+app.config.js
+api.config.js
