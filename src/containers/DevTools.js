@@ -1,9 +1,9 @@
 const React = require('react')
 const { createDevTools } = require('redux-devtools')
-const LogMonitor = require('redux-devtools-log-monitor')
-const DockMonitor = require('redux-devtools-dock-monitor')
+const LogMonitor = require('redux-devtools-log-monitor').default
+const DockMonitor = require('redux-devtools-dock-monitor').default
 
-export default createDevTools(
+module.exports = createDevTools(
   <DockMonitor
     toggleVisibilityKey="ctrl-h"
     changePositionKey="ctrl-w">

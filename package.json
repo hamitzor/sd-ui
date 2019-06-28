@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "build": "webpack --mode production",
-    "start": "nodemon -r source-map-support/register dist/bundle.server.js",
+    "start": "NODE_ENV=development nodemon -r source-map-support/register dist/bundle.server.js",
     "watch": "webpack --watch --mode development"
   },
   "dependencies": {

@@ -1,7 +1,6 @@
 const { createStore, applyMiddleware, compose } = require('redux')
-const thunk = require('redux-thunk')
+const thunk = require('redux-thunk').default
 const { createLogger } = require('redux-logger')
-const api = require('../redux-middlewares/api')
 const rootReducer = require('../reducers')
 const DevTools = require('../containers/DevTools')
 
@@ -10,11 +9,11 @@ const configureStore = preloadedState => {
     rootReducer,
     preloadedState,
     compose(
-      applyMiddleware(thunk, api, createLogger()),
+      applyMiddleware(thunk,  createLogger()),
       DevTools.instrument()
     )
   )
   return store
 }
 
-export default configureStore
+module.exports = configureStore

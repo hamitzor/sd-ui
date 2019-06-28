@@ -208,4 +208,4 @@ const rootReducer = combineReducers({
   videoUpload
 })
 
-export default rootReducer
+module.exports = rootReducer
