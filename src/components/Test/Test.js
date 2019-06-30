@@ -123,7 +123,7 @@ class Test extends React.Component {
   }
 
   componentDidMount() {
-    console.log('Test mounted')
+
   }
 
   select = React.createRef()

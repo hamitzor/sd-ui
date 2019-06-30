@@ -24,7 +24,7 @@ const auth = (state = {
   tryingLogin: false,
   loginFailed: false,
   loginFailedMessage: '',
-  apiKey: null,
+  sessionId: null,
   user: {}
 }, action) => {
   switch (action.type) {
@@ -34,7 +34,7 @@ const auth = (state = {
         tryingLogin: true,
         loginFailed: false,
         loginFailedMessage: '',
-        apiKey: null,
+        sessionId: null,
         user: {}
       }
     case LOGIN_SUCCESS:
@@ -43,7 +43,7 @@ const auth = (state = {
         tryingLogin: false,
         loginFailed: false,
         loginFailedMessage: '',
-        apiKey: action.apiKey,
+        sessionId: action.sessionId,
         user: action.user
       }
     case LOGIN_FAILURE:
@@ -52,7 +52,7 @@ const auth = (state = {
         tryingLogin: false,
         loginFailed: true,
         loginFailedMessage: action.message,
-        apiKey: null,
+        sessionId: null,
         user: {}
       }
     default:
@@ -190,7 +190,6 @@ const videoUpload = (state = {
     case VIDEO_UPLOAD_FAILURE:
       return {
         uploading: false,
-        progress: state.progress,
         done: false,
         failed: true,
         failedMessage: action.message

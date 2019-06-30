@@ -3,7 +3,7 @@ const { Fragment } = require('react')
 const { AppProvider } = require('../context/AppContext')
 const { BrowserRouter: Router, Route, Switch } = require('react-router-dom')
 const { getWidth } = require('../theme/getWidth')
-const Test = require('../components/Test')
+const UploadTest = require('../components/UploadTest')
 const StyleFixer = require('../components/StyleFixer')
 const Admin = require('../components/Admin')
 const config = require('../../app.config')
@@ -42,7 +42,7 @@ class App extends React.Component {
         <Router>
           <Fragment>
             <Switch>
-              <Route exact path='/' component={Test} />
+              <Route exact path='/' component={UploadTest} />
               <Route path='/admin' component={Admin} />
             </Switch>
           </Fragment>

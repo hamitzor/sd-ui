@@ -8,8 +8,12 @@ const Root = require('./containers/Root')
 const configureStore = require('./store/configureStore')
 const { ThemeProvider } = require('react-jss')
 const theme = require('./theme')
+const { tryLogin } = require('./actions/auth')
 
 const store = configureStore()
+
+
+store.dispatch(tryLogin('root', 'root'))
 
 render(
   <ThemeProvider theme={theme}>
