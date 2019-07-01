@@ -2,14 +2,20 @@ const {
   VIDEO_UPLOAD_STARTED,
   VIDEO_UPLOAD_MADE_PROGRESS,
   VIDEO_UPLOAD_SUCCESS,
-  VIDEO_UPLOAD_FAILURE
+  VIDEO_UPLOAD_FAILURE,
+  FETCH_VIDEO_REQUEST,
+  FETCH_VIDEO_SUCCESS,
+  FETCH_VIDEO_FAILURE,
+  FETCH_VIDEOS_REQUEST,
+  FETCH_VIDEOS_SUCCESS,
+  FETCH_VIDEOS_FAILURE
 } = require('../constants/action-types')
 const { apiConfig } = require('../util/config-loader')
 const { apiRoot } = require('../util/addresses')
 const formatRoute = require('../util/format-route')
 
 const WEB_STATUS = apiConfig.codes.web_status
-const videoEndpoint = (route) => apiRoot + apiConfig.web_api.route.video.sub_route + formatRoute(apiConfig.web_api.route.video[route])
+const videoEndpoint = (route, mapping) => apiRoot + apiConfig.web_api.route.video.sub_route + formatRoute(apiConfig.web_api.route.video[route], mapping)
 
 exports.uploadVideo = (file, title) => dispatch => {
   dispatch({
@@ -60,4 +66,52 @@ exports.uploadVideo = (file, title) => dispatch => {
 
     xhr.send(formData)
   })
+}
+
+exports.getVideo = videoId => dispatch => {
+  dispatch({
+    type: FETCH_VIDEO_REQUEST
+  })
+  return fetch(videoEndpoint('get', { video_id: videoId }), {
+    credentials: 'include'
+  }).then(res => res.json()).then(
+    json => {
+      if (json.status === WEB_STATUS.OK) {
+        dispatch({
+          type: FETCH_VIDEO_SUCCESS,
+          data: json.payload
+        })
+      }
+      else {
+        dispatch({
+          type: FETCH_VIDEO_FAILURE,
+          message: json.status
+        })
+      }
+    }
+  )
+}
+
+exports.getAllVideos = () => dispatch => {
+  dispatch({
+    type: FETCH_VIDEOS_REQUEST
+  })
+  return fetch(videoEndpoint('get_all'), {
+    credentials: 'include'
+  }).then(res => res.json()).then(
+    json => {
+      if (json.status === WEB_STATUS.OK) {
+        dispatch({
+          type: FETCH_VIDEOS_SUCCESS,
+          data: json.payload
+        })
+      }
+      else {
+        dispatch({
+          type: FETCH_VIDEOS_FAILURE,
+          message: json.status
+        })
+      }
+    }
+  )
 }
