@@ -8,11 +8,14 @@ const {
   FETCH_VIDEOS_REQUEST,
   FETCH_VIDEOS_SUCCESS,
   FETCH_VIDEOS_FAILURE,
+  FETCH_VIDEO_REQUEST,
+  FETCH_VIDEO_SUCCESS,
+  FETCH_VIDEO_FAILURE,
   OBJECT_DETECTION_REQUEST,
   OBJECT_DETECTION_STARTED,
-  OBJECT_DETCTION_MADE_PROGRESS,
-  OBJECT_DETCTION_SUCCESS,
-  OBJECT_DETCTION_FAILURE,
+  OBJECT_DETECTION_MADE_PROGRESS,
+  OBJECT_DETECTION_SUCCESS,
+  OBJECT_DETECTION_FAILURE,
   VIDEO_UPLOAD_STARTED,
   VIDEO_UPLOAD_MADE_PROGRESS,
   VIDEO_UPLOAD_SUCCESS,
@@ -60,95 +63,33 @@ const auth = (state = {
   }
 }
 
-const videos = (state = {
-  list: [],
+const video = (state = {
   tryingFetch: false,
   fetchFailed: false,
-  fetchFailedMessage: ''
+  fetchFailedMessage: '',
+  data: {}
 }, action) => {
   switch (action.type) {
-    case FETCH_VIDEOS_REQUEST:
+    case FETCH_VIDEO_REQUEST:
       return {
-        list: [],
         tryingFetch: true,
         fetchFailed: false,
-        fetchFailedMessage: ''
+        fetchFailedMessage: '',
+        data: {}
       }
-    case FETCH_VIDEOS_SUCCESS:
+    case FETCH_VIDEO_SUCCESS:
       return {
-        list: action.list,
         tryingFetch: false,
         fetchFailed: false,
-        fetchFailedMessage: ''
+        fetchFailedMessage: '',
+        data: action.data
       }
-    case FETCH_VIDEOS_FAILURE:
+    case FETCH_VIDEO_FAILURE:
       return {
-        list: [],
         tryingFetch: false,
         fetchFailed: true,
-        fetchFailedMessage: action.message
-      }
-    default:
-      return state
-  }
-}
-
-const objectDetection = (state = {
-  progress: {},
-  status: {}
-}, action) => {
-  switch (action.type) {
-    case OBJECT_DETECTION_REQUEST:
-      return {
-        progress: {
-          ...state.progress,
-          [action.videoId]: '0'
-        },
-        status: {
-          ...state.status,
-          [action.videoId]: cv_status.NOT_STARTED
-        },
-      }
-    case OBJECT_DETECTION_STARTED:
-      return {
-        progress: {
-          ...state.progress,
-          [action.videoId]: '0'
-        },
-        status: {
-          ...state.status,
-          [action.videoId]: cv_status.STARTED
-        },
-      }
-    case OBJECT_DETCTION_MADE_PROGRESS:
-      return {
-        progress: {
-          ...state.progress,
-          [action.videoId]: action.progress
-        },
-        status
-      }
-    case OBJECT_DETCTION_SUCCESS:
-      return {
-        progress: {
-          ...state.progress,
-          [action.videoId]: '100'
-        },
-        status: {
-          ...state.status,
-          [action.videoId]: cv_status.COMPLETED
-        },
-      }
-    case OBJECT_DETCTION_FAILURE:
-      return {
-        progress: {
-          ...state.progress,
-          [action.videoId]: '0'
-        },
-        status: {
-          ...state.status,
-          [action.videoId]: cv_status.FAILED
-        },
+        fetchFailedMessage: action.message,
+        data: {}
       }
     default:
       return state
@@ -204,10 +145,102 @@ const videoUpload = (state = {
   }
 }
 
+const videos = (state = {
+  list: [],
+  tryingFetch: false,
+  fetchFailed: false,
+  fetchFailedMessage: ''
+}, action) => {
+  switch (action.type) {
+    case FETCH_VIDEOS_REQUEST:
+      return {
+        list: [],
+        tryingFetch: true,
+        fetchFailed: false,
+        fetchFailedMessage: ''
+      }
+    case FETCH_VIDEOS_SUCCESS:
+      return {
+        list: action.data,
+        tryingFetch: false,
+        fetchFailed: false,
+        fetchFailedMessage: ''
+      }
+    case FETCH_VIDEOS_FAILURE:
+      return {
+        list: [],
+        tryingFetch: false,
+        fetchFailed: true,
+        fetchFailedMessage: action.message
+      }
+    default:
+      return state
+  }
+}
+
+const objectDetection = (state = {}, action) => {
+  switch (action.type) {
+    case OBJECT_DETECTION_REQUEST:
+      return {
+        ...state,
+        [action.videoId]: {
+          ...state[action.videoId],
+          progress: '0',
+          status: cv_status.NOT_STARTED
+        }
+      }
+    case OBJECT_DETECTION_STARTED:
+      return {
+        ...state,
+        [action.videoId]: {
+          ...state[action.videoId],
+          progress: '0',
+          status: cv_status.STARTED,
+          cancelLink: action.cancelLink,
+          failed: false,
+          message: ''
+        }
+      }
+    case OBJECT_DETECTION_MADE_PROGRESS:
+      return {
+        ...state,
+        [action.videoId]: {
+          ...state[action.videoId],
+          progress: action.progress,
+          failed: false,
+          message: ''
+        }
+      }
+    case OBJECT_DETECTION_SUCCESS:
+      return {
+        ...state,
+        [action.videoId]: {
+          ...state[action.videoId],
+          progress: '100',
+          status: cv_status.COMPLETED,
+          failed: false,
+          message: ''
+        }
+      }
+    case OBJECT_DETECTION_FAILURE:
+      return {
+        ...state,
+        [action.videoId]: {
+          ...state[action.videoId],
+          status: cv_status.FAILED,
+          failed: true,
+          message: action.message
+        }
+      }
+    default:
+      return state
+  }
+}
 
 const rootReducer = combineReducers({
   auth,
   videos,
+  video,
   objectDetection,
   videoUpload
 })
