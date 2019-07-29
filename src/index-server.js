@@ -14,6 +14,6 @@ app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, '../public/index.html'))
 })
 
-const { hostname, port } = config
+const { port } = config
 
-app.listen(port, hostname, () => { console.log(`Serving at http://${hostname}:${port}`) })
+app.listen(port, () => { console.log(`Serving at http://localhost:${port}`) })

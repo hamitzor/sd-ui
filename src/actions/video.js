@@ -37,6 +37,7 @@ exports.uploadVideo = (file, title) => dispatch => {
     xhr.onerror = function (e) {
       dispatch({
         type: VIDEO_UPLOAD_FAILURE,
+        code: 'CLIENT_SIDE_ERROR',
         message: e
       })
       resolve()
@@ -52,7 +53,8 @@ exports.uploadVideo = (file, title) => dispatch => {
       else {
         dispatch({
           type: VIDEO_UPLOAD_FAILURE,
-          message: res.status
+          code: res.status,
+          message: res.payload.message
         })
       }
       resolve()

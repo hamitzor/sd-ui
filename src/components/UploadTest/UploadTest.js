@@ -7,7 +7,7 @@ class UploadTest extends React.Component {
 
   onUpload = (e) => {
     const file = e.target.files[0]
-    const title = ''
+    const title = 'Test'
 
     this.props.dispatch(uploadVideo(file, title)).then(() => console.log('DONE!!'))
   }

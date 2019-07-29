@@ -160,6 +160,7 @@ const videoUpload = (state = {
   progress: '0',
   done: false,
   failed: false,
+  failedCode: '',
   failedMessage: ''
 }, action) => {
   switch (action.type) {
@@ -169,6 +170,7 @@ const videoUpload = (state = {
         progress: '0',
         done: false,
         failed: false,
+        failedCode: '',
         failedMessage: ''
       }
     case VIDEO_UPLOAD_MADE_PROGRESS:
@@ -177,6 +179,7 @@ const videoUpload = (state = {
         progress: action.progress,
         done: false,
         failed: false,
+        failedCode: '',
         failedMessage: ''
       }
     case VIDEO_UPLOAD_SUCCESS:
@@ -185,6 +188,7 @@ const videoUpload = (state = {
         progress: '100',
         done: true,
         failed: false,
+        failedCode: '',
         failedMessage: ''
       }
     case VIDEO_UPLOAD_FAILURE:
@@ -192,6 +196,7 @@ const videoUpload = (state = {
         uploading: false,
         done: false,
         failed: true,
+        failedCode: action.message,
         failedMessage: action.message
       }
     default:

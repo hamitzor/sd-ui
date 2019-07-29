@@ -34,7 +34,7 @@ const client = {
 
 const testServer = {
   context: path.resolve(__dirname, 'src'),
-  entry: './index.server',
+  entry: './index-server',
   devtool: 'source-map',
   output: {
     path: path.resolve(__dirname, 'dist'),
