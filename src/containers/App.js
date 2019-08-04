@@ -6,7 +6,6 @@ const { getWidth } = require('../theme/getWidth')
 const StyleFixer = require('../components/StyleFixer')
 const Admin = require('../components/Admin')
 const config = require('../../app.config')
-const ConfigApiTest = require('../components/ConfigApiTest')
 
 
 class App extends React.Component {
@@ -42,7 +41,7 @@ class App extends React.Component {
         <Router>
           <Fragment>
             <Switch>
-              <Route exact path='/' component={ConfigApiTest} />
+              <Route exact path='/' component={null} />
               <Route path='/admin' component={Admin} />
             </Switch>
           </Fragment>

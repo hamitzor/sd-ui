@@ -1,8 +1,7 @@
-const { config, apiConfig } = require('./config-loader')
+const apiConfig = require('../../api.config')
 
-const apiRoot = 'http://' + apiConfig.web_api.hostname + ':' + apiConfig.web_api.port
-const serverRoot = 'http://' + config.hostname + ':' + config.port
-
-const apiWsRoot = 'ws://' + apiConfig.web_api.hostname + ':' + apiConfig.web_api.port
+const apiRoot = `${apiConfig.port === 443 ? 'https' : 'http'}://${apiConfig.hostname}:${apiConfig.port}`
+const serverRoot = `${apiConfig.web.port === 443 ? 'https' : 'http'}://${apiConfig.web.hostname}:${apiConfig.web.port}`
+const apiWsRoot = `ws://${apiConfig.web.hostname}:${apiConfig.web.port}`
 
 module.exports = { apiRoot, serverRoot, apiWsRoot }

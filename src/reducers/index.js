@@ -1,25 +1,25 @@
 const { combineReducers } = require('redux')
-const { codes: { cv_status } } = require('../util/config-loader')
+//const { codes: { cv_status } } = require('../util/config-loader')
 
 const {
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
   LOGIN_FAILURE,
-  FETCH_VIDEOS_REQUEST,
-  FETCH_VIDEOS_SUCCESS,
-  FETCH_VIDEOS_FAILURE,
-  FETCH_VIDEO_REQUEST,
-  FETCH_VIDEO_SUCCESS,
-  FETCH_VIDEO_FAILURE,
-  OBJECT_DETECTION_REQUEST,
-  OBJECT_DETECTION_STARTED,
-  OBJECT_DETECTION_MADE_PROGRESS,
-  OBJECT_DETECTION_SUCCESS,
-  OBJECT_DETECTION_FAILURE,
-  VIDEO_UPLOAD_STARTED,
-  VIDEO_UPLOAD_MADE_PROGRESS,
-  VIDEO_UPLOAD_SUCCESS,
-  VIDEO_UPLOAD_FAILURE
+  //FETCH_VIDEOS_REQUEST,
+  //FETCH_VIDEOS_SUCCESS,
+  //FETCH_VIDEOS_FAILURE,
+  //FETCH_VIDEO_REQUEST,
+  //FETCH_VIDEO_SUCCESS,
+  //FETCH_VIDEO_FAILURE,
+  //OBJECT_DETECTION_REQUEST,
+  //OBJECT_DETECTION_STARTED,
+  //OBJECT_DETECTION_MADE_PROGRESS,
+  //OBJECT_DETECTION_SUCCESS,
+  //OBJECT_DETECTION_FAILURE,
+  //VIDEO_UPLOAD_STARTED,
+  //VIDEO_UPLOAD_MADE_PROGRESS,
+  //VIDEO_UPLOAD_SUCCESS,
+  //VIDEO_UPLOAD_FAILURE
 } = require('../constants/action-types')
 
 const auth = (state = {
@@ -62,6 +62,8 @@ const auth = (state = {
       return state
   }
 }
+
+/*
 
 const video = (state = {
   tryingFetch: false,
@@ -237,12 +239,14 @@ const objectDetection = (state = {}, action) => {
   }
 }
 
+*/
+
 const rootReducer = combineReducers({
   auth,
-  videos,
-  video,
-  objectDetection,
-  videoUpload
+  //videos,
+  //video,
+  //objectDetection,
+  //videoUpload
 })
 
 module.exports = rootReducer
