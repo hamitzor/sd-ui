@@ -27,8 +27,7 @@ const auth = (state = {
   tryingLogin: false,
   loginFailed: false,
   loginFailedMessage: '',
-  sessionId: null,
-  user: {}
+  user: null
 }, action) => {
   switch (action.type) {
     case LOGIN_REQUEST:
@@ -37,8 +36,7 @@ const auth = (state = {
         tryingLogin: true,
         loginFailed: false,
         loginFailedMessage: '',
-        sessionId: null,
-        user: {}
+        user: null
       }
     case LOGIN_SUCCESS:
       return {
@@ -46,7 +44,6 @@ const auth = (state = {
         tryingLogin: false,
         loginFailed: false,
         loginFailedMessage: '',
-        sessionId: action.sessionId,
         user: action.user
       }
     case LOGIN_FAILURE:
@@ -55,8 +52,7 @@ const auth = (state = {
         tryingLogin: false,
         loginFailed: true,
         loginFailedMessage: action.message,
-        sessionId: null,
-        user: {}
+        user: null
       }
     default:
       return state
