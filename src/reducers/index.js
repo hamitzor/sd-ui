@@ -2,9 +2,10 @@ const { combineReducers } = require('redux')
 //const { codes: { cv_status } } = require('../util/config-loader')
 
 const {
-  LOGIN_REQUEST,
   LOGIN_SUCCESS,
   LOGIN_FAILURE,
+  LOGOUT_SUCCESS,
+  LOGOUT_FAILURE,
   //FETCH_VIDEOS_REQUEST,
   //FETCH_VIDEOS_SUCCESS,
   //FETCH_VIDEOS_FAILURE,
@@ -22,37 +23,29 @@ const {
   //VIDEO_UPLOAD_FAILURE
 } = require('../constants/action-types')
 
-const auth = (state = {
+const userSession = (state = {
   authanticated: false,
-  tryingLogin: false,
-  loginFailed: false,
-  loginFailedMessage: '',
   user: null
 }, action) => {
   switch (action.type) {
-    case LOGIN_REQUEST:
-      return {
-        authanticated: false,
-        tryingLogin: true,
-        loginFailed: false,
-        loginFailedMessage: '',
-        user: null
-      }
     case LOGIN_SUCCESS:
       return {
         authanticated: true,
-        tryingLogin: false,
-        loginFailed: false,
-        loginFailedMessage: '',
         user: action.user
       }
     case LOGIN_FAILURE:
       return {
         authanticated: false,
-        tryingLogin: false,
-        loginFailed: true,
-        loginFailedMessage: action.message,
         user: null
+      }
+    case LOGOUT_SUCCESS:
+      return {
+        authanticated: false,
+        user: null
+      }
+    case LOGOUT_FAILURE:
+      return {
+        authanticated: true
       }
     default:
       return state
@@ -238,7 +231,7 @@ const objectDetection = (state = {}, action) => {
 */
 
 const rootReducer = combineReducers({
-  auth,
+  userSession,
   //videos,
   //video,
   //objectDetection,

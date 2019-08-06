@@ -17,16 +17,24 @@ const { IoMdKey, IoIosPerson, IoMdClose } = require('react-icons/io')
 const Control = require('../Control')
 const Text = require('../Text')
 const Alert = require('../Alert')
-const { withAdminContext } = require('../../context/AdminContext')
-const { Redirect } = require('react-router-dom')
 const Anchor = require('../Anchor')
 const { Link } = require('react-router-dom')
+const { connect } = require('react-redux')
+const { login } = require('../../actions/auth')
+const { Redirect } = require('react-router-dom')
+const {
+  OK,
+  NOT_FOUND,
+  BAD_REQUEST,
+  FORBIDDEN,
+  INTERNAL_SERVER_ERROR
+} = require('../../../status-codes')
 
 const statusErrorMap = {
-  404: 'Username or password is wrong',
-  400: 'Username or password is not set',
-  403: 'This actino is not allowed',
-  500: 'Internal server error'
+  [NOT_FOUND]: 'Username or password is wrong',
+  [BAD_REQUEST]: 'Username or password is not set',
+  [FORBIDDEN]: 'This actino is not allowed',
+  [INTERNAL_SERVER_ERROR]: 'Internal server error'
 }
 
 const styles = theme => {
@@ -97,7 +105,7 @@ class AdminLogin extends React.Component {
   getInitialState = () => (
     {
       error: false,
-      message: 'Something went wrong',
+      message: '',
       showPassword: false,
       username: '',
       password: '',
@@ -139,7 +147,8 @@ class AdminLogin extends React.Component {
     ))
   }
 
-  handleSubmit = () => {
+  handleSubmit = async () => {
+    const { dispatch } = this.props
     let { username, password, busy } = this.state
     username = username.trim()
     password = password.trim()
@@ -160,12 +169,13 @@ class AdminLogin extends React.Component {
       return
     }
 
+
     this.setState({
       busy: true
     }, async () => {
       try {
-        const status = await this.login(username, password)
-        if (status !== 200) {
+        const { status } = await dispatch(login(username, password))
+        if (status !== OK) {
           this.setState({
             ...this.getInitialState(),
             error: true,
@@ -177,38 +187,10 @@ class AdminLogin extends React.Component {
         this.setState({
           ...this.getInitialState(),
           error: true,
-          message: statusErrorMap[500]
+          message: statusErrorMap[INTERNAL_SERVER_ERROR]
         })
       }
     })
-  }
-
-  login = async (username, password) => {
-
-    const { adminContext: { loggedInCallback, apiEndpoints } } = this.props
-    let status = undefined
-    try {
-      const res = await fetch(apiEndpoints.session, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password })
-      })
-      if (res.status === 200) {
-        const data = await res.json()
-        status = 200
-        loggedInCallback(data)
-      }
-      else {
-        status = res.status
-      }
-    }
-    catch (err) {
-      throw err
-    }
-
-    return status
   }
 
   handleKeepChange = event => {
@@ -233,7 +215,7 @@ class AdminLogin extends React.Component {
     const {
       classes,
       className,
-      adminContext,
+      userSession,
       /* eslint-disable */
       //Just to catch ...others properly, theme prop is extracted.
       theme,
@@ -267,8 +249,7 @@ class AdminLogin extends React.Component {
       [classes.alert]: true
     })
 
-
-    return adminContext.auth ? <Redirect to='/admin' /> : (
+    return userSession.authanticated ? <Redirect to='/admin' /> : (
       <Flex className={rootClasses} direction='column' parent>
         <AdminHeader>
           <div className={classes['header-content']}>
@@ -381,7 +362,6 @@ class AdminLogin extends React.Component {
 
 AdminLogin.propTypes = {
   classes: PropTypes.object.isRequired,
-  adminContext: PropTypes.object.isRequired,
   className: PropTypes.string
 }
 
@@ -389,8 +369,10 @@ AdminLogin.defaultProps = {
   className: '',
 }
 
-const styledAdminLogin = withAdminContext(withStyles(styles)(AdminLogin))
+const styledAdminLogin = withStyles(styles)(AdminLogin)
 
 styledAdminLogin.displayName = 'AdminLogin'
 
-module.exports = styledAdminLogin
+module.exports = connect(state => ({
+  userSession: state.userSession
+}))(styledAdminLogin)

@@ -6,7 +6,6 @@ const Flex = require('../Flex')
 const AdminHeader = require('../AdminHeader')
 const AdminFooter = require('../AdminFooter')
 const Panel = require('../Panel')
-const { withAdminContext } = require('../../context/AdminContext')
 const { Redirect } = require('react-router-dom')
 const Image = require('../Image')
 const Text = require('../Text')
@@ -18,6 +17,8 @@ const { MdAdd, MdList, MdCheck, MdBlock, MdGroup, MdPersonAdd, MdInsertDriveFile
 const { Link } = require('react-router-dom')
 const { CSSTransition } = require('react-transition-group')
 const IconButton = require('../IconButton')
+const { connect } = require('react-redux')
+const { logout } = require('../../actions/auth')
 
 
 const styles = theme => {
@@ -138,13 +139,19 @@ class AdminHome extends React.Component {
     const {
       classes,
       className,
-      adminContext,
+      userSession: { authanticated, user },
       match,
+      dispatch,
       /* eslint-disable */
       //Just to catch ...others properly, theme prop is extracted.
       theme,
 
     } = this.props
+
+    if (!authanticated) {
+      return <Redirect to={`${match.path}/login`} />
+    }
+
 
     const {
       openLeftNavbar
@@ -180,13 +187,13 @@ class AdminHome extends React.Component {
         <Flex className={classes['left-navbar']} direction='column' parent>
           <Flex className={classes['user-info']} direction='column' alignItems='center' parent>
             <Image
-              src='https://scontent-mxp1-1.xx.fbcdn.net/v/t1.0-1/p100x100/21034563_1656608651016648_3404805281443873405_n.jpg?_nc_cat=103&_nc_ht=scontent-mxp1-1.xx&oh=5645031ff6f862e2d784b016c37cf91a&oe=5D22F152'
+              src={user.avatar}
               width={theme.unit * 15}
               height={theme.unit * 15}
               rounded
             />
-            <Text size='big'>Hamit Zor</Text>
-            <Text size='small'>Super Admin</Text>
+            <Text size='big'>{`${user.name} (${user.user})`}</Text>
+            <Text size='small'>{user.role === 'ADMIN' ? 'Admin' : 'Regular User'}</Text>
           </Flex>
           <Link to={`${match.path}/dashboard`}><Button radius={0} fullWidth justifyContent='left' color='default' >Dashboard</Button></Link>
           <Expansion animate={animate} open={true} label='Blogs'>
@@ -241,6 +248,7 @@ class AdminHome extends React.Component {
                 </Icon>
               </IconButton>
               <IconButton
+                onClick={() => dispatch(logout())}
                 size={2}
                 color='white'>
                 <Icon>
@@ -275,7 +283,7 @@ class AdminHome extends React.Component {
       exitDone: classes['display-exit-done']
     }
 
-    return !adminContext.auth ? <Redirect to={`${match.path}/login`} /> : (
+    return (
       <Flex className={rootClasses} parent wrap='nowrap' >
         {animate ?
           (<CSSTransition
@@ -302,7 +310,6 @@ class AdminHome extends React.Component {
 
 AdminHome.propTypes = {
   classes: PropTypes.object.isRequired,
-  adminContext: PropTypes.object.isRequired,
   className: PropTypes.string,
   match: PropTypes.object.isRequired,
 }
@@ -311,8 +318,10 @@ AdminHome.defaultProps = {
   className: '',
 }
 
-const styledAdminHome = withAdminContext(withStyles(styles)(AdminHome))
+const styledAdminHome = withStyles(styles)(AdminHome)
 
 styledAdminHome.displayName = 'AdminHome'
 
-module.exports = styledAdminHome
+module.exports = connect(state => ({
+  userSession: state.userSession
+}))(styledAdminHome)

@@ -1,54 +1,42 @@
 const React = require('react')
 const { Fragment } = require('react')
-const { AppProvider } = require('../context/AppContext')
 const { BrowserRouter: Router, Route, Switch } = require('react-router-dom')
 const { getWidth } = require('../theme/getWidth')
 const StyleFixer = require('../components/StyleFixer')
 const Admin = require('../components/Admin')
-const config = require('../../app.config')
-
+const { getSession } = require('../actions/auth')
+const { connect } = require('react-redux')
 
 class App extends React.Component {
 
   state = {
-    width: getWidth()
+    initialAuthCheckDone: false
   }
 
-  componentDidMount() {
-    const component = this
-    window.onresize = function () {
-      component.setState({
-        width: getWidth()
-      })
-    }
-  }
-
-  getContext = () => {
-    return {
-      appContext: {
-        width: this.state.width,
-        apiEndpoints: config.endpointUrl,
-        domain: config.domain,
-        port: config.port
-      }
-    }
+  async componentDidMount() {
+    const { dispatch } = this.props
+    await dispatch(getSession())
+    this.setState({
+      initialAuthCheckDone: true
+    })
   }
 
   render() {
+    const { initialAuthCheckDone } = this.state
+
     return (
-      <AppProvider value={this.getContext()}>
+      <Fragment>
         <StyleFixer />
-        <Router>
+        {initialAuthCheckDone ? (<Router>
           <Fragment>
             <Switch>
-              <Route exact path='/' component={null} />
               <Route path='/admin' component={Admin} />
             </Switch>
           </Fragment>
-        </Router>
-      </AppProvider>
+        </Router>) : <div>Loading...</div>}
+      </Fragment>
     )
   }
 }
 
-module.exports = App
+module.exports = connect()(App)
