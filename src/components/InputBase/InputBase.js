@@ -14,6 +14,10 @@ const styles = theme => {
       fontWeight: 'inherit',
       color: theme.color.text.normal,
       fontSize: '1rem',
+      '&:-webkit-autofill,&:-webkit-autofill:hover, &:-webkit-autofill:focus, &:-webkit-autofill:active': {
+        '-webkit-transition': "color 99999s ease-out, background-color 99999s ease-out",
+        '-webkit-transition-delay': '99999s'
+      },
       '&:focus': {
         outline: 'none'
       },

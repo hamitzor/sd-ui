@@ -238,12 +238,7 @@ class Select extends React.Component {
       animate,
       buttonProps,
       style,
-      /* eslint-disable */
-      //Just to catch ...others properly, theme prop is extracted.
-      theme,
-      maxOption,
-      /* eslint-enable */
-      ...others
+      theme: { unit }
     } = this.props
 
     const {
@@ -275,7 +270,7 @@ class Select extends React.Component {
     let selectedOne = false
 
     const menu = (
-      <div ref={this.menuRef} className={classes.menu} style={{ maxHeight: menuHeight ? menuHeight + theme.unit * 4 : 'none' }}>
+      <div ref={this.menuRef} className={classes.menu} style={{ maxHeight: menuHeight ? menuHeight + unit * 4 : 'none' }}>
         <List onSelect={this.handleSelect}>
           {
             React.Children.map(options, (child, i) => {
@@ -319,7 +314,7 @@ class Select extends React.Component {
 
     const tempRootStyle = ready ? {} : { position: 'absolute', zIndex: -1, visibility: 'hidden' }
     return (
-      <div style={{ ...style, ...tempRootStyle }} ref={this.rootRef} {...others} className={rootClasses} >
+      <div style={{ ...style, ...tempRootStyle }} ref={this.rootRef} className={rootClasses} >
         {ready && open && <BodyFixerWithStyles />}
         {
           !native &&
@@ -385,6 +380,7 @@ Select.propTypes = {
   }),
   classes: PropTypes.object.isRequired,
   className: PropTypes.string,
+  theme: PropTypes.object.isRequired,
   native: PropTypes.bool,
   color: PropTypes.oneOf(color),
   disabled: PropTypes.bool,

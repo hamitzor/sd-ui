@@ -13,8 +13,8 @@ class Admin extends React.Component {
 
     return (
       <Switch>
-        <Route exact path={`${match.path}`} component={AdminHome} />
         <Route path={`${match.path}/login`} component={AdminLogin} />
+        <Route path={`${match.path}`} component={AdminHome} />
       </Switch>
     )
   }

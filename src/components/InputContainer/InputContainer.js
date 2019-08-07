@@ -174,7 +174,7 @@ const styles = theme => {
       fontSize: descFontSize,
       float: 'left',
       color: labelColor,
-      paddingTop: theme.unit / 5 * 4,
+      marginTop: theme.unit / 5 * 3,
       marginLeft: theme.unit,
       marginRight: theme.unit * 2,
       textAlign: 'left'
@@ -184,7 +184,7 @@ const styles = theme => {
       fontSize: descFontSize,
       float: 'right',
       fontWeight: 500,
-      paddingTop: theme.unit / 5 * 4,
+      marginTop: theme.unit / 5 * 3,
       marginRight: theme.unit,
       marginLeft: theme.unit * 2,
       color: errorColor,

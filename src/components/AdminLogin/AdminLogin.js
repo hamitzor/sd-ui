@@ -39,14 +39,12 @@ const statusErrorMap = {
 
 const styles = theme => {
   return {
-    root: {
-      height: '100vh'
-    },
+    root: {},
     container: {
       flex: 1,
-      padding: `${theme.unit * 2}px ${theme.unit * 2}px`,
+      padding: `${theme.unit * 16}px ${theme.unit * 2}px`,
       [theme.bigger('sm')]: {
-        padding: `${theme.unit * 3}px ${theme.unit * 5}px`,
+        padding: `${theme.unit * 34.8}px ${theme.unit * 5}px`,
       },
     },
     form: {
@@ -57,6 +55,9 @@ const styles = theme => {
       },
       position: 'relative',
       maxWidth: 452
+    },
+    remember: {
+      marginTop: theme.unit * 3
     },
     button: {
       [theme.smaller('sm')]: {
@@ -100,6 +101,14 @@ class AdminLogin extends React.Component {
   constructor(props) {
     super(props)
     this.state = this.getInitialState()
+  }
+  //Redux fix: https://stackoverflow.com/questions/53786551/reactjs-redux-cant-perform-a-react-state-update-on-an-unmounted-component
+  componentWillUnmount() {
+    this.setState = () => undefined
+  }
+
+  componentDidMount() {
+    document.getElementsByTagName('input')[0].focus()
   }
 
   getInitialState = () => (
@@ -214,12 +223,8 @@ class AdminLogin extends React.Component {
   render() {
     const {
       classes,
-      className,
-      userSession,
-      /* eslint-disable */
-      //Just to catch ...others properly, theme prop is extracted.
-      theme,
-      /* eslint-enable */
+      userSession: { authanticated },
+      width
     } = this.props
 
     const {
@@ -233,12 +238,10 @@ class AdminLogin extends React.Component {
       validation
     } = this.state
 
-    const width = theme.width()
     const isXs = width === 'xs'
 
     const rootClasses = classNames({
-      [classes.root]: true,
-      [className]: true
+      [classes.root]: true
     })
 
     const containerClasses = classNames({
@@ -249,12 +252,17 @@ class AdminLogin extends React.Component {
       [classes.alert]: true
     })
 
-    return userSession.authanticated ? <Redirect to='/admin' /> : (
+    const rememberClasses = classNames({
+      [classes.remember]: true,
+      [classes['margin-bottom']]: true
+    })
+
+    return authanticated ? <Redirect to='/admin' /> : (
       <Flex className={rootClasses} direction='column' parent>
         <AdminHeader>
           <div className={classes['header-content']}>
             <Anchor className={classes.logo}>
-              <Link to='/admin'><Text tag='h4' color='white'>Hamit Zor - Admin</Text></Link>
+              <Link to='/admin'><Text tag='h4' color='white'>SceneDetector | Admin Panel Login</Text></Link>
             </Anchor>
           </div>
         </AdminHeader>
@@ -315,7 +323,7 @@ class AdminLogin extends React.Component {
                 }
               </InputContainer>
               <Control
-                className={classes['margin-bottom']}
+                className={rememberClasses}
                 value='remember'
                 onChange={this.handleKeepChange}
                 checked={keep}
@@ -362,11 +370,13 @@ class AdminLogin extends React.Component {
 
 AdminLogin.propTypes = {
   classes: PropTypes.object.isRequired,
-  className: PropTypes.string
+  dispatch: PropTypes.func.isRequired,
+  userSession: PropTypes.object.isRequired,
+  width: PropTypes.string
 }
 
 AdminLogin.defaultProps = {
-  className: '',
+  width: 'lg'
 }
 
 const styledAdminLogin = withStyles(styles)(AdminLogin)
@@ -374,5 +384,6 @@ const styledAdminLogin = withStyles(styles)(AdminLogin)
 styledAdminLogin.displayName = 'AdminLogin'
 
 module.exports = connect(state => ({
-  userSession: state.userSession
+  userSession: state.userSession,
+  width: state.width
 }))(styledAdminLogin)

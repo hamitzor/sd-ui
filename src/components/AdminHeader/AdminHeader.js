@@ -17,19 +17,12 @@ const styles = theme => {
 const AdminHeader = props => {
   const {
     children,
-    classes,
-    className,
-    /* eslint-disable */
-    //Just to catch ...others properly, theme prop is extracted.
-    theme,
-    /* eslint-enable */
+    classes
   } = props
 
   const rootClasses = classNames({
-    [classes.root]: true,
-    [className]: true
+    [classes.root]: true
   })
-
 
   return (
     <Flex className={rootClasses} justify='center' alignItems='center' parent>
@@ -40,13 +33,11 @@ const AdminHeader = props => {
 
 AdminHeader.propTypes = {
   children: PropTypes.any,
-  classes: PropTypes.object.isRequired,
-  className: PropTypes.string,
+  classes: PropTypes.object.isRequired
 }
 
 AdminHeader.defaultProps = {
   children: '',
-  className: ''
 }
 
 const styledAdminHeader = withStyles(styles)(AdminHeader)

@@ -16,23 +16,18 @@ const styles = theme => {
         padding: `${theme.unit * 3}px ${theme.unit * 5}px`,
       },
       textAlign: 'center',
+      fontWeight: 600
     }
   }
 }
 
 const AdminFooter = props => {
   const {
-    classes,
-    className,
-    /* eslint-disable */
-    //Just to catch ...others properly, theme prop is extracted.
-    theme,
-    /* eslint-enable */
+    classes
   } = props
 
   const rootClasses = classNames({
-    [classes.root]: true,
-    [className]: true
+    [classes.root]: true
   })
 
   const containerClasses = classNames({
@@ -42,7 +37,7 @@ const AdminFooter = props => {
   return (
     <Flex className={rootClasses} justify='center' alignItems='center' parent>
       <Flex className={containerClasses} xs={12}>
-        <Text size='small' color='white'>© 2011 Hamit Zor All Rights Reserved</Text>
+        <Text size='small' color='white'>© 2011 SceneDetector All Rights Reserved</Text>
       </Flex>
     </Flex>
   )
@@ -50,11 +45,6 @@ const AdminFooter = props => {
 
 AdminFooter.propTypes = {
   classes: PropTypes.object.isRequired,
-  className: PropTypes.string
-}
-
-AdminFooter.defaultProps = {
-  className: '',
 }
 
 const styledAdminFooter = withStyles(styles)(AdminFooter)

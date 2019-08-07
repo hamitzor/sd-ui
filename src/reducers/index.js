@@ -20,8 +20,21 @@ const {
   //VIDEO_UPLOAD_STARTED,
   //VIDEO_UPLOAD_MADE_PROGRESS,
   //VIDEO_UPLOAD_SUCCESS,
-  //VIDEO_UPLOAD_FAILURE
+  //VIDEO_UPLOAD_FAILURE,
+  INITIAL_WIDTH_CALCULATED,
+  WIDTH_CHANGED
 } = require('../constants/action-types')
+
+const width = (state = null, action) => {
+  switch (action.type) {
+    case INITIAL_WIDTH_CALCULATED:
+      return action.value
+    case WIDTH_CHANGED:
+      return action.value
+    default:
+      return state
+  }
+}
 
 const userSession = (state = {
   authanticated: false,
@@ -231,6 +244,7 @@ const objectDetection = (state = {}, action) => {
 */
 
 const rootReducer = combineReducers({
+  width,
   userSession,
   //videos,
   //video,

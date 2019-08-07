@@ -9,6 +9,7 @@ const configureStore = require('./store/configureStore')
 const { ThemeProvider } = require('react-jss')
 const theme = require('./theme')
 
+
 const store = configureStore()
 
 render(

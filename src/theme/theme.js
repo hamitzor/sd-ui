@@ -1,6 +1,6 @@
 const Color = require('color')
 const { breakpoints, breakpointNames } = require('./breakpoints')
-const { getWidth } = require('./getWidth')
+const { getWidth } = require('./get-width')
 
 
 const shadow = [
@@ -82,7 +82,7 @@ const grey = {
 }
 
 const error = Color('#e84747')
-const primary = Color('#6600ff')
+const primary = Color('#0095ff')
 const secondary = Color('#39ad00')
 const textColor = Color('#424242')
 

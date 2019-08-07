@@ -1,11 +1,16 @@
 const React = require('react')
 const { Fragment } = require('react')
 const { BrowserRouter: Router, Route, Switch } = require('react-router-dom')
-const { getWidth } = require('../theme/getWidth')
+const { getWidth } = require('../theme/get-width')
 const StyleFixer = require('../components/StyleFixer')
 const Admin = require('../components/Admin')
 const { getSession } = require('../actions/auth')
 const { connect } = require('react-redux')
+const PropTypes = require('prop-types')
+const {
+  INITIAL_WIDTH_CALCULATED,
+  WIDTH_CHANGED
+} = require('../constants/action-types')
 
 class App extends React.Component {
 
@@ -19,6 +24,18 @@ class App extends React.Component {
     this.setState({
       initialAuthCheckDone: true
     })
+
+    dispatch({
+      type: INITIAL_WIDTH_CALCULATED,
+      value: getWidth()
+    })
+
+    window.onresize = function () {
+      dispatch({
+        type: WIDTH_CHANGED,
+        value: getWidth()
+      })
+    }
   }
 
   render() {
@@ -37,6 +54,10 @@ class App extends React.Component {
       </Fragment>
     )
   }
+}
+
+App.propTypes = {
+  dispatch: PropTypes.func.isRequired
 }
 
 module.exports = connect()(App)

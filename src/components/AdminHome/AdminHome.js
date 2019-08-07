@@ -12,13 +12,13 @@ const Text = require('../Text')
 const Expansion = require('../Expansion')
 const Button = require('../Button')
 const Icon = require('../Icon')
-const Test = require('../Test')
-const { MdAdd, MdList, MdCheck, MdBlock, MdGroup, MdPersonAdd, MdInsertDriveFile, MdMenu, MdClose, MdAccountCircle } = require('react-icons/md')
+const { MdAdd, MdList, MdCheck, MdBlock, MdMenu, MdClose, MdAccountCircle } = require('react-icons/md')
 const { Link } = require('react-router-dom')
 const { CSSTransition } = require('react-transition-group')
 const IconButton = require('../IconButton')
 const { connect } = require('react-redux')
 const { logout } = require('../../actions/auth')
+const { Route, Switch } = require('react-router-dom')
 
 
 const styles = theme => {
@@ -28,10 +28,10 @@ const styles = theme => {
       overflowX: 'hidden'
     },
     'left-navbar': {
-      width: '250px'
+      width: '360px'
     },
-    'display': {
-      minWidth: '360px'
+    'content': {
+      flex: 1
     },
     'container': {
       flex: 1
@@ -48,55 +48,58 @@ const styles = theme => {
       paddingBottom: 10
     },
     'left-navbar-enter': {
-      ...theme.transform('translateX(-250px)'),
+      ...theme.transform('translateX(-360px)'),
       width: '0px',
       transition: theme.transition('all')
     },
     'left-navbar-enter-active': {
       ...theme.transform('translateX(0)'),
-      width: '250px',
+      width: '360px',
     },
     'left-navbar-enter-done': {
       ...theme.transform('translateX(0)'),
-      width: '250px',
+      width: '360px',
     },
     'left-navbar-exit': {
       ...theme.transform('translateX(0)'),
-      width: '250px',
+      width: '360px',
       transition: theme.transition('all')
     },
     'left-navbar-exit-active': {
-      ...theme.transform('translateX(-250px)'),
+      ...theme.transform('translateX(-360px)'),
       width: '0px',
     },
     'left-navbar-exit-done': {
-      ...theme.transform('translateX(-250px)'),
+      ...theme.transform('translateX(-360px)'),
       width: '0px',
     },
-    'display-enter': {
+    'left-navbar-close': {
+      padding: `${theme.unit * 2}px ${theme.unit * 3}px`
+    },
+    'content-enter': {
       width: '100%',
       transition: theme.transition('all')
     },
-    'display-enter-active': {
-      width: 'calc( 100% - 250px )',
+    'content-enter-active': {
+      width: 'calc( 100% - 360px )',
     },
-    'display-enter-done': {
-      width: 'calc( 100% - 250px )',
+    'content-enter-done': {
+      width: 'calc( 100% - 360px )',
     },
-    'display-exit': {
-      width: 'calc( 100% - 250px )',
+    'content-exit': {
+      width: 'calc( 100% - 360px )',
       transition: theme.transition('all')
     },
-    'display-exit-active': {
+    'content-exit-active': {
       width: '100%',
     },
-    'display-exit-done': {
+    'content-exit-done': {
       width: '100%',
     },
-    'display-on': {
-      width: 'calc( 100% - 250px )',
+    'content-on': {
+      width: 'calc( 100% - 360px )',
     },
-    'display-off': {
+    'content-off': {
       width: '100%',
     },
     'header-content': {
@@ -108,7 +111,7 @@ const styles = theme => {
 class AdminHome extends React.Component {
 
   state = {
-    openLeftNavbar: true,
+    leftNavbarOpened: true,
     busy: false
   }
 
@@ -119,18 +122,16 @@ class AdminHome extends React.Component {
     onExited: () => { this.setState({ busy: false }) }
   }
 
-
   componentDidMount() {
+    const { width } = this.props
     this.setState({
-      /* eslint-disable */
-      openLeftNavbar: this.props.theme.width() !== 'xs'
-      /* eslint-enable */
+      leftNavbarOpened: width !== 'xs'
     })
   }
 
-  handleToggleLeftNavbar = () => {
-    this.setState(({ openLeftNavbar, busy }) => {
-      let newState = busy ? {} : { openLeftNavbar: !openLeftNavbar }
+  toggleLeftNavbar = val => () => {
+    this.setState(({ busy }) => {
+      let newState = busy ? {} : { leftNavbarOpened: val }
       return newState
     })
   }
@@ -140,11 +141,10 @@ class AdminHome extends React.Component {
       classes,
       className,
       userSession: { authanticated, user },
-      match,
+      width,
       dispatch,
-      /* eslint-disable */
-      //Just to catch ...others properly, theme prop is extracted.
-      theme,
+      match,
+      theme: { unit },
 
     } = this.props
 
@@ -152,14 +152,11 @@ class AdminHome extends React.Component {
       return <Redirect to={`${match.path}/login`} />
     }
 
-
     const {
-      openLeftNavbar
+      leftNavbarOpened
     } = this.state
 
-
-    const animate = theme.width() !== 'xs'
-
+    const animate = width !== 'xs'
 
     const rootClasses = classNames({
       [classes.root]: true,
@@ -185,68 +182,67 @@ class AdminHome extends React.Component {
     const leftNavbar = (
       <Panel radius={0} noBorder padding={0}>
         <Flex className={classes['left-navbar']} direction='column' parent>
+          <Flex parent justify='end'>
+            {leftNavbarOpened && <IconButton
+              className={classes['left-navbar-close']}
+              size={2}
+              color='default'
+              onClick={this.toggleLeftNavbar(false)}>
+              <Icon>
+                <MdClose />
+              </Icon>
+            </IconButton>}
+          </Flex>
           <Flex className={classes['user-info']} direction='column' alignItems='center' parent>
             <Image
               src={user.avatar}
-              width={theme.unit * 15}
-              height={theme.unit * 15}
+              width={unit * 15}
+              height={unit * 15}
               rounded
             />
             <Text size='big'>{`${user.name} (${user.user})`}</Text>
             <Text size='small'>{user.role === 'ADMIN' ? 'Admin' : 'Regular User'}</Text>
           </Flex>
-          <Link to={`${match.path}/dashboard`}><Button radius={0} fullWidth justifyContent='left' color='default' >Dashboard</Button></Link>
-          <Expansion animate={animate} open={true} label='Blogs'>
+          <Link to={`${match.path}/dashboard`}>
+            <Button radius={0} fullWidth justifyContent='left' color='default' >Dashboard</Button>
+          </Link>
+          <Expansion animate={animate} open={true} label='Configuration Sets'>
             <div className={classes['inner-navbar']}>
-              <InnerNav to='blos/new' ><Icon><MdAdd /></Icon>New Blog</InnerNav>
-              <InnerNav to='blogs/all' ><Icon><MdList /></Icon>All Blogs</InnerNav>
-              <InnerNav to='blogs/published' ><Icon><MdCheck /></Icon>Published Blogs</InnerNav>
-              <InnerNav to='blogs/unpublished' ><Icon><MdBlock /></Icon>Unpublished Blogs</InnerNav>
+              <InnerNav to='configuration/new' ><Icon><MdAdd /></Icon>New Configuration Set</InnerNav>
+              <InnerNav to='configuration/all' ><Icon><MdList /></Icon>All Configuration Sets</InnerNav>
             </div>
           </Expansion>
-          <Expansion animate={animate} open={true} label='Comments'>
+          <Expansion animate={animate} open={false} label='Comments'>
             <div className={classes['inner-navbar']}>
               <InnerNav to='comments/all' ><Icon><MdList /></Icon>All Comments</InnerNav>
               <InnerNav to='comments/approved' ><Icon><MdCheck /></Icon>Approved Comments</InnerNav>
               <InnerNav to='comments/unapproved' ><Icon><MdBlock /></Icon>Unapproved Comments</InnerNav>
             </div>
           </Expansion>
-          <Expansion animate={animate} label='Users'>
-            <div className={classes['inner-navbar']}>
-              <InnerNav to='users' ><Icon><MdGroup /></Icon>All Users</InnerNav>
-              <InnerNav to='users/new' ><Icon><MdPersonAdd /></Icon>New User</InnerNav>
-            </div>
-          </Expansion>
-          <Expansion animate={animate} label='Settings'>
-            <div className={classes['inner-navbar']}>
-              <InnerNav to='users' ><Icon><MdInsertDriveFile /></Icon>Pages</InnerNav>
-              <InnerNav to='users/new' ><Icon><MdPersonAdd /></Icon>Site Configuration</InnerNav>
-            </div>
-          </Expansion>
         </Flex>
       </Panel>
     )
 
-    const Display = (animate, on) => {
+    const content = (animate) => {
 
-      const displayClasses = classNames({
-        [classes['display']]: true,
-        [classes['display-on']]: !animate && on,
-        [classes['display-off']]: !animate && !on
+      const contentClasses = classNames({
+        [classes['content']]: true,
+        [classes['content-on']]: !animate && leftNavbarOpened,
+        [classes['content-off']]: !animate && !leftNavbarOpened
       })
 
       return (
-        <Flex wrap='nowrap' fullWidth={false} className={displayClasses} direction='column' parent>
+        <Flex wrap='nowrap' fullWidth={false} className={contentClasses} direction='column' parent>
           <AdminHeader>
             <Flex className={classes['header-content']} justify='between' parent>
-              <IconButton
+              {!leftNavbarOpened ? <IconButton
                 size={2}
                 color='white'
-                onClick={this.handleToggleLeftNavbar}>
+                onClick={this.toggleLeftNavbar(true)}>
                 <Icon>
-                  {openLeftNavbar ? <MdClose /> : <MdMenu />}
+                  <MdMenu />
                 </Icon>
-              </IconButton>
+              </IconButton> : <div />}
               <IconButton
                 onClick={() => dispatch(logout())}
                 size={2}
@@ -258,7 +254,10 @@ class AdminHome extends React.Component {
             </Flex>
           </AdminHeader>
           <Flex className={classes['container']} parent>
-            <Test />
+            <Switch>
+              <Route exact path={`${match.path}`} component={() => <Redirect to={`${match.path}/dashboard`} />} />
+              <Route path={`${match.path}/dashboard`} component={() => <div>/dashboard</div>} />
+            </Switch>
           </Flex>
           <AdminFooter />
         </Flex>
@@ -274,35 +273,35 @@ class AdminHome extends React.Component {
       exitDone: classes['left-navbar-exit-done']
     }
 
-    const displayAnimateClasses = {
-      enter: classes['display-enter'],
-      enterActive: classes['display-enter-active'],
-      enterDone: classes['display-enter-done'],
-      exit: classes['display-exit'],
-      exitActive: classes['display-exit-active'],
-      exitDone: classes['display-exit-done']
+    const contentAnimateClasses = {
+      enter: classes['content-enter'],
+      enterActive: classes['content-enter-active'],
+      enterDone: classes['content-enter-done'],
+      exit: classes['content-exit'],
+      exitActive: classes['content-exit-active'],
+      exitDone: classes['content-exit-done']
     }
 
     return (
       <Flex className={rootClasses} parent wrap='nowrap' >
         {animate ?
           (<CSSTransition
-            in={openLeftNavbar}
+            in={leftNavbarOpened}
             timeout={200}
             classNames={leftNavbarAnimateClasses}
             {...this.animateBusyHandlers}
           >
             {leftNavbar}
-          </CSSTransition>) : openLeftNavbar && leftNavbar}
+          </CSSTransition>) : leftNavbarOpened && leftNavbar}
         {animate ?
           (<CSSTransition
-            in={openLeftNavbar}
+            in={leftNavbarOpened}
             timeout={200}
-            classNames={displayAnimateClasses}
+            classNames={contentAnimateClasses}
             {...this.animateBusyHandlers}
           >
-            {Display(true)}
-          </CSSTransition>) : Display(false, openLeftNavbar)}
+            {content(true)}
+          </CSSTransition>) : content(false, leftNavbarOpened)}
       </Flex>
     )
   }
@@ -311,11 +310,16 @@ class AdminHome extends React.Component {
 AdminHome.propTypes = {
   classes: PropTypes.object.isRequired,
   className: PropTypes.string,
+  theme: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
+  dispatch: PropTypes.func.isRequired,
+  userSession: PropTypes.object.isRequired,
+  width: PropTypes.string
 }
 
 AdminHome.defaultProps = {
   className: '',
+  width: 'lg'
 }
 
 const styledAdminHome = withStyles(styles)(AdminHome)
@@ -323,5 +327,6 @@ const styledAdminHome = withStyles(styles)(AdminHome)
 styledAdminHome.displayName = 'AdminHome'
 
 module.exports = connect(state => ({
-  userSession: state.userSession
+  userSession: state.userSession,
+  width: state.width
 }))(styledAdminHome)
