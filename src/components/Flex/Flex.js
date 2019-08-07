@@ -218,6 +218,7 @@ Flex.propTypes = {
 }
 
 Flex.defaultProps = {
+  className: '',
   children: null,
   parent: false,
   direction: 'row',

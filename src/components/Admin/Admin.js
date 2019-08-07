@@ -4,21 +4,12 @@ const { Route, Switch } = require('react-router-dom')
 const AdminLogin = require('../AdminLogin')
 const AdminHome = require('../AdminHome')
 
-class Admin extends React.Component {
-
-  render() {
-    const {
-      match
-    } = this.props
-
-    return (
-      <Switch>
-        <Route path={`${match.path}/login`} component={AdminLogin} />
-        <Route path={`${match.path}`} component={AdminHome} />
-      </Switch>
-    )
-  }
-}
+const Admin = ({ match: { url } }) => (
+  <Switch>
+    <Route path={`${url}/login`} component={AdminLogin} />
+    <Route path={`${url}`} component={AdminHome} />
+  </Switch>
+)
 
 Admin.propTypes = {
   match: PropTypes.object.isRequired,

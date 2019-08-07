@@ -22,8 +22,18 @@ const {
   //VIDEO_UPLOAD_SUCCESS,
   //VIDEO_UPLOAD_FAILURE,
   INITIAL_WIDTH_CALCULATED,
-  WIDTH_CHANGED
+  WIDTH_CHANGED,
+  LANGUAGE_CHANGED
 } = require('../constants/action-types')
+
+const lang = (state = 'en', action) => {
+  switch (action.type) {
+    case LANGUAGE_CHANGED:
+      return action.lang
+    default:
+      return state
+  }
+}
 
 const width = (state = null, action) => {
   switch (action.type) {
@@ -246,6 +256,7 @@ const objectDetection = (state = {}, action) => {
 const rootReducer = combineReducers({
   width,
   userSession,
+  lang,
   //videos,
   //video,
   //objectDetection,

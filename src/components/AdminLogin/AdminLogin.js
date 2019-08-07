@@ -13,7 +13,8 @@ const Button = require('../Button')
 const IconButton = require('../IconButton')
 const Icon = require('../Icon')
 const { FaRegEye, FaRegEyeSlash } = require('react-icons/fa')
-const { IoMdKey, IoIosPerson, IoMdClose } = require('react-icons/io')
+const { IoMdClose } = require('react-icons/io')
+const { FiLock, FiUser } = require('react-icons/fi')
 const Control = require('../Control')
 const Text = require('../Text')
 const Alert = require('../Alert')
@@ -22,6 +23,7 @@ const { Link } = require('react-router-dom')
 const { connect } = require('react-redux')
 const { login } = require('../../actions/auth')
 const { Redirect } = require('react-router-dom')
+const i18n = require('../../i18n/translations')
 const {
   OK,
   NOT_FOUND,
@@ -31,20 +33,23 @@ const {
 } = require('../../../status-codes')
 
 const statusErrorMap = {
-  [NOT_FOUND]: 'Username or password is wrong',
-  [BAD_REQUEST]: 'Username or password is not set',
-  [FORBIDDEN]: 'This actino is not allowed',
-  [INTERNAL_SERVER_ERROR]: 'Internal server error'
+  [NOT_FOUND]: 'loginErrorWrong',
+  [BAD_REQUEST]: 'loginErrorBadRequest',
+  [FORBIDDEN]: 'errorForbidden',
+  [INTERNAL_SERVER_ERROR]: 'errorServerError'
 }
 
 const styles = theme => {
   return {
     root: {},
+    'lang-link': {
+      marginRight: theme.unit * 4
+    },
     container: {
       flex: 1,
       padding: `${theme.unit * 16}px ${theme.unit * 2}px`,
       [theme.bigger('sm')]: {
-        padding: `${theme.unit * 34.8}px ${theme.unit * 5}px`,
+        padding: `${theme.unit * 35.15}px ${theme.unit * 5}px`,
       },
     },
     form: {
@@ -83,12 +88,10 @@ const styles = theme => {
       color: theme.color.white,
       fontSize: '0.9rem'
     },
-    logo: {
+    'header-content': {
       '& a': {
         textDecoration: 'none'
-      }
-    },
-    'header-content': {
+      },
       padding: `${theme.unit * 2}px ${theme.unit * 2}px`,
       [theme.bigger('sm')]: {
         padding: `${theme.unit * 2}px ${theme.unit * 5}px`,
@@ -157,7 +160,7 @@ class AdminLogin extends React.Component {
   }
 
   handleSubmit = async () => {
-    const { dispatch } = this.props
+    const { dispatch, lang } = this.props
     let { username, password, busy } = this.state
     username = username.trim()
     password = password.trim()
@@ -167,11 +170,11 @@ class AdminLogin extends React.Component {
         validation: {
           username: {
             valid: username !== '',
-            message: username !== '' ? '' : 'You must enter your username'
+            message: username !== '' ? '' : i18n[lang].emptyUsernameMessage
           },
           password: {
             valid: password !== '',
-            message: password !== '' ? '' : 'You must enter your password'
+            message: password !== '' ? '' : i18n[lang].emptyPasswordMessage
           }
         }
       })
@@ -188,7 +191,7 @@ class AdminLogin extends React.Component {
           this.setState({
             ...this.getInitialState(),
             error: true,
-            message: statusErrorMap[status]
+            message: i18n[lang][statusErrorMap[status]]
           })
         }
       }
@@ -196,7 +199,7 @@ class AdminLogin extends React.Component {
         this.setState({
           ...this.getInitialState(),
           error: true,
-          message: statusErrorMap[INTERNAL_SERVER_ERROR]
+          message: i18n[lang][statusErrorMap[INTERNAL_SERVER_ERROR]]
         })
       }
     })
@@ -224,9 +227,10 @@ class AdminLogin extends React.Component {
     const {
       classes,
       userSession: { authanticated },
-      width
+      width,
+      lang,
+      match: { url }
     } = this.props
-
     const {
       username,
       password,
@@ -257,30 +261,36 @@ class AdminLogin extends React.Component {
       [classes['margin-bottom']]: true
     })
 
-    return authanticated ? <Redirect to='/admin' /> : (
+    return authanticated ? <Redirect to={`${url}/..`} /> : (
       <Flex className={rootClasses} direction='column' parent>
-        <AdminHeader>
-          <div className={classes['header-content']}>
-            <Anchor className={classes.logo}>
-              <Link to='/admin'><Text tag='h4' color='white'>SceneDetector | Admin Panel Login</Text></Link>
+        <AdminHeader className={classes['header-content']}>
+          <div></div>
+          <div>
+            <Anchor>
+              <Link to='/admin'><Text tag='h4' color='white'>{i18n[lang].loginHeader}</Text></Link>
+            </Anchor>
+          </div>
+          <div className={classes['lang-link']}>
+            <Anchor>
+              <Link to={`${url.replace(/^\/..\//, lang === 'tr' ? '/en/' : '/tr/')}`}><Text tag='h5' color='white'>{lang === 'tr' ? 'EN' : 'TR'}</Text></Link>
             </Anchor>
           </div>
         </AdminHeader>
         <Flex className={containerClasses} justify='center' alignItems='center' parent>
           <Panel className={classes.form}>
             <Flex parent justify={isXs ? 'center' : 'start'}>
-              <Text marginBottom tag='h4'  >Administrator Login</Text>
+              <Text marginBottom tag='h4'>{i18n[lang].loginFormTitle}</Text>
             </Flex>
             <Flex direction='column' alignItems={isXs ? 'center' : 'stretch'} parent>
               <InputContainer
                 className={classes['margin-bottom']}
-                label='Username'
-                desc='Administrator Username'
+                label={i18n[lang].username}
+                desc={i18n[lang].usernameDesc}
                 errorMessage={validation.username.message}
                 error={!validation.username.valid}>
                 <InputExtension>
                   <Icon>
-                    <IoIosPerson />
+                    <FiUser />
                   </Icon>
                 </InputExtension>
                 <InputBase
@@ -292,13 +302,13 @@ class AdminLogin extends React.Component {
               </InputContainer>
               <InputContainer
                 className={classes['margin-bottom']}
-                label='Password'
-                desc='Administrator Password'
+                label={i18n[lang].password}
+                desc={i18n[lang].passwordDesc}
                 errorMessage={validation.password.message}
                 error={!validation.password.valid}>
                 <InputExtension>
                   <Icon>
-                    <IoMdKey />
+                    <FiLock />
                   </Icon>
                 </InputExtension>
                 <InputBase
@@ -327,7 +337,7 @@ class AdminLogin extends React.Component {
                 value='remember'
                 onChange={this.handleKeepChange}
                 checked={keep}
-                inputLabel='Keep me logged in'
+                inputLabel={i18n[lang].keepMeLoggedIn}
               />
               <Button
                 type='filled'
@@ -362,7 +372,7 @@ class AdminLogin extends React.Component {
             </Alert>
           </Panel>
         </Flex>
-        <AdminFooter />
+        <AdminFooter lang={lang} />
       </Flex>
     )
   }
@@ -370,9 +380,11 @@ class AdminLogin extends React.Component {
 
 AdminLogin.propTypes = {
   classes: PropTypes.object.isRequired,
+  match: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired,
   userSession: PropTypes.object.isRequired,
-  width: PropTypes.string
+  width: PropTypes.string,
+  lang: PropTypes.string.isRequired
 }
 
 AdminLogin.defaultProps = {
@@ -385,5 +397,6 @@ styledAdminLogin.displayName = 'AdminLogin'
 
 module.exports = connect(state => ({
   userSession: state.userSession,
-  width: state.width
+  width: state.width,
+  lang: state.lang
 }))(styledAdminLogin)

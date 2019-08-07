@@ -1,6 +1,6 @@
 const React = require('react')
 const { Fragment } = require('react')
-const { BrowserRouter: Router, Route, Switch } = require('react-router-dom')
+const { Route, Switch } = require('react-router-dom')
 const { getWidth } = require('../theme/get-width')
 const StyleFixer = require('../components/StyleFixer')
 const Admin = require('../components/Admin')
@@ -9,20 +9,21 @@ const { connect } = require('react-redux')
 const PropTypes = require('prop-types')
 const {
   INITIAL_WIDTH_CALCULATED,
-  WIDTH_CHANGED
+  WIDTH_CHANGED,
+  LANGUAGE_CHANGED
 } = require('../constants/action-types')
 
 class App extends React.Component {
 
   state = {
-    initialAuthCheckDone: false
+    appInitialized: false
   }
 
   async componentDidMount() {
     const { dispatch } = this.props
     await dispatch(getSession())
     this.setState({
-      initialAuthCheckDone: true
+      appInitialized: true
     })
 
     dispatch({
@@ -38,26 +39,36 @@ class App extends React.Component {
     }
   }
 
-  render() {
-    const { initialAuthCheckDone } = this.state
+  componentDidUpdate() {
+    const { dispatch, match: { params: { lang } } } = this.props
+    dispatch({
+      type: LANGUAGE_CHANGED,
+      lang
+    })
+  }
 
+  render() {
+    const { appInitialized } = this.state
+    const { match: { url } } = this.props
     return (
       <Fragment>
         <StyleFixer />
-        {initialAuthCheckDone ? (<Router>
-          <Fragment>
+        {appInitialized ?
+          (<Fragment>
             <Switch>
-              <Route path='/admin' component={Admin} />
+              <Route path={`${url}/admin`} component={Admin} />
+              <Route exact={true} path={`${url}`} component={() => <div>Home</div>} />
+              <Route path="*" component={() => <div>404</div>} />
             </Switch>
-          </Fragment>
-        </Router>) : <div>Loading...</div>}
+          </Fragment>) : <div>Loading...</div>}
       </Fragment>
     )
   }
 }
 
 App.propTypes = {
-  dispatch: PropTypes.func.isRequired
+  dispatch: PropTypes.func.isRequired,
+  match: PropTypes.object.isRequired
 }
 
 module.exports = connect()(App)

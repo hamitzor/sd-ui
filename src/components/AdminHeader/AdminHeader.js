@@ -3,6 +3,7 @@ const PropTypes = require('prop-types')
 const withStyles = require('react-jss').default
 const classNames = require('classnames')
 const Flex = require('../Flex')
+const { connect } = require('react-redux')
 
 
 const styles = theme => {
@@ -25,7 +26,7 @@ const AdminHeader = props => {
   })
 
   return (
-    <Flex className={rootClasses} justify='center' alignItems='center' parent>
+    <Flex className={rootClasses} justify='between' alignItems='center' parent>
       {children}
     </Flex>
   )
@@ -44,4 +45,6 @@ const styledAdminHeader = withStyles(styles)(AdminHeader)
 
 styledAdminHeader.displayName = 'AdminHeader'
 
-module.exports = styledAdminHeader
+module.exports = connect(state => ({
+  lang: state.lang
+}))(styledAdminHeader)

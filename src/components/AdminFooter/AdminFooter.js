@@ -4,6 +4,9 @@ const withStyles = require('react-jss').default
 const classNames = require('classnames')
 const Flex = require('../Flex')
 const Text = require('../Text')
+const i18n = require('../../i18n/translations')
+const { connect } = require('react-redux')
+
 
 const styles = theme => {
   return {
@@ -23,7 +26,8 @@ const styles = theme => {
 
 const AdminFooter = props => {
   const {
-    classes
+    classes,
+    lang
   } = props
 
   const rootClasses = classNames({
@@ -37,7 +41,7 @@ const AdminFooter = props => {
   return (
     <Flex className={rootClasses} justify='center' alignItems='center' parent>
       <Flex className={containerClasses} xs={12}>
-        <Text size='small' color='white'>© 2011 SceneDetector All Rights Reserved</Text>
+        <Text size='small' color='white'>{i18n[lang].copyright}</Text>
       </Flex>
     </Flex>
   )
@@ -45,10 +49,13 @@ const AdminFooter = props => {
 
 AdminFooter.propTypes = {
   classes: PropTypes.object.isRequired,
+  lang: PropTypes.string.isRequired
 }
 
 const styledAdminFooter = withStyles(styles)(AdminFooter)
 
 styledAdminFooter.displayName = 'AdminFooter'
 
-module.exports = styledAdminFooter
+module.exports = connect(state => ({
+  lang: state.lang
+}))(styledAdminFooter)
