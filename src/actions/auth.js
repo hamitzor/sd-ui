@@ -32,16 +32,18 @@ exports.login = (user, pwd) => dispatch => {
     .then(res => res.json())
     .then(json => {
       if (json.status === codes.OK) {
-        return dispatch({
+        dispatch({
           type: LOGIN_SUCCESS,
           user: json.payload.user
         })
+        return json
       }
       else {
-        return dispatch({
+        dispatch({
           type: LOGIN_FAILURE,
           status: json.status
         })
+        return json
       }
     })
 }

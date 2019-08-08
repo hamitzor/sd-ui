@@ -6,6 +6,8 @@ const {
   LOGIN_FAILURE,
   LOGOUT_SUCCESS,
   LOGOUT_FAILURE,
+  CREATE_CONFIG_SET_REQUEST,
+  CREATE_CONFIG_SET_SUCCESS,
   //FETCH_VIDEOS_REQUEST,
   //FETCH_VIDEOS_SUCCESS,
   //FETCH_VIDEOS_FAILURE,
@@ -69,6 +71,33 @@ const userSession = (state = {
     case LOGOUT_FAILURE:
       return {
         authanticated: true
+      }
+    default:
+      return state
+  }
+}
+
+const configSet = (state = {
+  fetching: false,
+  updating: false,
+  deleting: false,
+  creating: false,
+  count: 0,
+  list: []
+}, action) => {
+  console.log(state)
+  switch (action.type) {
+    case CREATE_CONFIG_SET_REQUEST:
+      return {
+        ...state,
+        creating: true
+      }
+    case CREATE_CONFIG_SET_SUCCESS:
+      return {
+        ...state,
+        creating: false,
+        count: state.count + 1,
+        list: [...state.list, action.payload]
       }
     default:
       return state
@@ -257,6 +286,7 @@ const rootReducer = combineReducers({
   width,
   userSession,
   lang,
+  configSet
   //videos,
   //video,
   //objectDetection,

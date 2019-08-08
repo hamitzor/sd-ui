@@ -2,23 +2,22 @@ const React = require('react')
 const PropTypes = require('prop-types')
 const withStyles = require('react-jss').default
 const classNames = require('classnames')
-const Flex = require('../Flex')
-const AdminHeader = require('../AdminHeader')
-const AdminFooter = require('../AdminFooter')
-const Panel = require('../Panel')
-const InputBase = require('../InputBase')
-const InputContainer = require('../InputContainer')
-const InputExtension = require('../InputExtension')
-const Button = require('../Button')
-const IconButton = require('../IconButton')
-const Icon = require('../Icon')
+const Flex = require('../../components/Flex')
+const AdminHeader = require('../../components/AdminHeader')
+const AdminFooter = require('../../components/AdminFooter')
+const Panel = require('../../components/Panel')
+const InputBase = require('../../components/InputBase')
+const InputContainer = require('../../components/InputContainer')
+const InputExtension = require('../../components/InputExtension')
+const Button = require('../../components/Button')
+const IconButton = require('../../components/IconButton')
+const Icon = require('../../components/Icon')
 const { FaRegEye, FaRegEyeSlash } = require('react-icons/fa')
 const { IoMdClose } = require('react-icons/io')
 const { FiLock, FiUser } = require('react-icons/fi')
-const Control = require('../Control')
-const Text = require('../Text')
-const Alert = require('../Alert')
-const Anchor = require('../Anchor')
+const Text = require('../../components/Text')
+const Alert = require('../../components/Alert')
+const Anchor = require('../../components/Anchor')
 const { Link } = require('react-router-dom')
 const { connect } = require('react-redux')
 const { login } = require('../../actions/auth')
@@ -49,11 +48,11 @@ const styles = theme => {
       flex: 1,
       padding: `${theme.unit * 16}px ${theme.unit * 2}px`,
       [theme.bigger('sm')]: {
-        padding: `${theme.unit * 35.15}px ${theme.unit * 5}px`,
+        padding: `${theme.unit * 33.75}px ${theme.unit * 5}px`,
       },
     },
     form: {
-      padding: `${theme.unit * 15}px ${theme.unit * 15}px`,
+      padding: `${theme.unit * 20}px ${theme.unit * 15}px`,
       [theme.smaller('sm')]: {
         width: '100%',
         padding: `${theme.unit * 4}px 0`,
@@ -65,6 +64,7 @@ const styles = theme => {
       marginTop: theme.unit * 3
     },
     button: {
+      marginTop: theme.unit * 2,
       [theme.smaller('sm')]: {
         width: `calc( 100% - ${theme.unit * 4}px )`,
       }
@@ -105,36 +105,32 @@ class AdminLogin extends React.Component {
     super(props)
     this.state = this.getInitialState()
   }
-  //Redux fix: https://stackoverflow.com/questions/53786551/reactjs-redux-cant-perform-a-react-state-update-on-an-unmounted-component
-  componentWillUnmount() {
-    this.setState = () => undefined
-  }
 
   componentDidMount() {
-    document.getElementsByTagName('input')[0].focus()
+    const firstInput = document.getElementsByTagName('input')[0]
+    if (firstInput) {
+      firstInput.focus()
+    }
   }
 
-  getInitialState = () => (
-    {
-      error: false,
-      message: '',
-      showPassword: false,
-      username: '',
-      password: '',
-      busy: false,
-      keep: false,
-      validation: {
-        username: {
-          valid: true,
-          message: ''
-        },
-        password: {
-          valid: true,
-          message: ''
-        }
+  getInitialState = () => ({
+    error: false,
+    message: '',
+    showPassword: false,
+    username: '',
+    password: '',
+    busy: false,
+    validation: {
+      username: {
+        valid: true,
+        message: ''
+      },
+      password: {
+        valid: true,
+        message: ''
       }
     }
-  )
+  })
 
   handleKeyDown = event => {
     event.persist()
@@ -170,11 +166,11 @@ class AdminLogin extends React.Component {
         validation: {
           username: {
             valid: username !== '',
-            message: username !== '' ? '' : i18n[lang].emptyUsernameMessage
+            message: username !== '' ? '' : i18n[lang].validationErrorEmptyUsername
           },
           password: {
             valid: password !== '',
-            message: password !== '' ? '' : i18n[lang].emptyPasswordMessage
+            message: password !== '' ? '' : i18n[lang].validationErrorEmptyUsername
           }
         }
       })
@@ -205,11 +201,6 @@ class AdminLogin extends React.Component {
     })
   }
 
-  handleKeepChange = event => {
-    this.setState({
-      keep: event.target.checked
-    })
-  }
 
   handleChange = name => event => {
     this.setState({ [name]: event.target.value })
@@ -229,14 +220,23 @@ class AdminLogin extends React.Component {
       userSession: { authanticated },
       width,
       lang,
-      match: { url }
+      match: { url },
+      location: { state }
     } = this.props
+
+    if (authanticated) {
+      console.log(state)
+      if (state) {
+        return <Redirect to={state.from.pathname} />
+      }
+      return <Redirect to={`/${lang}`} />
+    }
+
     const {
       username,
       password,
       showPassword,
       busy,
-      keep,
       error,
       message,
       validation
@@ -256,12 +256,7 @@ class AdminLogin extends React.Component {
       [classes.alert]: true
     })
 
-    const rememberClasses = classNames({
-      [classes.remember]: true,
-      [classes['margin-bottom']]: true
-    })
-
-    return authanticated ? <Redirect to={`${url}/..`} /> : (
+    return (
       <Flex className={rootClasses} direction='column' parent>
         <AdminHeader className={classes['header-content']}>
           <div></div>
@@ -332,20 +327,14 @@ class AdminLogin extends React.Component {
                   </InputExtension>
                 }
               </InputContainer>
-              <Control
-                className={rememberClasses}
-                value='remember'
-                onChange={this.handleKeepChange}
-                checked={keep}
-                inputLabel={i18n[lang].keepMeLoggedIn}
-              />
               <Button
                 type='filled'
+                busy={busy}
                 className={classes.button}
                 onClick={this.handleSubmit}
                 disabled={busy}
               >
-                Login
+                {i18n[lang].login}
               </Button>
             </Flex>
             <Alert
@@ -381,6 +370,7 @@ class AdminLogin extends React.Component {
 AdminLogin.propTypes = {
   classes: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
+  location: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired,
   userSession: PropTypes.object.isRequired,
   width: PropTypes.string,

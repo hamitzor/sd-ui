@@ -13,95 +13,101 @@ const radius = [0, 1, 2, 3]
 const disabled = ['disabled', 'enabled']
 const align = ['center', 'left', 'right']
 
+const rootStyles = theme => type.reduce((typeAcc, typeVal) => ({
+  '@keyframes spin': {
+    from: { ...theme.transform('rotate(0deg)') },
+    to: { ...theme.transform('rotate(360deg)') }
+  },
+  ...typeAcc,
+  ...color.reduce((colorAcc, colorVal) => {
+    const loaderColor = colorVal === 'default' ? theme.color.text.normal : theme.color[colorVal].normal
+    const loaderStyle = {
+      border: `${theme.unit * 1}px solid ${theme.color.background.normal}`,
+      borderTop: `${theme.unit * 1}px solid ${loaderColor}`,
+      borderRadius: '50%',
+      width: theme.unit * 8,
+      height: theme.unit * 8,
+    }
 
-const rootStyles = theme => type.reduce((rootAcc, typeVal) => {
-  rootAcc = {
-    ...rootAcc,
-    ...color.reduce((colorAcc, colorVal) => {
-      colorAcc = {
-        ...colorAcc,
-        ...disabled.reduce((disabledAcc, disabledVal) => {
+    return ({
+      ...colorAcc,
+      ...disabled.reduce((disabledAcc, disabledVal) => {
+        let styles = {}
+        const calculatedColor = colorVal === 'default' ?
+          (disabledVal === 'disabled' ? theme.color.text.disabled : theme.color.text.normal) :
+          (disabledVal === 'disabled' ? theme.color[colorVal].disabled : theme.color[colorVal].normal)
 
-          let styles = {}
-          const calculatedColor = colorVal === 'default' ?
-            (disabledVal === 'disabled' ? theme.color.text.disabled : theme.color.text.normal) :
-            (disabledVal === 'disabled' ? theme.color[colorVal].disabled : theme.color[colorVal].normal)
+        const calculatedHoverColor = colorVal === 'default' ?
+          theme.color.text.dark :
+          theme.color[colorVal].dark
 
-          const calculatedHoverColor = colorVal === 'default' ?
-            theme.color.text.dark :
-            theme.color[colorVal].dark
-
-          const calculatedActiveColor = colorVal === 'default' ?
-            theme.color.text.light :
-            theme.color[colorVal].light
+        const calculatedActiveColor = colorVal === 'default' ?
+          theme.color.text.light :
+          theme.color[colorVal].light
 
 
-          if (typeVal === 'outlined') {
-            styles.color = calculatedColor
-            styles.border = `2px solid ${calculatedColor}`
-            styles.backgroundColor = theme.color.white
-            if (disabledVal !== 'disabled') {
-              styles['&:hover'] = {
-                color: calculatedHoverColor,
-                border: `2px solid ${calculatedHoverColor}`
-              }
-              styles['&:active'] = {
-                color: calculatedActiveColor,
-                border: `2px solid ${calculatedActiveColor}`
-              }
+        if (typeVal === 'outlined') {
+          styles.color = calculatedColor
+          styles.border = `2px solid ${calculatedColor}`
+          styles.backgroundColor = theme.color.white
+          if (disabledVal !== 'disabled') {
+            styles['&:hover'] = {
+              color: calculatedHoverColor,
+              border: `2px solid ${calculatedHoverColor}`
             }
-
-          }
-          else if (typeVal === 'light') {
-            styles.color = calculatedColor
-            styles.backgroundColor = theme.color.grey[200]
-            if (disabledVal !== 'disabled') {
-              styles['&:hover'] = {
-                backgroundColor: theme.color.grey[300],
-              }
-              styles['&:active'] = {
-                backgroundColor: theme.color.grey[200],
-              }
-            }
-          }
-          else if (typeVal === 'transparent') {
-            styles.color = calculatedColor
-            styles.backgroundColor = 'rgba(0,0,0,0)'
-            if (disabledVal !== 'disabled') {
-              styles['&:hover'] = {
-                backgroundColor: 'rgba(0,0,0,0.08)',
-              }
-              styles['&:active'] = {
-                backgroundColor: 'rgba(0,0,0,0)',
-              }
-            }
-          }
-          else {
-            styles.color = theme.color.white
-            styles.backgroundColor = calculatedColor
-            if (disabledVal !== 'disabled') {
-              styles['&:hover'] = {
-                backgroundColor: calculatedHoverColor,
-              }
-              styles['&:active'] = {
-                backgroundColor: calculatedActiveColor,
-              }
+            styles['&:active'] = {
+              color: calculatedActiveColor,
+              border: `2px solid ${calculatedActiveColor}`
             }
           }
 
-          disabledAcc = {
-            ...disabledAcc,
-            [`root-${typeVal}-${colorVal}-${disabledVal}`]: styles
+        }
+        else if (typeVal === 'light') {
+          styles.color = calculatedColor
+          styles.backgroundColor = theme.color.grey[200]
+          if (disabledVal !== 'disabled') {
+            styles['&:hover'] = {
+              backgroundColor: theme.color.grey[300],
+            }
+            styles['&:active'] = {
+              backgroundColor: theme.color.grey[200],
+            }
           }
-          return disabledAcc
-        }, {})
-      }
-      return colorAcc
-    }, {})
-  }
+        }
+        else if (typeVal === 'transparent') {
+          styles.color = calculatedColor
+          styles.backgroundColor = 'rgba(0,0,0,0)'
+          if (disabledVal !== 'disabled') {
+            styles['&:hover'] = {
+              backgroundColor: 'rgba(0,0,0,0.08)',
+            }
+            styles['&:active'] = {
+              backgroundColor: 'rgba(0,0,0,0)',
+            }
+          }
+        }
+        else {
+          styles.color = theme.color.white
+          styles.backgroundColor = calculatedColor
+          if (disabledVal !== 'disabled') {
+            styles['&:hover'] = {
+              backgroundColor: calculatedHoverColor,
+            }
+            styles['&:active'] = {
+              backgroundColor: calculatedActiveColor,
+            }
+          }
+        }
 
-  return rootAcc
-}, {})
+        return {
+          ...disabledAcc,
+          [`root-${typeVal}-${colorVal}-${disabledVal}`]: styles
+        }
+      }, {}),
+      [`loader-${colorVal}-busy`]: loaderStyle
+    })
+  }, {})
+}), {})
 
 const sizeStyles = theme => size.reduce((acc, val) => {
   acc = {
@@ -189,6 +195,17 @@ const styles = theme => {
     ...alignStyles(),
     'root-full-width': {
       width: '100%'
+    },
+    'loader': {
+      position: 'absolute',
+      '-webkit-animation-name': 'spin',
+      animationName: 'spin',
+      '-webkit-animation-duration': '0.7s',
+      '-webkit-animation-iteration-count': 'infinite',
+      '-webkit-animation-timing-function': 'ease-in-out',
+      animationDuration: '0.7s',
+      animationIiterationCount: 'infinite',
+      animationTimingFunction: 'ease-in-out'
     }
   }
 }
@@ -236,6 +253,7 @@ const Button = props => {
     justifyContent,
     fullWidth,
     rootRef,
+    busy,
     /* eslint-disable */
     //Just to catch ...others properly, theme prop is extracted.
     theme,
@@ -245,48 +263,54 @@ const Button = props => {
 
   const { Text, headIcons, tailIcons } = resolveChildren(children)
 
-  const rootClasses = classNames({
+  const rootClass = classNames({
     [classes.root]: true,
     [classes[`root-${type}-${color}-${disabled ? 'disabled' : 'enabled'}`]]: true,
     [classes[`root-size-${size}`]]: true,
     [classes[`root-radius-${radius}`]]: true,
     [classes['root-disabled']]: disabled,
     [classes['root-full-width']]: fullWidth,
+    [classes['root-full-width']]: fullWidth,
     [className]: true
   })
 
-
-  const headIconClasses = classNames({
+  const headIconClass = classNames({
     [classes.Icon]: true,
     [classes[`Icon-size-${size}`]]: true,
     [classes['head-icon']]: true
   })
 
-  const tailIconClasses = classNames({
+  const tailIconClass = classNames({
     [classes.Icon]: true,
     [classes[`Icon-size-${size}`]]: true,
     [classes['tail-icon']]: true
   })
 
-  const TextClasses = classNames({
+  const TextClass = classNames({
     [classes.Text]: true,
     [classes[`Text-size-${size}`]]: true
   })
 
-  const contentClasses = classNames({
+  const contentClass = classNames({
     [classes.content]: true,
     [classes[`content-align-${justifyContent}`]]: true,
     [contentClassName]: true
   })
 
+  const loaderClass = classNames({
+    [classes.loader]: true,
+    [classes[`loader-${color}-busy`]]: busy
+  })
+
   return (
-    <button ref={rootRef} {...others} className={rootClasses} disabled={disabled}>
+    <button ref={rootRef} {...others} className={rootClass} disabled={disabled}>
       {badge}
-      <div className={contentClasses}>
+      <div className={contentClass}>
+        <div className={loaderClass}></div>
         {[
-          headIcons.length > 0 && <div className={headIconClasses} key='first-icons'>{headIcons}</div>,
-          <div className={`BUTTON_TEXT ${TextClasses}`} key='text'>{Text}</div>,
-          tailIcons.length > 0 && <div className={tailIconClasses} key='last-icons'>{tailIcons}</div>
+          headIcons.length > 0 && <div className={headIconClass} key='first-icons'>{headIcons}</div>,
+          <div className={`BUTTON_TEXT ${TextClass}`} key='text'>{Text}</div>,
+          tailIcons.length > 0 && <div className={tailIconClass} key='last-icons'>{tailIcons}</div>
         ]}
       </div>
     </button>
@@ -304,6 +328,7 @@ Button.propTypes = {
   type: PropTypes.oneOf(type),
   color: PropTypes.oneOf(color),
   disabled: PropTypes.bool,
+  busy: PropTypes.bool,
   size: PropTypes.oneOf(size),
   radius: PropTypes.oneOf(radius),
   badge: childrenTypeChecker({
@@ -321,6 +346,7 @@ Button.defaultProps = {
   color: 'primary',
   size: 2,
   disabled: false,
+  busy: false,
   radius: 2,
   justifyContent: 'center',
   fullWidth: false,

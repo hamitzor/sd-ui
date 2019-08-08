@@ -3,10 +3,13 @@ const { Fragment } = require('react')
 const { Route, Switch } = require('react-router-dom')
 const { getWidth } = require('../theme/get-width')
 const StyleFixer = require('../components/StyleFixer')
-const Admin = require('../components/Admin')
+const Admin = require('./Admin')
 const { getSession } = require('../actions/auth')
 const { connect } = require('react-redux')
 const PropTypes = require('prop-types')
+const Login = require('./Login')
+const Home = require('./Home')
+
 const {
   INITIAL_WIDTH_CALCULATED,
   WIDTH_CHANGED,
@@ -49,15 +52,17 @@ class App extends React.Component {
 
   render() {
     const { appInitialized } = this.state
-    const { match: { url } } = this.props
+    const { lang } = this.props
+
     return (
       <Fragment>
         <StyleFixer />
         {appInitialized ?
           (<Fragment>
             <Switch>
-              <Route path={`${url}/admin`} component={Admin} />
-              <Route exact={true} path={`${url}`} component={() => <div>Home</div>} />
+              <Route path={`/${lang}/admin`} component={Admin} />
+              <Route path={`/${lang}/login`} component={Login} />
+              <Route path={`/${lang}`} component={Home} />
               <Route path="*" component={() => <div>404</div>} />
             </Switch>
           </Fragment>) : <div>Loading...</div>}
@@ -68,7 +73,10 @@ class App extends React.Component {
 
 App.propTypes = {
   dispatch: PropTypes.func.isRequired,
-  match: PropTypes.object.isRequired
+  match: PropTypes.object.isRequired,
+  lang: PropTypes.string.isRequired
 }
 
-module.exports = connect()(App)
+module.exports = connect(state => ({
+  lang: state.lang
+}))(App)

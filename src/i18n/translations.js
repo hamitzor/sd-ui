@@ -9,13 +9,18 @@ module.exports = {
     keepMeLoggedIn: 'Keep me logged in',
     login: 'Login',
     copyright: '© 2011 SceneDetector All Rights Reserved',
-    emptyUsernameMessage: 'You must enter your username',
-    emptyPasswordMessage: 'You must enter your password',
+    validationErrorEmptyUsername: 'You must enter your username',
+    validationErrorEmptyPassword: 'You must enter your password',
     admin: 'Admin',
     loginErrorWrong: 'Username or password is wrong',
     loginErrorBadRequest: 'Username or password is not set',
     errorForbidden: 'This action is not allowed',
-    errorServerError: 'An error occured'
+    errorServerError: 'An error occured',
+    newConfigSetTitle: 'Create a new configuration set',
+    configSetName: 'Configuration Set Name',
+    configSetNameDesc: 'A distinct name for your configuration set',
+    validationErrorEmptyConfigSetName: 'You must enter a name for configuration set',
+    create: 'Create'
   },
   tr: {
     loginHeader: 'SceneDetector | Giriş Yap',
@@ -27,12 +32,17 @@ module.exports = {
     keepMeLoggedIn: 'Oturumu açık tut',
     login: 'Giriş Yap',
     copyright: '© 2011 SceneDetector Tüm Hakları Saklıdır',
-    emptyUsernameMessage: 'Lütfen kullanıcı adınızı giriniz',
-    emptyPasswordMessage: 'Lütfen parolanızı giriniz',
+    validationErrorEmptyUsername: 'Kullanıcı adınızı giriniz',
+    validationErrorEmptyPassword: 'Parolanızı giriniz',
     admin: 'Yönetici',
     loginErrorWrong: 'Kullanıcı adı ya da parola hatalı',
     loginErrorBadRequest: 'Kullanıcı adı ya da parola boş',
     errorForbidden: 'Bu işlemi yapmak için yetkiniz yoktur',
-    errorServerError: 'Bir hata oluştu'
+    errorServerError: 'Bir hata oluştu',
+    newConfigSetTitle: 'Yeni bir konfigürasyon kümesi oluştur',
+    configSetName: 'Konfigürasyon Kümesi Adı',
+    configSetNameDesc: 'Konfigürasyon kümesi için ayırt edici bir ad',
+    validationErrorEmptyConfigSetName: 'Konfigürasyon kümesi için bir ad giriniz',
+    create: 'Oluştur'
   }
 }

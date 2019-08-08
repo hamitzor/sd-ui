@@ -2,24 +2,23 @@ const React = require('react')
 const PropTypes = require('prop-types')
 const withStyles = require('react-jss').default
 const classNames = require('classnames')
-const Flex = require('../Flex')
-const AdminHeader = require('../AdminHeader')
-const AdminFooter = require('../AdminFooter')
-const Panel = require('../Panel')
-const { Redirect } = require('react-router-dom')
-const Image = require('../Image')
-const Text = require('../Text')
-const Expansion = require('../Expansion')
-const Button = require('../Button')
-const Icon = require('../Icon')
+const Flex = require('../../components/Flex')
+const AdminHeader = require('../../components/AdminHeader')
+const AdminFooter = require('../../components/AdminFooter')
+const Panel = require('../../components/Panel')
+const { Redirect, Route, Switch } = require('react-router-dom')
+const Image = require('../../components/Image')
+const Text = require('../../components/Text')
+const Expansion = require('../../components/Expansion')
+const Button = require('../../components/Button')
+const Icon = require('../../components/Icon')
 const { MdAdd, MdList, MdCheck, MdBlock, MdMenu, MdClose, MdAccountCircle } = require('react-icons/md')
 const { Link } = require('react-router-dom')
 const { CSSTransition } = require('react-transition-group')
-const IconButton = require('../IconButton')
+const IconButton = require('../../components/IconButton')
 const { connect } = require('react-redux')
 const { logout } = require('../../actions/auth')
-const { Route, Switch } = require('react-router-dom')
-
+const ConfigSetNew = require('./ConfigSetNew')
 
 const styles = theme => {
   return {
@@ -74,7 +73,8 @@ const styles = theme => {
       width: '0px',
     },
     'left-navbar-close': {
-      padding: `${theme.unit * 2}px ${theme.unit * 3}px`
+      padding: `${theme.unit * 2}px ${theme.unit * 3}px`,
+      paddingBottom: 0
     },
     'content-enter': {
       width: '100%',
@@ -108,7 +108,7 @@ const styles = theme => {
   }
 }
 
-class AdminHome extends React.Component {
+class Admin extends React.Component {
 
   state = {
     leftNavbarOpened: true,
@@ -140,16 +140,24 @@ class AdminHome extends React.Component {
     const {
       classes,
       className,
-      userSession: { authanticated, user },
+      userSession: { user, authanticated },
       width,
       dispatch,
-      match,
+      match: { url },
       theme: { unit },
-
+      location,
+      lang,
     } = this.props
 
     if (!authanticated) {
-      return <Redirect to={`${match.path}/login`} />
+      return <Redirect to={{
+        pathname: `/${lang}/login`,
+        state: { from: location }
+      }} />
+    }
+
+    if (user.role !== 'ADMIN') {
+      return <div>You have to be Administrator to access Admin Panel</div>
     }
 
     const {
@@ -171,7 +179,7 @@ class AdminHome extends React.Component {
       } = props
 
       return (
-        <Link to={`${match.path}/${to}`}>
+        <Link to={`${url}/${to}`}>
           <Button type='transparent' color='default' className={classes['inner-nav']} radius={0} fullWidth justifyContent='left' size={1} {...others}>
             {children}
           </Button>
@@ -203,13 +211,13 @@ class AdminHome extends React.Component {
             <Text size='big'>{`${user.name} (${user.user})`}</Text>
             <Text size='small'>{user.role === 'ADMIN' ? 'Admin' : 'Regular User'}</Text>
           </Flex>
-          <Link to={`${match.path}/dashboard`}>
+          <Link to={`${url}/dashboard`}>
             <Button radius={0} fullWidth justifyContent='left' color='default' >Dashboard</Button>
           </Link>
-          <Expansion animate={animate} open={true} label='Configuration Sets'>
+          <Expansion animate={animate} open={true} label='Config Sets'>
             <div className={classes['inner-navbar']}>
-              <InnerNav to='configuration/new' ><Icon><MdAdd /></Icon>New Configuration Set</InnerNav>
-              <InnerNav to='configuration/all' ><Icon><MdList /></Icon>All Configuration Sets</InnerNav>
+              <InnerNav to='config/set/new' ><Icon><MdAdd /></Icon>New Config Set</InnerNav>
+              <InnerNav to='config/set/all' ><Icon><MdList /></Icon>All Config Sets</InnerNav>
             </div>
           </Expansion>
           <Expansion animate={animate} open={false} label='Comments'>
@@ -255,8 +263,10 @@ class AdminHome extends React.Component {
           </AdminHeader>
           <Flex className={classes['container']} parent>
             <Switch>
-              <Route exact path={`${match.path}`} component={() => <Redirect to={`${match.path}/dashboard`} />} />
-              <Route path={`${match.path}/dashboard`} component={() => <div>/dashboard</div>} />
+              <Route path={`${url}/config/set/new`} component={ConfigSetNew} />
+              <Route path={`${url}/config/set/all`} component={() => <div>/confi/set/all</div>} />
+              <Route path={`${url}/dashboard`} component={() => <div>/dashboard</div>} />
+              <Route path={url} component={() => <Redirect to={`${url}/dashboard`} />} />
             </Switch>
           </Flex>
           <AdminFooter />
@@ -307,26 +317,29 @@ class AdminHome extends React.Component {
   }
 }
 
-AdminHome.propTypes = {
+Admin.propTypes = {
   classes: PropTypes.object.isRequired,
   className: PropTypes.string,
   theme: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
+  lang: PropTypes.string.isRequired,
   dispatch: PropTypes.func.isRequired,
   userSession: PropTypes.object.isRequired,
-  width: PropTypes.string
+  width: PropTypes.string,
+  location: PropTypes.object.isRequired
 }
 
-AdminHome.defaultProps = {
+Admin.defaultProps = {
   className: '',
   width: 'lg'
 }
 
-const styledAdminHome = withStyles(styles)(AdminHome)
+const styledAdminHome = withStyles(styles)(Admin)
 
 styledAdminHome.displayName = 'AdminHome'
 
 module.exports = connect(state => ({
   userSession: state.userSession,
-  width: state.width
+  width: state.width,
+  lang: state.lang
 }))(styledAdminHome)
