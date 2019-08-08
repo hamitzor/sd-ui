@@ -2,9 +2,7 @@ const React = require('react')
 const PropTypes = require('prop-types')
 const withStyles = require('react-jss').default
 const { connect } = require('react-redux')
-const Panel = require('../../components/Panel')
 const Flex = require('../../components/Flex')
-const Text = require('../../components/Text')
 const InputContainer = require('../../components/InputContainer')
 const Icon = require('../../components/Icon')
 const InputBase = require('../../components/InputBase')
@@ -14,6 +12,12 @@ const IconButton = require('../../components/IconButton')
 const { IoMdClose } = require('react-icons/io')
 const Alert = require('../../components/Alert')
 const { create } = require('../../actions/configuration-set')
+const Popup = require('../../components/Popup')
+const PopupBody = require('../../components/PopupBody')
+const PopupHeader = require('../../components/PopupHeader')
+const PopupFooter = require('../../components/PopupFooter')
+const PopupHeaderTitle = require('../../components/PopupHeaderTitle')
+const PopupHeaderExtension = require('../../components/PopupHeaderExtension')
 const {
   OK,
   NOT_FOUND,
@@ -51,7 +55,7 @@ const styles = theme => ({
   button: {
     marginTop: theme.unit * 2,
     [theme.smaller('sm')]: {
-      width: `calc( 100% - ${theme.unit * 4}px )`,
+      width: '100%'
     }
   },
   'margin-bottom': {
@@ -82,6 +86,7 @@ class ConfigSetNew extends React.Component {
     this.state = this.getInitialState()
   }
 
+
   componentDidMount() {
     const firstInput = document.getElementsByTagName('input')[0]
     if (firstInput) {
@@ -90,6 +95,9 @@ class ConfigSetNew extends React.Component {
   }
 
   getInitialState = () => ({
+    dialogOpen: false,
+    dialogContent: null,
+    dialogTitle: '',
     error: false,
     message: '',
     configSetName: '',
@@ -129,7 +137,6 @@ class ConfigSetNew extends React.Component {
     const { dispatch, lang } = this.props
     let { configSetName, busy } = this.state
     configSetName = configSetName.trim()
-
     if (configSetName === '' || busy) {
       this.setState({
         validation: {
@@ -170,7 +177,6 @@ class ConfigSetNew extends React.Component {
     })
   }
 
-
   handleChange = name => event => {
     this.setState({ [name]: event.target.value })
   }
@@ -183,77 +189,131 @@ class ConfigSetNew extends React.Component {
     this.setState({ error: false })
   }
 
-  render() {
+  handleDialogClose = () => {
+    this.setState({
+      dialogOpen: false
+    })
+  }
+
+  openCreateConfigSetDialog = () => {
     const {
-      classes,
+      lang
+    } = this.props
+
+    this.setState({
+      dialogOpen: true,
+      dialogTitle: i18n[lang].newConfigSetTitle
+    })
+  }
+
+  render() {
+
+    const {
       width,
-      lang,
+      classes,
+      lang
     } = this.props
 
     const {
-      configSetName: configSetName,
+      dialogOpen,
+      dialogTitle,
       busy,
+      configSetName,
       error,
       message,
-      validation
+      validation,
     } = this.state
+
 
     const isXs = width === 'xs'
 
     return (
-      <div className={classes.root}>
-        <Panel className={classes.form}>
-          <Flex parent justify={isXs ? 'center' : 'start'}>
-            <Text marginBottom tag='h4'>{i18n[lang].newConfigSetTitle}</Text>
-          </Flex>
-          <Flex direction='column' alignItems={isXs ? 'center' : 'stretch'} parent>
-            <InputContainer
-              className={classes['margin-bottom']}
-              label={i18n[lang].configSetName}
-              desc={i18n[lang].configSetNameDesc}
-              errorMessage={validation.configSetName.message}
-              error={!validation.configSetName.valid}>
-              <InputBase
-                value={configSetName}
-                onKeyDown={this.handleKeyDown}
-                onFocus={this.handleFocus('configSetName')}
-                onChange={this.handleChange('configSetName')}
-              />
-            </InputContainer>
-            <Button
-              type='filled'
-              className={classes.button}
-              onClick={this.handleSubmit}
-              disabled={busy}
-              busy={busy}
-            >
-              {i18n[lang].create}
-            </Button>
-          </Flex>
-          <Alert
-            absolute={!isXs}
-            fixed={isXs}
-            align={isXs ? 'top' : 'unset'}
-            justify={isXs ? 'left' : 'unset'}
-            className={classes.alert}
-            color='error'
-            open={error}
-            fullWidth={isXs}
-            animate={!isXs}>
-            <Flex wrap='nowrap' parent justify='between'>
-              <div className={classes['alert-message']}>{message}</div>
-              <IconButton
-                size={1}
-                color='white'
-                onClick={this.handleAlertClose}>
-                <Icon>
-                  <IoMdClose />
-                </Icon>
-              </IconButton>
+      <React.Fragment>
+        <Popup width='maxContent' open={dialogOpen} onClose={this.handleDialogClose} fullScreen={isXs}>
+          <PopupHeader color='secondary' style={{ justifyContent: 'space-between' }}>
+            <PopupHeaderTitle>
+              {dialogTitle}
+            </PopupHeaderTitle>
+            {isXs &&
+              <PopupHeaderExtension>
+                <IconButton
+                  size={1}
+                  color='white'
+                  onClick={this.handleDialogClose}>
+                  <Icon>
+                    <IoMdClose />
+                  </Icon>
+                </IconButton>
+              </PopupHeaderExtension>}
+          </PopupHeader>
+          <PopupBody>
+            <React.Fragment>
+              <Flex direction='column' alignItems={isXs ? 'center' : 'stretch'} parent>
+                <InputContainer
+                  className={classes['margin-bottom']}
+                  label={i18n[lang].configSetName}
+                  desc={i18n[lang].configSetNameDesc}
+                  errorMessage={validation.configSetName.message}
+                  error={!validation.configSetName.valid}>
+                  <InputBase
+                    value={configSetName}
+                    onKeyDown={this.handleKeyDown}
+                    onFocus={this.handleFocus('configSetName')}
+                    onChange={this.handleChange('configSetName')}
+                  />
+                </InputContainer>
+              </Flex>
+              <Alert
+                absolute={!isXs}
+                fixed={isXs}
+                align={isXs ? 'top' : 'unset'}
+                justify={isXs ? 'left' : 'unset'}
+                className={classes.alert}
+                color='error'
+                open={error}
+                fullWidth={isXs}
+                animate={!isXs}>
+                <Flex wrap='nowrap' parent justify='between'>
+                  <div className={classes['alert-message']}>{message}</div>
+                  <IconButton
+                    size={1}
+                    color='white'
+                    onClick={this.handleAlertClose}>
+                    <Icon>
+                      <IoMdClose />
+                    </Icon>
+                  </IconButton>
+                </Flex>
+              </Alert>
+            </React.Fragment>
+          </PopupBody>
+          <PopupFooter>
+            <Flex
+              parent
+              justify='end'
+              style={{ paddingBottom: 5 }}>
+              <Button
+                style={{ marginRight: 10 }}
+                type='light'
+                color='error'
+                onClick={this.handleDialogClose}
+                disabled={busy}
+              >Vazgeç
+              </Button>
+              <Button
+                type='filled'
+                onClick={this.handleSubmit}
+                disabled={busy}
+                busy={busy}
+              >{i18n[lang].create}
+              </Button>
             </Flex>
-          </Alert>
-        </Panel>
-      </div>
+          </PopupFooter>
+        </Popup>
+        <div className={classes.root}>
+          <Button onClick={this.openCreateConfigSetDialog}>OPEN!</Button>
+        </div>
+      </React.Fragment>
     )
   }
 }

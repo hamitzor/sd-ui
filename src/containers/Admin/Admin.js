@@ -212,7 +212,7 @@ class Admin extends React.Component {
             <Text size='small'>{user.role === 'ADMIN' ? 'Admin' : 'Regular User'}</Text>
           </Flex>
           <Link to={`${url}/dashboard`}>
-            <Button radius={0} fullWidth justifyContent='left' color='default' >Dashboard</Button>
+            <Button size={3} radius={0} fullWidth justifyContent='left' color='default' >Dashboard</Button>
           </Link>
           <Expansion animate={animate} open={true} label='Config Sets'>
             <div className={classes['inner-navbar']}>

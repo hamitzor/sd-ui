@@ -7,13 +7,13 @@ const Panel = require('../Panel')
 const childrenTypeChecker = require('../../../custom_modules/children-type-checker')
 const { CSSTransition } = require('react-transition-group')
 
-const width = breakpointNames.filter(x => x !== 'xs')
+const width = [...breakpointNames.filter(x => x !== 'xs'), 'maxContent']
 
 const widthStyles = theme => width.reduce((acc, val) => {
   acc = {
     ...acc,
     [`popup-width-${val}`]: {
-      width: theme.breakpoints[val]
+      width: val === 'maxContent' ? undefined : theme.breakpoints[val]
     }
   }
   return acc
@@ -22,15 +22,13 @@ const widthStyles = theme => width.reduce((acc, val) => {
 const bodyFixerStyles = {
   '@global': {
     'body': {
-      overflow: 'hidden',
-      paddingRight: 15
+      overflow: 'hidden'
     }
   }
 }
 
 const BodyFixer = () => null
 const BodyFixerWithStyles = withStyles(bodyFixerStyles)(BodyFixer)
-
 
 const styles = theme => {
 
@@ -164,7 +162,7 @@ class Popup extends React.Component {
     const root = (
       <div {...others} className={rootClasses} onClick={this.handleClick} ref={this.rootRef}>
         <BodyFixerWithStyles />
-        <Panel padding={fullScreen ? 0 : 1} border={fullScreen ? 0 : 1} radius={fullScreen ? 0 : 2} className={popupClasses}>
+        <Panel padding={fullScreen ? 0 : 1} border={fullScreen ? 0 : 1} radius={fullScreen ? 0 : 3} className={popupClasses}>
           <div>{PopupHeader && <PopupHeader.type {...PopupHeader.props} full={fullScreen} />}</div>
           <div className={popupBodyClasses}>{PopupBody}</div>
           <div className={popupFooterClasses}>{PopupFooter}</div>
@@ -192,7 +190,7 @@ class Popup extends React.Component {
 
 Popup.propTypes = {
   children: childrenTypeChecker({
-    'PopupBody': [true, 1],
+    'PopupBody': [false, 1],
     'PopupHeader': [false, 1],
     'PopupFooter': [false, 1],
   }),

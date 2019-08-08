@@ -183,6 +183,7 @@ class Expansion extends React.Component {
         <Button
           onClick={this.handleClick}
           type={type}
+          size={3}
           radius={0}
           className={classes['toggle']}
           contentClassName={classes['toggle-content']}

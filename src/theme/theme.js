@@ -72,8 +72,8 @@ const grey = {
   50: '#fcfcfc',
   100: '#f8f8f8',
   200: '#f3f3f3',
-  300: '#eaeaea',
-  400: '#dedede',
+  300: '#eeeeee',
+  400: '#e2e2e2',
   500: '#9e9e9e',
   600: '#757575',
   700: '#616161',
@@ -81,14 +81,14 @@ const grey = {
   900: '#212121'
 }
 
-const error = Color('#e84747')
+const error = Color('#ff6666')
 const primary = Color('#0095ff')
 const secondary = Color('#39ad00')
 const textColor = Color('#424242')
 
 const themeColor = {
   background: {
-    normal: '#f6f6f6',
+    normal: '#fbfbfb',
     panel: '#fff',
   },
   white: '#fff',

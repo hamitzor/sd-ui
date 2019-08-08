@@ -4,8 +4,6 @@ const withStyles = require('react-jss').default
 const classNames = require('classnames')
 const childrenTypeChecker = require('../../../custom_modules/children-type-checker')
 
-
-
 const type = ['light', 'outlined', 'filled', 'transparent']
 const color = ['default', 'primary', 'secondary', 'error']
 const size = [1, 2, 3]
@@ -22,11 +20,11 @@ const rootStyles = theme => type.reduce((typeAcc, typeVal) => ({
   ...color.reduce((colorAcc, colorVal) => {
     const loaderColor = colorVal === 'default' ? theme.color.text.normal : theme.color[colorVal].normal
     const loaderStyle = {
-      border: `${theme.unit * 1}px solid ${theme.color.background.normal}`,
-      borderTop: `${theme.unit * 1}px solid ${loaderColor}`,
+      border: `4px solid ${theme.color.background.normal}`,
+      borderTop: `4px solid ${loaderColor}`,
       borderRadius: '50%',
-      width: theme.unit * 8,
-      height: theme.unit * 8,
+      width: theme.unit * 6,
+      height: theme.unit * 6,
     }
 
     return ({
@@ -64,13 +62,13 @@ const rootStyles = theme => type.reduce((typeAcc, typeVal) => ({
         }
         else if (typeVal === 'light') {
           styles.color = calculatedColor
-          styles.backgroundColor = theme.color.grey[200]
+          styles.backgroundColor = theme.color.grey[300]
           if (disabledVal !== 'disabled') {
             styles['&:hover'] = {
-              backgroundColor: theme.color.grey[300],
+              backgroundColor: theme.color.grey[400],
             }
             styles['&:active'] = {
-              backgroundColor: theme.color.grey[200],
+              backgroundColor: theme.color.grey[300],
             }
           }
         }
@@ -117,12 +115,12 @@ const sizeStyles = theme => size.reduce((acc, val) => {
       paddingLeft: theme.unit * val * 2,
     },
     [`Text-size-${val}`]: {
-      paddingTop: theme.unit * val / 1.4 + 5,
-      paddingBottom: theme.unit * val / 1.4 + 5,
-      fontSize: `${0.7 + val / 9}rem`
+      paddingTop: 6 + val * 2,
+      paddingBottom: 6 + val * 2,
+      fontSize: 12 + val
     },
     [`Icon-size-${val}`]: {
-      fontSize: `${1 + val / 5 - 0.2}rem`
+      fontSize: 11 + val
     },
   }
   return acc

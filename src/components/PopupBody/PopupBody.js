@@ -5,7 +5,7 @@ const PopupBody = props => {
 }
 
 PopupBody.propTypes = {
-  children: PropTypes.any.isRequired
+  children: PropTypes.any
 }
 
 PopupBody.displayName = 'PopupBody'
