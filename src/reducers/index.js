@@ -8,6 +8,9 @@ const {
   LOGOUT_FAILURE,
   CREATE_CONFIG_SET_REQUEST,
   CREATE_CONFIG_SET_SUCCESS,
+  FETCH_CONFIG_SETS_REQUEST,
+  FETCH_CONFIG_SETS_SUCCESS,
+  FETCH_CONFIG_SETS_FAILURE,
   //FETCH_VIDEOS_REQUEST,
   //FETCH_VIDEOS_SUCCESS,
   //FETCH_VIDEOS_FAILURE,
@@ -79,13 +82,13 @@ const userSession = (state = {
 
 const configSet = (state = {
   fetching: false,
+  fetchingFailed: false,
   updating: false,
   deleting: false,
   creating: false,
   count: 0,
   list: []
 }, action) => {
-  console.log(state)
   switch (action.type) {
     case CREATE_CONFIG_SET_REQUEST:
       return {
@@ -98,6 +101,29 @@ const configSet = (state = {
         creating: false,
         count: state.count + 1,
         list: [...state.list, action.payload]
+      }
+    case FETCH_CONFIG_SETS_REQUEST:
+      return {
+        ...state,
+        fetching: true,
+        fetchingFailed: false,
+        count: 0,
+        list: []
+      }
+    case FETCH_CONFIG_SETS_SUCCESS:
+      return {
+        ...state,
+        fetching: false,
+        count: action.payload.length,
+        list: action.payload
+      }
+    case FETCH_CONFIG_SETS_FAILURE:
+      return {
+        ...state,
+        fetching: false,
+        fetchingFailed: true,
+        count: action.payload.length,
+        list: action.payload
       }
     default:
       return state

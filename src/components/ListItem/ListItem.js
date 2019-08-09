@@ -21,14 +21,14 @@ const styles = theme => {
     hoverable: {
       cursor: 'pointer',
       '&:hover': {
-        backgroundColor: theme.color.grey[200]
+        backgroundColor: theme.color.grey[400]
       },
       '&:active': {
         backgroundColor: theme.color.grey[100]
       }
     },
     selected: {
-      backgroundColor: theme.color.grey[400]
+      backgroundColor: theme.color.grey[300]
     }
   }
 }

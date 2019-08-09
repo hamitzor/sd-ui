@@ -8,41 +8,15 @@ const justify = ['left', 'right', 'unset']
 const align = ['top', 'bottom', 'unset']
 const color = ['primary', 'secondary', 'error']
 
-const justifyStyles = theme => justify.reduce((acc, val) => {
-  if (val !== 'unset') {
-    acc = {
-      ...acc,
-      [`root-justify-${val}`]: {
-        [val]: theme.unit * 5
-      }
-    }
-  }
-  return acc
-}, {})
-
-const alignStyles = theme => align.reduce((acc, val) => {
-  if (val !== 'unset') {
-    acc = {
-      ...acc,
-      [`root-align-${val}`]: {
-        [val]: theme.unit * 5
-      }
-    }
-  }
-  return acc
-}, {})
-
-
-const colorStyles = theme => color.reduce((acc, val) => {
-  acc = {
-    ...acc,
-    [`root-color-${val}`]: {
-      backgroundColor: theme.color[val].normal
-    }
-  }
-  return acc
-}, {})
-
+const justifyStyles = theme => justify.reduce((acc, val) => ({
+  ...acc, [`root-justify-${val}`]: { [val !== 'unset' ? val : '']: theme.unit * 5 }
+}), {})
+const alignStyles = theme => align.reduce((acc, val) => ({
+  ...acc, [`root-align-${val}`]: { [val !== 'unset' ? val : '']: theme.unit * 5 }
+}), {})
+const colorStyles = theme => color.reduce((acc, val) => ({
+  ...acc, [`root-color-${val}`]: { backgroundColor: theme.color[val].normal }
+}), {})
 
 const styles = theme => {
   return {
@@ -101,11 +75,6 @@ const Alert = props => {
     align,
     fixed,
     absolute,
-    /* eslint-disable */
-    //Just to catch ...others properly, some props are extracted.
-    theme,
-    /* eslint-enable */
-    ...others
   } = props
 
   const rootClasses = classNames({
@@ -119,9 +88,8 @@ const Alert = props => {
     [className]: true
   })
 
-
   const root = (
-    <div {...others} className={rootClasses} >
+    <div className={rootClasses} >
       {children}
     </div>
   )

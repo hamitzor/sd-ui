@@ -11,25 +11,26 @@ const Button = require('../../components/Button')
 const IconButton = require('../../components/IconButton')
 const { IoMdClose } = require('react-icons/io')
 const Alert = require('../../components/Alert')
-const { create } = require('../../actions/configuration-set')
+const { create, getAll } = require('../../actions/configuration-set')
 const Popup = require('../../components/Popup')
 const PopupBody = require('../../components/PopupBody')
 const PopupHeader = require('../../components/PopupHeader')
 const PopupFooter = require('../../components/PopupFooter')
 const PopupHeaderTitle = require('../../components/PopupHeaderTitle')
 const PopupHeaderExtension = require('../../components/PopupHeaderExtension')
+const { transitionTime } = require('../../theme')
+const ListItem = require('../../components/ListItem')
+const List = require('../../components/List')
+const {
+  DUPLICATED
+} = require('../../../error-codes')
 const {
   OK,
-  NOT_FOUND,
-  BAD_REQUEST,
-  FORBIDDEN,
   INTERNAL_SERVER_ERROR
 } = require('../../../status-codes')
 
 const statusErrorMap = {
-  [NOT_FOUND]: 'loginErrorWrong',
-  [BAD_REQUEST]: 'loginErrorBadRequest',
-  [FORBIDDEN]: 'errorForbidden',
+  [DUPLICATED]: 'configSetNameDuplicated',
   [INTERNAL_SERVER_ERROR]: 'errorServerError'
 }
 
@@ -70,7 +71,6 @@ const styles = theme => ({
       left: theme.unit * 15,
       right: theme.unit * 15,
       marginTop: theme.unit * 2
-
     }
   },
   'alert-message': {
@@ -88,13 +88,19 @@ class ConfigSetNew extends React.Component {
 
 
   componentDidMount() {
-    const firstInput = document.getElementsByTagName('input')[0]
-    if (firstInput) {
-      firstInput.focus()
-    }
+    const { dispatch } = this.props
+    dispatch(getAll())
   }
 
+  resetStateWithDelay = () => new Promise(resolve => {
+    setTimeout(() => {
+      this.setState(this.getInitialState(), () => resolve())
+    }, transitionTime)
+  })
+
   getInitialState = () => ({
+    selectedConfigField: null,
+    selectedConfigSet: null,
     dialogOpen: false,
     dialogContent: null,
     dialogTitle: '',
@@ -135,7 +141,7 @@ class ConfigSetNew extends React.Component {
 
   handleSubmit = async () => {
     const { dispatch, lang } = this.props
-    let { configSetName, busy } = this.state
+    let { configSetName, validation, busy } = this.state
     configSetName = configSetName.trim()
     if (configSetName === '' || busy) {
       this.setState({
@@ -149,22 +155,30 @@ class ConfigSetNew extends React.Component {
       return
     }
 
+    if (Object.keys(validation).filter(key => validation[key].valid === false).length > 0) {
+      return
+    }
+
     this.setState({
       busy: true
     }, async () => {
       try {
-        const { status } = await dispatch(create(configSetName))
+        const { status, payload } = await dispatch(create(configSetName))
         if (status !== OK) {
           this.setState({
-            ...this.getInitialState(),
-            error: true,
-            message: i18n[lang][statusErrorMap[status]]
+            busy: false,
+            validation: {
+              configSetName: {
+                valid: false,
+                message: i18n[lang][statusErrorMap[payload.name]]
+              }
+            }
           })
         }
         else {
           this.setState({
-            busy: false
-          })
+            dialogOpen: false
+          }, () => this.resetStateWithDelay())
         }
       }
       catch (err) {
@@ -192,7 +206,7 @@ class ConfigSetNew extends React.Component {
   handleDialogClose = () => {
     this.setState({
       dialogOpen: false
-    })
+    }, () => this.resetStateWithDelay())
   }
 
   openCreateConfigSetDialog = () => {
@@ -211,10 +225,12 @@ class ConfigSetNew extends React.Component {
     const {
       width,
       classes,
-      lang
+      lang,
+      configSet
     } = this.props
 
     const {
+      selectedConfigSet,
       dialogOpen,
       dialogTitle,
       busy,
@@ -304,7 +320,6 @@ class ConfigSetNew extends React.Component {
                 type='filled'
                 onClick={this.handleSubmit}
                 disabled={busy}
-                busy={busy}
               >{i18n[lang].create}
               </Button>
             </Flex>
@@ -313,6 +328,24 @@ class ConfigSetNew extends React.Component {
         <div className={classes.root}>
           <Button onClick={this.openCreateConfigSetDialog}>OPEN!</Button>
         </div>
+        <List
+          hoverable
+          onSelect={(el, i) => {
+            this.setState({
+              selectedConfigSet: i
+            })
+          }}>
+          {configSet.list.map(el => <ListItem key={el.name} itemId={el.name} selected={selectedConfigSet === el.name}>{el.name}</ListItem>)}
+        </List>
+        <List
+          hoverable
+          onSelect={(el, i) => {
+            this.setState({
+              selectedConfigSet: i
+            })
+          }}>
+          {selectedConfigSet && configSet.list.filter(o => o.name === selectedConfigSet)[0].fields.map(el => <ListItem key={el.key} itemId={el.key} selected={selectedConfigSet === el.key}>{el.key}</ListItem>)}
+        </List>
       </React.Fragment>
     )
   }
@@ -326,6 +359,7 @@ ConfigSetNew.propTypes = {
   dispatch: PropTypes.func.isRequired,
   userSession: PropTypes.object.isRequired,
   width: PropTypes.string,
+  configSet: PropTypes.object.isRequired
 }
 
 ConfigSetNew.defaultProps = {
@@ -339,5 +373,6 @@ styledAdminHome.displayName = 'AdminHome'
 module.exports = connect(state => ({
   userSession: state.userSession,
   width: state.width,
-  lang: state.lang
+  lang: state.lang,
+  configSet: state.configSet
 }))(styledAdminHome)

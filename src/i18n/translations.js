@@ -20,7 +20,8 @@ module.exports = {
     configSetName: 'Configuration Set Name',
     configSetNameDesc: 'A distinct name for your configuration set',
     validationErrorEmptyConfigSetName: 'You must enter a name for configuration set',
-    create: 'Create'
+    create: 'Create',
+    configSetNameDuplicated: 'Configuration set already exists'
   },
   tr: {
     loginHeader: 'SceneDetector | Giriş Yap',
@@ -43,6 +44,7 @@ module.exports = {
     configSetName: 'Konfigürasyon Kümesi Adı',
     configSetNameDesc: 'Konfigürasyon kümesi için ayırt edici bir ad',
     validationErrorEmptyConfigSetName: 'Konfigürasyon kümesi için bir ad giriniz',
-    create: 'Oluştur'
+    create: 'Oluştur',
+    configSetNameDuplicated: 'Konfigürasyon kümesi çoktan bulunmaktadır'
   }
 }

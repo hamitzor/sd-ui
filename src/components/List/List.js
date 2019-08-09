@@ -65,7 +65,7 @@ const List = props => {
 
 List.propTypes = {
   children: childrenTypeChecker({
-    'ListItem': [true],
+    'ListItem': [false],
   }),
   classes: PropTypes.object.isRequired,
   className: PropTypes.string,
