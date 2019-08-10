@@ -2,154 +2,111 @@ const React = require('react')
 const PropTypes = require('prop-types')
 const withStyles = require('react-jss').default
 const classNames = require('classnames')
-const childrenTypeChecker = require('../../../custom_modules/children-type-checker')
+const childChecker = require('../../util/child-checker')
+const Icon = require('../Icon')
+const types = ['light', 'filled', 'transparent']
+const colors = ['darkgrey', 'primary', 'warning', 'error']
+const sizes = ['small', 'normal', 'big']
+const radiuses = [0, 1, 2, 3]
+const justifies = ['center', 'left', 'right']
+const disableds = ['enabled', 'disabled']
 
-const type = ['light', 'outlined', 'filled', 'transparent']
-const color = ['default', 'primary', 'secondary', 'error']
-const size = [1, 2, 3]
-const radius = [0, 1, 2, 3]
-const disabled = ['disabled', 'enabled']
-const align = ['center', 'left', 'right']
 
-const rootStyles = theme => type.reduce((typeAcc, typeVal) => ({
-  '@keyframes spin': {
-    from: { ...theme.transform('rotate(0deg)') },
-    to: { ...theme.transform('rotate(360deg)') }
-  },
-  ...typeAcc,
-  ...color.reduce((colorAcc, colorVal) => {
-    const loaderColor = colorVal === 'default' ? theme.color.text.normal : theme.color[colorVal].normal
-    const loaderStyle = {
-      border: `4px solid ${theme.color.background.normal}`,
-      borderTop: `4px solid ${loaderColor}`,
-      borderRadius: '50%',
-      width: theme.unit * 6,
-      height: theme.unit * 6,
+const colorClasses = theme => types.reduce((acc, type) => {
+  return {
+    ...acc,
+    ...disableds.reduce((acc, disabled) => {
+      return {
+        ...acc,
+        ...colors.reduce((acc, color) => {
+          const style = { '&:hover': {}, '&:active': {} }
+          if (type === 'light') {
+            style.color = theme.color[color].normal
+            style.backgroundColor = disabled === 'enabled' ? theme.color.grey.normal : theme.color.grey.disabled
+            if (disabled === 'enabled') {
+              style['&:hover'].backgroundColor = theme.color.grey.dark
+              style['&:active'].backgroundColor = theme.color.grey.light
+            }
+          }
+          else if (type === 'filled') {
+            style.color = theme.color.white
+            style.backgroundColor = disabled === 'enabled' ? theme.color[color].normal : theme.color[color].disabled
+            if (disabled === 'enabled') {
+              style['&:hover'].backgroundColor = theme.color[color].dark
+              style['&:active'].backgroundColor = theme.color[color].light
+            }
+          }
+          else {
+            style.color = disabled === 'enabled' ? theme.color[color].normal : theme.color[color].disabled
+            style.backgroundColor = 'transparent'
+            if (disabled === 'enabled') {
+              style['&:hover'].color = theme.color[color].light
+              style['&:active'].color = theme.color[color].dark
+            }
+          }
+
+          return {
+            ...acc,
+            [`root-color-${type}-${color}-${disabled}`]: style,
+            [`loader-color-${color}`]: { borderColor: type === 'filled' ? theme.color.background : theme.color.grey.dark, borderTopColor: theme.color[color].normal }
+          }
+        }, {})
+      }
+    }, {})
+  }
+}, {})
+
+const sizeStyles = theme => sizes.reduce((acc, size) => {
+  let rootPadding = '0 8px', textPadding = '5px 0', loaderSize = theme.unit * 4
+  if (size === 'normal') {
+    rootPadding = '0 11px'
+    textPadding = '5px 0'
+    loaderSize = theme.unit * 6
+  }
+  else if (size === 'big') {
+    rootPadding = '0 15px'
+    textPadding = '6px 0'
+    loaderSize = theme.unit * 7
+  }
+  return {
+    ...acc,
+    [`root-size-${size}`]: {
+      padding: rootPadding
+    },
+    [`text-size-${size}`]: {
+      fontSize: theme.text[size],
+      padding: textPadding
+    },
+    [`icon-size-${size}`]: {
+      fontSize: theme.text[size] + 7
+    },
+    [`loader-size-${size}`]: {
+      width: loaderSize,
+      height: loaderSize
     }
+  }
+}, {})
 
-    return ({
-      ...colorAcc,
-      ...disabled.reduce((disabledAcc, disabledVal) => {
-        let styles = {}
-        const calculatedColor = colorVal === 'default' ?
-          (disabledVal === 'disabled' ? theme.color.text.disabled : theme.color.text.normal) :
-          (disabledVal === 'disabled' ? theme.color[colorVal].disabled : theme.color[colorVal].normal)
-
-        const calculatedHoverColor = colorVal === 'default' ?
-          theme.color.text.dark :
-          theme.color[colorVal].dark
-
-        const calculatedActiveColor = colorVal === 'default' ?
-          theme.color.text.light :
-          theme.color[colorVal].light
-
-
-        if (typeVal === 'outlined') {
-          styles.color = calculatedColor
-          styles.border = `2px solid ${calculatedColor}`
-          styles.backgroundColor = theme.color.white
-          if (disabledVal !== 'disabled') {
-            styles['&:hover'] = {
-              color: calculatedHoverColor,
-              border: `2px solid ${calculatedHoverColor}`
-            }
-            styles['&:active'] = {
-              color: calculatedActiveColor,
-              border: `2px solid ${calculatedActiveColor}`
-            }
-          }
-
-        }
-        else if (typeVal === 'light') {
-          styles.color = calculatedColor
-          styles.backgroundColor = theme.color.grey[300]
-          if (disabledVal !== 'disabled') {
-            styles['&:hover'] = {
-              backgroundColor: theme.color.grey[400],
-            }
-            styles['&:active'] = {
-              backgroundColor: theme.color.grey[300],
-            }
-          }
-        }
-        else if (typeVal === 'transparent') {
-          styles.color = calculatedColor
-          styles.backgroundColor = 'rgba(0,0,0,0)'
-          if (disabledVal !== 'disabled') {
-            styles['&:hover'] = {
-              backgroundColor: 'rgba(0,0,0,0.08)',
-            }
-            styles['&:active'] = {
-              backgroundColor: 'rgba(0,0,0,0)',
-            }
-          }
-        }
-        else {
-          styles.color = theme.color.white
-          styles.backgroundColor = calculatedColor
-          if (disabledVal !== 'disabled') {
-            styles['&:hover'] = {
-              backgroundColor: calculatedHoverColor,
-            }
-            styles['&:active'] = {
-              backgroundColor: calculatedActiveColor,
-            }
-          }
-        }
-
-        return {
-          ...disabledAcc,
-          [`root-${typeVal}-${colorVal}-${disabledVal}`]: styles
-        }
-      }, {}),
-      [`loader-${colorVal}-busy`]: loaderStyle
-    })
-  }, {})
+const radiusStyles = () => radiuses.reduce((acc, radius) => ({
+  ...acc,
+  [`root-radius-${radius}`]: {
+    borderRadius: radius * 2
+  }
 }), {})
 
-const sizeStyles = theme => size.reduce((acc, val) => {
-  acc = {
-    ...acc,
-    [`root-size-${val}`]: {
-      paddingRight: theme.unit * val * 2,
-      paddingLeft: theme.unit * val * 2,
-    },
-    [`Text-size-${val}`]: {
-      paddingTop: 6 + val * 2,
-      paddingBottom: 6 + val * 2,
-      fontSize: 12 + val
-    },
-    [`Icon-size-${val}`]: {
-      fontSize: 11 + val
-    },
+const alignStyles = () => justifies.reduce((acc, justify) => ({
+  ...acc,
+  [`justify-${justify}`]: {
+    justifyContent: justify
   }
-  return acc
-}, {})
-
-const radiusStyles = theme => radius.reduce((acc, val) => {
-  acc = {
-    ...acc,
-    [`root-radius-${val}`]: {
-      borderRadius: theme.unit * val / 2
-    }
-  }
-  return acc
-}, {})
-
-const alignStyles = () => align.reduce((acc, val) => {
-  acc = {
-    ...acc,
-    [`content-align-${val}`]: {
-      justifyContent: val
-    }
-  }
-  return acc
-}, {})
-
+}), {})
 
 const styles = theme => {
-
   return {
+    '@keyframes spin': {
+      from: { ...theme.transform('rotate(0deg)') },
+      to: { ...theme.transform('rotate(360deg)') }
+    },
     root: {
       display: 'inline-block',
       position: 'relative',
@@ -157,7 +114,7 @@ const styles = theme => {
       border: 'none',
       fontFamily: 'inherit',
       fontWeight: 600,
-      transition: theme.transition('background'),
+      transition: theme.transition(['background', 'color']),
       cursor: 'pointer',
       padding: 0,
       '&:focus': {
@@ -167,34 +124,44 @@ const styles = theme => {
         border: 0
       }
     },
-    'root-disabled': {
+    disabled: {
       cursor: 'default'
     },
     content: {
       display: 'flex',
       alignItems: 'center'
     },
-    Text: {
+    text: {
       display: 'inline-block',
     },
-    Icon: {
+    icon: {
       display: 'flex',
       alignItems: 'center',
-    },
-    'head-icon': {
-      marginRight: theme.unit
     },
     'tail-icon': {
       marginLeft: theme.unit
     },
-    ...rootStyles(theme),
+    'head-icon': {
+      marginRight: theme.unit
+    },
+    ...colorClasses(theme),
     ...sizeStyles(theme),
-    ...radiusStyles(theme),
+    ...radiusStyles(),
     ...alignStyles(),
     'root-full-width': {
       width: '100%'
     },
-    'loader': {
+    'loader-container': {
+      position: 'absolute',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      top: 0,
+      bottom: 0,
+      left: 0,
+      right: 0
+    },
+    loader: {
       position: 'absolute',
       '-webkit-animation-name': 'spin',
       animationName: 'spin',
@@ -203,55 +170,46 @@ const styles = theme => {
       '-webkit-animation-timing-function': 'ease-in-out',
       animationDuration: '0.7s',
       animationIiterationCount: 'infinite',
-      animationTimingFunction: 'ease-in-out'
+      animationTimingFunction: 'ease-in-out',
+      borderWidth: 4,
+      borderStyle: 'solid',
+      borderRadius: '50%'
     }
   }
 }
 
-const resolveChildren = (children) => {
-  const headIcons = []
-  const tailIcons = []
-  let Text = undefined
-  React.Children.forEach(children,
-    (child, index) => {
-      if (child) {
-
-        const displayName = typeof child === 'string' ? 'Text' : child.type.displayName
-
-        if (displayName === 'Icon') {
-          if (!Text) {
-            headIcons.push(<child.type key={`head-icon-${index}`} {...child.props}></child.type>)
-          }
-          else {
-            tailIcons.push(<child.type key={`head-icon-${index}`} {...child.props}></child.type>)
-          }
-        }
-        else if (displayName === 'Text' && !Text) {
-          Text = child
-        }
+const resolveChildren = children => {
+  const childList = Array.isArray(children) ? children : [children]
+  return childList.reduce((acc, child) => {
+    if (child) {
+      const type = child.type ? child.type : typeof child
+      if (type === Icon) {
+        acc[acc.text ? 'headIcons' : 'tailIcons'].push(child)
+      }
+      else {
+        acc.text = child
       }
     }
-  )
-
-  return { headIcons, tailIcons, Text }
+    return acc
+  }, { headIcons: [], tailIcons: [] })
 }
 
 const Button = props => {
   const {
-    children,
     classes,
+    className,
+    children,
+    contentClassName,
     type,
     color,
     disabled,
+    busy,
     size,
     radius,
-    className,
-    contentClassName,
     badge,
-    justifyContent,
+    justify,
     fullWidth,
     rootRef,
-    busy,
     /* eslint-disable */
     //Just to catch ...others properly, theme prop is extracted.
     theme,
@@ -259,57 +217,55 @@ const Button = props => {
     ...others
   } = props
 
-  const { Text, headIcons, tailIcons } = resolveChildren(children)
-
-  const rootClass = classNames({
-    [classes.root]: true,
-    [classes[`root-${type}-${color}-${disabled ? 'disabled' : 'enabled'}`]]: true,
-    [classes[`root-size-${size}`]]: true,
-    [classes[`root-radius-${radius}`]]: true,
-    [classes['root-disabled']]: disabled,
-    [classes['root-full-width']]: fullWidth,
-    [classes['root-full-width']]: fullWidth,
-    [className]: true
-  })
-
-  const headIconClass = classNames({
-    [classes.Icon]: true,
-    [classes[`Icon-size-${size}`]]: true,
-    [classes['head-icon']]: true
-  })
-
-  const tailIconClass = classNames({
-    [classes.Icon]: true,
-    [classes[`Icon-size-${size}`]]: true,
-    [classes['tail-icon']]: true
-  })
-
-  const TextClass = classNames({
-    [classes.Text]: true,
-    [classes[`Text-size-${size}`]]: true
-  })
-
-  const contentClass = classNames({
-    [classes.content]: true,
-    [classes[`content-align-${justifyContent}`]]: true,
-    [contentClassName]: true
-  })
-
-  const loaderClass = classNames({
-    [classes.loader]: true,
-    [classes[`loader-${color}-busy`]]: busy
-  })
+  const { text, headIcons, tailIcons } = resolveChildren(children)
+  const elClasses = {
+    root: classNames({
+      [classes.root]: true,
+      [classes[`root-color-${type}-${color}-${disabled || busy ? 'disabled' : 'enabled'}`]]: true,
+      [classes.disabled]: disabled || busy,
+      [classes[`root-size-${size}`]]: true,
+      [classes[`root-radius-${radius}`]]: true,
+      [classes['root-disabled']]: disabled,
+      [classes['root-full-width']]: fullWidth,
+      [classes['root-full-width']]: fullWidth,
+      [className]: true
+    }),
+    headIcon: classNames({
+      [classes.icon]: true,
+      [classes[`icon-size-${size}`]]: true,
+      [classes['head-icon']]: true
+    }),
+    tailIcon: classNames({
+      [classes.icon]: true,
+      [classes[`icon-size-${size}`]]: true,
+      [classes['tail-icon']]: true
+    }),
+    content: classNames({
+      [classes.content]: true,
+      [classes[`justify-${justify}`]]: true,
+      [contentClassName]: true
+    }),
+    buttonText: classNames({
+      [classes.text]: true,
+      [classes[`text-size-${size}`]]: true
+    }),
+    loader: classNames({
+      [classes.loader]: true,
+      [classes[`loader-size-${size}`]]: true,
+      [classes[`loader-color-${color}`]]: busy
+    })
+  }
 
   return (
-    <button ref={rootRef} {...others} className={rootClass} disabled={disabled}>
+    <button ref={rootRef} {...others} className={elClasses.root} disabled={disabled}>
       {badge}
-      <div className={contentClass}>
-        <div className={loaderClass}></div>
-        {[
-          headIcons.length > 0 && <div className={headIconClass} key='first-icons'>{headIcons}</div>,
-          <div className={`BUTTON_TEXT ${TextClass}`} key='text'>{Text}</div>,
-          tailIcons.length > 0 && <div className={tailIconClass} key='last-icons'>{tailIcons}</div>
-        ]}
+      <div className={elClasses.content}>
+        <div className={classes['loader-container']}>
+          {busy && <div className={elClasses.loader}></div>}
+        </div>
+        <div className={elClasses.headIcon}>{headIcons}</div>
+        <div data-role="button-text" className={elClasses.buttonText}>{text}</div>
+        <div className={elClasses.tailIcon}>{tailIcons}</div>
       </div>
     </button>
   )
@@ -318,23 +274,18 @@ const Button = props => {
 Button.propTypes = {
   classes: PropTypes.object.isRequired,
   className: PropTypes.string,
-  children: childrenTypeChecker({
-    'Icon': [false],
-    'string': [true]
-  }),
+  children: childChecker([{ type: 'Icon' }, { type: 'string', required: true }]),
   contentClassName: PropTypes.string,
-  type: PropTypes.oneOf(type),
-  color: PropTypes.oneOf(color),
+  type: PropTypes.oneOf(types),
+  color: PropTypes.oneOf(colors),
   disabled: PropTypes.bool,
   busy: PropTypes.bool,
-  size: PropTypes.oneOf(size),
-  radius: PropTypes.oneOf(radius),
-  badge: childrenTypeChecker({
-    'Badge': [false, 1]
-  }),
-  justifyContent: PropTypes.oneOf(align),
+  size: PropTypes.oneOf(sizes),
+  radius: PropTypes.oneOf(radiuses),
+  badge: childChecker([{ type: 'Badge', max: 1 }]),
+  justify: PropTypes.oneOf(justifies),
   fullWidth: PropTypes.bool,
-  rootRef: PropTypes.any,
+  rootRef: PropTypes.any
 }
 
 Button.defaultProps = {
@@ -342,16 +293,13 @@ Button.defaultProps = {
   contentClassName: '',
   type: 'light',
   color: 'primary',
-  size: 2,
   disabled: false,
   busy: false,
+  size: 'normal',
   radius: 2,
-  justifyContent: 'center',
+  justify: 'center',
   fullWidth: false,
+  rootRef: null,
 }
 
-const styledButton = withStyles(styles)(Button)
-
-styledButton.displayName = 'Button'
-
-module.exports = styledButton
+module.exports = withStyles(styles)(Button)

@@ -34,26 +34,23 @@ const z = {
 
 const unit = 5
 
-
 const text = {
-  h1: '30px',
-  h2: '26px',
-  h3: '22px',
-  h4: '18px',
-  h5: '16px',
-  h6: '14px',
-  small: '11px',
-  normal: '14px',
-  big: '18px'
+  h1: 60,
+  h2: 40,
+  h3: 30,
+  h4: 25,
+  h5: 20,
+  h6: 18,
+  small: 14,
+  normal: 18,
+  big: 20
 }
 
-
-const primary = Color('#0088ff')
-const secondary = Color('#7b00ff')
-const error = Color('#ff4f3b')
-const grey = Color('#e6e6e6')
-const dark = Color('#454545')
-const warning = Color('#ffbf00')
+const primary = Color('#00A6FF')
+const error = Color('#e34234')
+const grey = Color('#f4f4f4')
+const darkgrey = Color('#454545')
+const warning = Color('#F1BB00')
 
 const themeColor = {
   background: '#f9f9f9',
@@ -62,52 +59,40 @@ const themeColor = {
   black: '#000',
   primary: {
     normal: primary.hex(),
-    light: primary.lighten(.4).hex(),
+    light: primary.lighten(.3).hex(),
     dark: primary.darken(.2).hex(),
-    darker: primary.darken(.5).hex(),
     disabled: primary.lighten(.6).hex(),
-  },
-  secondary: {
-    normal: secondary.hex(),
-    light: secondary.lighten(.4).hex(),
-    dark: secondary.darken(.2).hex(),
-    darker: secondary.darken(.5).hex(),
-    disabled: secondary.lighten(.6).hex(),
   },
   error: {
     normal: error.hex(),
-    light: error.lighten(.4).hex(),
+    light: error.lighten(.3).hex(),
     dark: error.darken(.2).hex(),
-    darker: error.darken(.5).hex(),
     disabled: error.lighten(.6).hex(),
   },
   warning: {
     normal: warning.hex(),
     light: warning.lighten(.4).hex(),
     dark: warning.darken(.2).hex(),
-    darker: warning.darken(.5).hex(),
     disabled: warning.lighten(.6).hex(),
   },
   grey: {
     normal: grey.hex(),
-    light: grey.lighten(.05).hex(),
-    dark: grey.darken(.1).hex(),
-    darker: grey.darken(.2).hex(),
-    disabled: grey.lighten(.6).hex(),
+    light: grey.lighten(.03).hex(),
+    dark: grey.darken(.05).hex(),
+    disabled: grey.lighten(.03).hex(),
   },
-  dark: {
-    normal: dark.hex(),
-    light: dark.lighten(.4).hex(),
-    dark: dark.darken(.2).hex(),
-    darker: dark.darken(.4).hex(),
-    disabled: dark.lighten(.6).hex(),
+  darkgrey: {
+    normal: darkgrey.hex(),
+    light: darkgrey.lighten(.4).hex(),
+    dark: darkgrey.darken(.2).hex(),
+    disabled: darkgrey.lighten(1).hex(),
   }
 }
 
 const duration = 200
 
-const transition = (properties = ['all'], duration = duration) =>
-  properties.map(property => `${property} ${duration}ms`).join(',')
+const transition = (properties = ['all'], custumDuration = duration) =>
+  properties.map(property => `${property} ${custumDuration}ms`).join(',')
 
 const transform = name => {
   return {

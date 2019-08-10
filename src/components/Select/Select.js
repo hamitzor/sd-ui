@@ -185,7 +185,7 @@ class Select extends React.Component {
     }
     else {
       const button = this.buttonRef.current
-      const calculatedSelectClasses = button.querySelector('.BUTTON_TEXT').className + ' ' + button.className
+      const calculatedSelectClasses = button.querySelector('[data-role="button-text"]').className + ' ' + button.className
       this.setState({
         ready: true,
         calculatedSelectClasses

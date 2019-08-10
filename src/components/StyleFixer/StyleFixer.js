@@ -18,8 +18,12 @@ const styles = theme => ({
     body: {
       margin: 0, // Remove the margin in all browsers.
       backgroundColor: theme.color.background.normal,
-      fontFamily: `'Source Sans Pro', sans-serif`
+      fontFamily: 'source-sans-pro,sans-serif',
+      fontStyle: 'normal'
     },
+    'h1,h2,h3,h4,h5,h6': {
+      fontWeight: 600
+    }
   },
 })
 

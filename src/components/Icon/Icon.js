@@ -1,8 +1,6 @@
 const PropTypes = require('prop-types')
 
-const Icon = props => {
-  return props.children
-}
+const Icon = ({ children }) => children
 
 Icon.propTypes = {
   children: PropTypes.element.isRequired
