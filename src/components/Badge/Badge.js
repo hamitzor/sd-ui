@@ -3,110 +3,66 @@ const PropTypes = require('prop-types')
 const withStyles = require('react-jss').default
 const classNames = require('classnames')
 
+const colors = ['grey', 'darkgrey', 'primary', 'success', 'warning', 'error']
 
-
-const color = ['default', 'primary', 'secondary', 'error']
-
-const rootStyles = theme => color.reduce((colorAcc, colorVal) => {
-
-  const calculatedColor = colorVal === 'default' ?
-    theme.color.text.normal : theme.color[colorVal].normal
-
-  const calculatedHoverColor = colorVal === 'default' ?
-    theme.color.text.dark : theme.color[colorVal].dark
-
-  const calculatedActiveColor = colorVal === 'default' ?
-    theme.color.text.light : theme.color[colorVal].light
-
-  colorAcc = {
-    ...colorAcc,
-    [`root-color-${colorVal}`]: {
-      color: theme.color.white,
-      backgroundColor: calculatedColor,
-      '&:hover': {
-        backgroundColor: calculatedHoverColor
-      },
-      '&:active': {
-        backgroundColor: calculatedActiveColor,
-      }
-    },
-    [`@keyframes shine-color-${colorVal}`]: {
-      from: { filter: 'brightness(1)', ...theme.transform('rotate(-15deg)') },
-      to: { filter: 'brightness(1.2)', ...theme.transform('rotate(15deg)') },
-    },
-    [`root-shine-color-${colorVal}`]: {
-      '-webkit-animation-name': `shine-color-${colorVal}`, /* Safari 4.0 - 8.0 */
-      animationName: `shine-color-${colorVal}`
-    }
+const colorClasses = theme => colors.reduce((acc, color) => ({
+  ...acc,
+  [`badge-color-${color}`]: {
+    color: color === 'grey' ? theme.color.darkgrey.normal : theme.color.white,
+    backgroundColor: color === 'grey' ? theme.color[color].dark : theme.color[color].normal
   }
-  return colorAcc
-}, {})
+}), {})
 
 const styles = theme => {
-
   return {
-    root: {
+    badge: {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
       position: 'absolute',
       top: theme.unit * -2,
       right: theme.unit * -2,
-      width: theme.unit * 5.2,
-      height: theme.unit * 5.2,
-      fontSize: '0.6rem',
+      width: theme.unit * 5.3,
+      height: theme.unit * 5.3,
+      fontSize: 12,
       borderRadius: '50%',
-      transition: theme.transition('background'),
+      transition: theme.transition(['background']),
       cursor: 'initial',
-      textTransform: 'none'
+      textTransform: 'none',
+      fontWeight: 700
     },
-    'root-shine': {
+    'badge-shine': {
+      '-webkit-animation-name': `shine`,
       '-webkit-animation-duration': '1s',
       '-webkit-animation-iteration-count': 'infinite',
       '-webkit-animation-direction': 'alternate',
       '-webkit-animation-timing-function': 'ease-in-out',
+      animationName: `shine`,
       animationDuration: '1s',
       animationIiterationCount: 'infinite',
       animationDirection: 'alternate',
       animationTimingFunction: 'ease-in-out'
     },
-    ...rootStyles(theme)
+    '@keyframes shine': {
+      from: { filter: 'brightness(1)', ...theme.transform('rotate(-15deg)') },
+      to: { filter: 'brightness(1.2)', ...theme.transform('rotate(15deg)') },
+    },
+    ...colorClasses(theme)
   }
 }
 
-
-const Badge = props => {
-  const {
-    classes,
-    color,
-    className,
-    value,
-    maxValue,
-    shine,
-    /* eslint-disable */
-    //Just to catch ...others properly, theme prop is extracted.
-    theme,
-    /* eslint-enable */
-    ...others
-  } = props
-
-  const rootClasses = classNames({
-    [classes.root]: true,
-    [classes[`root-color-${color}`]]: true,
-    [classes['root-shine']]: shine,
-    [classes[`root-shine-color-${color}`]]: shine,
+// eslint-disable-next-line no-unused-vars
+const Badge = ({ classes, color, className, value, maxValue, shine, theme, ...others }) => {
+  const badgeClasses = classNames({
+    [classes.badge]: true,
+    [classes[`badge-color-${color}`]]: true,
+    [classes['badge-shine']]: shine,
     [className]: true
   })
 
-  let displayedValue = value
-
-  if (maxValue && !isNaN(value) && parseInt(value) > maxValue) {
-    displayedValue = `${maxValue}+`
-  }
-
   return (
-    <div {...others} className={rootClasses}>
-      {displayedValue}
+    <div className={badgeClasses} {...others}>
+      {(maxValue && !isNaN(value) && parseInt(value) > maxValue) ? `${maxValue}+` : value}
     </div>
   )
 }
@@ -114,7 +70,8 @@ const Badge = props => {
 Badge.propTypes = {
   classes: PropTypes.object.isRequired,
   className: PropTypes.string,
-  color: PropTypes.oneOf(color),
+  theme: PropTypes.object.isRequired,
+  color: PropTypes.oneOf(colors),
   value: PropTypes.string.isRequired,
   maxValue: PropTypes.number,
   shine: PropTypes.bool,
@@ -122,12 +79,12 @@ Badge.propTypes = {
 
 Badge.defaultProps = {
   className: '',
-  color: 'secondary',
+  color: 'warning',
   shine: false
 }
 
-const styledBadge = withStyles(styles)(Badge)
+const styled = withStyles(styles)(Badge)
 
-styledBadge.displayName = 'Badge'
+styled.displayName = 'Badge'
 
-module.exports = styledBadge
+module.exports = styled

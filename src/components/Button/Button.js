@@ -4,97 +4,97 @@ const withStyles = require('react-jss').default
 const classNames = require('classnames')
 const childChecker = require('../../util/child-checker')
 const Icon = require('../Icon')
+const Spinner = require('../Spinner')
+
 const types = ['light', 'filled', 'transparent']
-const colors = ['darkgrey', 'primary', 'warning', 'error']
+const colors = ['darkgrey', 'primary', 'success', 'warning', 'error']
 const sizes = ['small', 'normal', 'big']
+const sizeToNumber = { small: 1, normal: 2, big: 3 }
 const radiuses = [0, 1, 2, 3]
 const justifies = ['center', 'left', 'right']
 const disableds = ['enabled', 'disabled']
 
 
-const colorClasses = theme => types.reduce((acc, type) => {
-  return {
+const colorClasses = theme => types.reduce((acc, type) => ({
+  ...acc,
+  ...disableds.reduce((acc, disabled) => ({
     ...acc,
-    ...disableds.reduce((acc, disabled) => {
+    ...colors.reduce((acc, color) => {
+      const style = { '&:hover': {}, '&:active': {} }
+      if (type === 'light') {
+        style.boxShadow = theme.shadow[1]
+        style.color = disabled === 'enabled' ? theme.color[color].normal : theme.color[color].disabled
+        style.backgroundColor = disabled === 'enabled' ? theme.color.grey.normal : theme.color.grey.disabled
+        if (disabled === 'enabled') {
+          style['&:hover'].backgroundColor = theme.color.grey.dark
+          style['&:active'].backgroundColor = theme.color.grey.light
+        }
+      }
+      else if (type === 'filled') {
+        style.boxShadow = theme.shadow[2]
+        style.color = theme.color.white
+        style.backgroundColor = disabled === 'enabled' ? theme.color[color].normal : theme.color[color].disabled
+        if (disabled === 'enabled') {
+          style['&:hover'].backgroundColor = theme.color[color].dark
+          style['&:active'].backgroundColor = theme.color[color].light
+        }
+      }
+      else {
+        style.color = disabled === 'enabled' ? theme.color[color].normal : theme.color[color].disabled
+        style.backgroundColor = 'transparent'
+        if (disabled === 'enabled') {
+          style['&:hover'].color = theme.color[color].light
+          style['&:active'].color = theme.color[color].dark
+        }
+      }
+
       return {
         ...acc,
-        ...colors.reduce((acc, color) => {
-          const style = { '&:hover': {}, '&:active': {} }
-          if (type === 'light') {
-            style.color = theme.color[color].normal
-            style.backgroundColor = disabled === 'enabled' ? theme.color.grey.normal : theme.color.grey.disabled
-            if (disabled === 'enabled') {
-              style['&:hover'].backgroundColor = theme.color.grey.dark
-              style['&:active'].backgroundColor = theme.color.grey.light
-            }
-          }
-          else if (type === 'filled') {
-            style.color = theme.color.white
-            style.backgroundColor = disabled === 'enabled' ? theme.color[color].normal : theme.color[color].disabled
-            if (disabled === 'enabled') {
-              style['&:hover'].backgroundColor = theme.color[color].dark
-              style['&:active'].backgroundColor = theme.color[color].light
-            }
-          }
-          else {
-            style.color = disabled === 'enabled' ? theme.color[color].normal : theme.color[color].disabled
-            style.backgroundColor = 'transparent'
-            if (disabled === 'enabled') {
-              style['&:hover'].color = theme.color[color].light
-              style['&:active'].color = theme.color[color].dark
-            }
-          }
-
-          return {
-            ...acc,
-            [`root-color-${type}-${color}-${disabled}`]: style,
-            [`loader-color-${color}`]: { borderColor: type === 'filled' ? theme.color.background : theme.color.grey.dark, borderTopColor: theme.color[color].normal }
-          }
-        }, {})
+        [`button-color-${type}-${color}-${disabled}`]: style,
       }
     }, {})
-  }
-}, {})
+  }), {})
+}), {})
 
-const sizeStyles = theme => sizes.reduce((acc, size) => {
-  let rootPadding = '0 8px', textPadding = '5px 0', loaderSize = theme.unit * 4
+const sizeClasses = theme => sizes.reduce((acc, size) => ({
+  ...acc,
+  [`text-size-${size}`]: {
+    fontSize: theme.text[size],
+  },
+  [`icon-size-${size}`]: {
+    fontSize: theme.text[size] + 5
+  }
+}), {})
+
+const paddingClasses = () => sizes.reduce((acc, size) => {
+  let buttonPadding = '0 8px', textPadding = '4px 0'
   if (size === 'normal') {
-    rootPadding = '0 11px'
-    textPadding = '5px 0'
-    loaderSize = theme.unit * 6
+    buttonPadding = '0 11px'
+    textPadding = '4px 0'
   }
   else if (size === 'big') {
-    rootPadding = '0 15px'
-    textPadding = '6px 0'
-    loaderSize = theme.unit * 7
+    buttonPadding = '0 15px'
+    textPadding = '4px 0'
   }
   return {
     ...acc,
-    [`root-size-${size}`]: {
-      padding: rootPadding
+    [`button-padding-${size}`]: {
+      padding: buttonPadding
     },
-    [`text-size-${size}`]: {
-      fontSize: theme.text[size],
+    [`text-padding-${size}`]: {
       padding: textPadding
-    },
-    [`icon-size-${size}`]: {
-      fontSize: theme.text[size] + 7
-    },
-    [`loader-size-${size}`]: {
-      width: loaderSize,
-      height: loaderSize
     }
   }
 }, {})
 
-const radiusStyles = () => radiuses.reduce((acc, radius) => ({
+const radiusClasses = () => radiuses.reduce((acc, radius) => ({
   ...acc,
-  [`root-radius-${radius}`]: {
+  [`button-radius-${radius}`]: {
     borderRadius: radius * 2
   }
 }), {})
 
-const alignStyles = () => justifies.reduce((acc, justify) => ({
+const alignClasses = () => justifies.reduce((acc, justify) => ({
   ...acc,
   [`justify-${justify}`]: {
     justifyContent: justify
@@ -107,7 +107,7 @@ const styles = theme => {
       from: { ...theme.transform('rotate(0deg)') },
       to: { ...theme.transform('rotate(360deg)') }
     },
-    root: {
+    button: {
       display: 'inline-block',
       position: 'relative',
       textTransform: 'uppercase',
@@ -137,6 +137,7 @@ const styles = theme => {
     icon: {
       display: 'flex',
       alignItems: 'center',
+      padding: theme.unit / 2
     },
     'tail-icon': {
       marginLeft: theme.unit
@@ -145,10 +146,11 @@ const styles = theme => {
       marginRight: theme.unit
     },
     ...colorClasses(theme),
-    ...sizeStyles(theme),
-    ...radiusStyles(),
-    ...alignStyles(),
-    'root-full-width': {
+    ...sizeClasses(theme),
+    ...paddingClasses(),
+    ...radiusClasses(),
+    ...alignClasses(),
+    'button-full-width': {
       width: '100%'
     },
     'loader-container': {
@@ -160,20 +162,6 @@ const styles = theme => {
       bottom: 0,
       left: 0,
       right: 0
-    },
-    loader: {
-      position: 'absolute',
-      '-webkit-animation-name': 'spin',
-      animationName: 'spin',
-      '-webkit-animation-duration': '0.7s',
-      '-webkit-animation-iteration-count': 'infinite',
-      '-webkit-animation-timing-function': 'ease-in-out',
-      animationDuration: '0.7s',
-      animationIiterationCount: 'infinite',
-      animationTimingFunction: 'ease-in-out',
-      borderWidth: 4,
-      borderStyle: 'solid',
-      borderRadius: '50%'
     }
   }
 }
@@ -219,26 +207,26 @@ const Button = props => {
 
   const { text, headIcons, tailIcons } = resolveChildren(children)
   const elClasses = {
-    root: classNames({
-      [classes.root]: true,
-      [classes[`root-color-${type}-${color}-${disabled || busy ? 'disabled' : 'enabled'}`]]: true,
+    button: classNames({
+      [classes.button]: true,
+      [classes[`button-color-${type}-${color}-${disabled || busy ? 'disabled' : 'enabled'}`]]: true,
       [classes.disabled]: disabled || busy,
-      [classes[`root-size-${size}`]]: true,
-      [classes[`root-radius-${radius}`]]: true,
-      [classes['root-disabled']]: disabled,
-      [classes['root-full-width']]: fullWidth,
-      [classes['root-full-width']]: fullWidth,
+      [classes[`button-padding-${size}`]]: text !== undefined,
+      [classes[`button-radius-${radius}`]]: true,
+      [classes['button-disabled']]: disabled,
+      [classes['button-full-width']]: fullWidth,
+      [classes['button-full-width']]: fullWidth,
       [className]: true
     }),
     headIcon: classNames({
       [classes.icon]: true,
       [classes[`icon-size-${size}`]]: true,
-      [classes['head-icon']]: true
+      [classes['head-icon']]: text !== undefined,
     }),
     tailIcon: classNames({
       [classes.icon]: true,
       [classes[`icon-size-${size}`]]: true,
-      [classes['tail-icon']]: true
+      [classes['tail-icon']]: text !== undefined,
     }),
     content: classNames({
       [classes.content]: true,
@@ -246,26 +234,22 @@ const Button = props => {
       [contentClassName]: true
     }),
     buttonText: classNames({
-      [classes.text]: true,
-      [classes[`text-size-${size}`]]: true
-    }),
-    loader: classNames({
-      [classes.loader]: true,
-      [classes[`loader-size-${size}`]]: true,
-      [classes[`loader-color-${color}`]]: busy
+      [classes.text]: text !== undefined,
+      [classes[`text-size-${size}`]]: text !== undefined,
+      [classes[`text-padding-${size}`]]: text !== undefined,
     })
   }
 
   return (
-    <button ref={rootRef} {...others} className={elClasses.root} disabled={disabled}>
+    <button ref={rootRef} {...others} className={elClasses.button} disabled={disabled}>
       {badge}
       <div className={elClasses.content}>
         <div className={classes['loader-container']}>
-          {busy && <div className={elClasses.loader}></div>}
+          <Spinner visible={busy} size={text === undefined ? sizeToNumber[size] : sizeToNumber[size]} color={color} />
         </div>
-        <div className={elClasses.headIcon}>{headIcons}</div>
-        <div data-role="button-text" className={elClasses.buttonText}>{text}</div>
-        <div className={elClasses.tailIcon}>{tailIcons}</div>
+        {headIcons.length > 0 && <div className={elClasses.headIcon}>{headIcons}</div>}
+        {text && <div data-role="button-text" className={elClasses.buttonText}>{text}</div>}
+        {tailIcons.length > 0 && <div className={elClasses.tailIcon}>{tailIcons}</div>}
       </div>
     </button>
   )
@@ -274,7 +258,7 @@ const Button = props => {
 Button.propTypes = {
   classes: PropTypes.object.isRequired,
   className: PropTypes.string,
-  children: childChecker([{ type: 'Icon' }, { type: 'string', required: true }]),
+  children: childChecker([{ type: 'Icon' }, { type: 'string' }]),
   contentClassName: PropTypes.string,
   type: PropTypes.oneOf(types),
   color: PropTypes.oneOf(colors),
@@ -302,4 +286,8 @@ Button.defaultProps = {
   rootRef: null,
 }
 
-module.exports = withStyles(styles)(Button)
+const styled = withStyles(styles)(Button)
+
+styled.displayName = 'Button'
+
+module.exports = styled
