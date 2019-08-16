@@ -17,8 +17,8 @@ const styles = theme => ({
     },
     body: {
       margin: 0, // Remove the margin in all browsers.
-      backgroundColor: theme.color.background.normal,
-      fontFamily: 'source-sans-pro,sans-serif',
+      backgroundColor: theme.color.background,
+      fontFamily: "'Quicksand', sans-serif",
       fontStyle: 'normal'
     },
     'h1,h2,h3,h4,h5,h6': {

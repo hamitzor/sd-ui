@@ -3,60 +3,74 @@ const PropTypes = require('prop-types')
 const withStyles = require('react-jss').default
 const classNames = require('classnames')
 const { CSSTransition } = require('react-transition-group')
+const Icon = require('../../components/Icon')
+const { FaInfoCircle, FaExclamationCircle, FaCheckCircle, FaExclamation } = require('react-icons/fa')
 
-const justify = ['left', 'right', 'unset']
-const align = ['top', 'bottom', 'unset']
-const color = ['primary', 'secondary', 'error']
+const aligns = ['top', 'bottom', 'unset']
+const types = ['info', 'success', 'warning', 'error']
 
-const justifyStyles = theme => justify.reduce((acc, val) => ({
-  ...acc, [`root-justify-${val}`]: { [val !== 'unset' ? val : '']: theme.unit * 5 }
+const alignClasses = theme => aligns.reduce((acc, val) => ({
+  ...acc,
+  [`align-${val}`]: { [val !== 'unset' ? val : '']: theme.unit * 2 },
+  [`align-${val}-full-width`]: { [val !== 'unset' ? val : '']: 0 },
 }), {})
-const alignStyles = theme => align.reduce((acc, val) => ({
-  ...acc, [`root-align-${val}`]: { [val !== 'unset' ? val : '']: theme.unit * 5 }
-}), {})
-const colorStyles = theme => color.reduce((acc, val) => ({
-  ...acc, [`root-color-${val}`]: { backgroundColor: theme.color[val].normal }
+const typeClasses = theme => types.reduce((acc, val) => ({
+  ...acc, [`type-${val}`]: {
+    color: val === 'info' ? theme.color.primary.normal : theme.color[val].normal
+  }
 }), {})
 
 const styles = theme => {
   return {
-    root: {
-      backgroundColor: 'rgba(0,0,0,0.4)',
-      padding: `${theme.unit * 2}px ${theme.unit * 4}px`,
-      paddingRight: theme.unit * 2,
+    alert: {
+      backgroundColor: theme.color.white,
+      cursor: 'pointer',
+      fontWeight: 600,
+      fontSize: 16,
+      padding: `${theme.unit * 2}px ${theme.unit * 3}px`,
       borderRadius: theme.unit,
-      boxShadow: theme.shadow[1],
-      zIndex: theme.zIndex.Alert,
+      boxShadow: theme.shadow[2],
+      zIndex: theme.z.Alert,
+      right: theme.unit * 3
     },
-    'root-fixed': {
+    content: {
+      display: 'flex',
+      alignItems: 'center'
+    },
+    text: {
+      marginLeft: 7
+    },
+    icon: {
+      fontSize: 20
+    },
+    'fixed': {
       position: 'fixed'
     },
-    'root-absolute': {
+    'absolute': {
       position: 'absolute'
     },
-    'root-enter': {
+    'enter': {
       opacity: 0,
-      transition: theme.transition('all')
+      transition: theme.transition()
     },
-    'root-enter-active': {
+    'enter-active': {
       opacity: 1,
     },
-    'root-exit': {
+    'exit': {
       opacity: 1,
-      transition: theme.transition('all')
+      transition: theme.transition()
     },
-    'root-exit-active': {
+    'exit-active': {
       opacity: 0,
     },
-    ...justifyStyles(theme),
-    ...alignStyles(theme),
-    ...colorStyles(theme),
-    'root-full-width': {
+    ...alignClasses(theme),
+    ...typeClasses(theme),
+    'full-width': {
       borderRadius: 0,
       left: 0,
       right: 0,
-      top: 0,
-      padding: `${theme.unit * 2}px ${theme.unit * 2}px`,
+      padding: `${theme.unit * 3}px ${theme.unit * 2}px`,
+      boxShadow: theme.shadow[1],
       maxWidth: 'none'
     },
   }
@@ -70,35 +84,52 @@ const Alert = props => {
     open,
     fullWidth,
     animate,
-    color,
-    justify,
-    align,
+    type,
     fixed,
     absolute,
+    ...others
   } = props
 
-  const rootClasses = classNames({
-    [classes.root]: true,
-    [classes['root-full-width']]: fullWidth,
-    [classes[`root-color-${color}`]]: true,
-    [classes[`root-justify-${justify}`]]: true,
-    [classes[`root-align-${align}`]]: true,
-    [classes[`root-fixed`]]: fixed,
-    [classes[`root-absolute`]]: absolute,
-    [className]: true
-  })
+  delete others['theme']
 
-  const root = (
-    <div className={rootClasses} >
-      {children}
+  const elClasses = {
+    alert: classNames({
+      [classes.alert]: true,
+      [classes['full-width']]: fullWidth,
+      [classes[`type-${type}`]]: true,
+      [classes[`align-${type === 'error' || type === 'info' ? 'top' : 'bottom'}-full-width`]]: fullWidth,
+      [classes[`align-${type === 'error' || type === 'info' ? 'top' : 'bottom'}`]]: true,
+      [classes[`fixed`]]: fixed,
+      [classes[`absolute`]]: absolute,
+      [className]: true
+    })
+  }
+
+  const icon = {
+    info: <FaInfoCircle className={classes.icon} />,
+    success: <FaCheckCircle className={classes.icon} />,
+    warning: <FaExclamation className={classes.icon} />,
+    error: <FaExclamationCircle className={classes.icon} />,
+  }
+
+  const alert = (
+    <div className={elClasses.alert} {...others}>
+      <div className={classes.content}>
+        <Icon>
+          {icon[type]}
+        </Icon>
+        <div className={classes.text}>
+          {children}
+        </div>
+      </div>
     </div>
   )
 
-  const rootAnimateClasses = {
-    enter: classes['root-enter'],
-    enterActive: classes['root-enter-active'],
-    exit: classes['root-exit'],
-    exitActive: classes['root-exit-active']
+  const alertAnimateClasses = {
+    enter: classes['enter'],
+    enterActive: classes['enter-active'],
+    exit: classes['exit'],
+    exitActive: classes['exit-active']
   }
 
   return (
@@ -107,10 +138,10 @@ const Alert = props => {
         in={open}
         unmountOnExit
         timeout={200}
-        classNames={rootAnimateClasses}
+        classNames={alertAnimateClasses}
       >
-        {root}
-      </CSSTransition> : open && root
+        {alert}
+      </CSSTransition> : open && alert
   )
 }
 
@@ -121,9 +152,7 @@ Alert.propTypes = {
   open: PropTypes.bool,
   fullWidth: PropTypes.bool,
   animate: PropTypes.bool,
-  color: PropTypes.oneOf(color),
-  justify: PropTypes.oneOf(justify),
-  align: PropTypes.oneOf(align),
+  type: PropTypes.oneOf(types),
   fixed: PropTypes.bool,
   absolute: PropTypes.bool,
 }
@@ -133,10 +162,8 @@ Alert.defaultProps = {
   open: false,
   fullWidth: false,
   animate: true,
-  color: 'primary',
-  justify: 'unset',
-  align: 'unset',
-  fixed: false,
+  type: 'info',
+  fixed: true,
   absolute: false
 }
 

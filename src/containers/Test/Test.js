@@ -8,10 +8,11 @@ const Icon = require('../../components/Icon')
 const { FaGithub } = require('react-icons/fa')
 const Spinner = require('../../components/Spinner')
 const Badge = require('../../components/Badge')
+const Alert = require('../../components/Alert')
 
 const styles = theme => ({
   content: {
-    height: 2000
+    height: 900
   }
 })
 
@@ -26,7 +27,8 @@ const buttonOptions = {
 class Test extends React.Component {
   state = {
     buttonBusy: false,
-    spinnersVisible: false
+    spinnersVisible: false,
+    alertVisible: false
   }
 
   render() {
@@ -37,7 +39,8 @@ class Test extends React.Component {
 
     const {
       buttonBusy,
-      spinnersVisible
+      spinnersVisible,
+      alertVisible
     } = this.state
 
     const spinners = <div style={{ margin: 40 }}>
@@ -236,8 +239,33 @@ class Test extends React.Component {
       ))}
     </div>
 
+    const alertsToggle = <div style={{ margin: 40 }}>
+      <Button onClick={() => { this.setState(({ alertVisible }) => ({ alertVisible: !alertVisible })) }}>
+        Toggle Alerts
+    </Button>
+    </div>
+    const alerts = [
+      /**
+       * <Alert onClick={() => { this.setState({ alertVisible: false }) }} key={1} open={alertVisible} type="warning">
+        Be careful while deleting videos
+      </Alert>,
+      <Alert onClick={() => { this.setState({ alertVisible: false }) }} key={2} open={alertVisible} align="bottom">
+        Don&apos;t forget to check the video
+      </Alert>,
+       */
+      <Alert onClick={() => { this.setState({ alertVisible: false }) }} key={3} open={alertVisible} type="success">
+        The operation is successfully completed
+      </Alert>,
+      <Alert onClick={() => { this.setState({ alertVisible: false }) }} key={4} open={alertVisible} type="error">
+        An error encountered
+      </Alert>
+    ]
+
     return (
-      <div className={classes.content}>
+      <div className={classes.content} style={{ position: 'relative' }}>
+        {alertsToggle}
+        {busyButton}
+        {alerts}
       </div>
     )
   }
