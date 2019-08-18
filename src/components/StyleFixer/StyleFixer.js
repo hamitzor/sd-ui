@@ -10,7 +10,8 @@ const styles = theme => ({
       // Change from `box-sizing: content-box` so that `width`
       // is not affected by `padding` or `border`.
       boxSizing: 'border-box',
-      fontSize: 18
+      fontSize: theme.text.normal,
+      color: theme.color.darkgrey.dark
     },
     '*, *::before, *::after': {
       boxSizing: 'inherit',
@@ -18,7 +19,7 @@ const styles = theme => ({
     body: {
       margin: 0, // Remove the margin in all browsers.
       backgroundColor: theme.color.background,
-      fontFamily: "'Quicksand', sans-serif",
+      fontFamily: "'Fira Sans', sans-serif",
       fontStyle: 'normal'
     },
     'h1,h2,h3,h4,h5,h6': {

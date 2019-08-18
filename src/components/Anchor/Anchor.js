@@ -2,76 +2,52 @@ const React = require('react')
 const PropTypes = require('prop-types')
 const withStyles = require('react-jss').default
 const classNames = require('classnames')
+const childChecker = require('../../util/child-checker')
 
 
-const color = ['default', 'primary', 'secondary', 'error', 'white']
-const disabled = ['disabled', 'enabled']
+const colors = ['grey', 'darkgrey', 'primary', 'success', 'warning', 'error']
+const disableds = ['enabled', 'disabled']
 
-const rootStyles = theme => color.reduce((colorAcc, colorVal) => {
-  colorAcc = {
-    ...colorAcc,
-    ...disabled.reduce((disabledAcc, disabledVal) => {
 
-      let styles = {}
-      const calculatedColor = colorVal === 'default' ?
-        (disabledVal === 'disabled' ? theme.color.text.disabled : theme.color.text.normal) :
-        colorVal === 'white' ?
-          (disabledVal === 'disabled' ? theme.color.grey[200] : theme.color.white) :
-          (disabledVal === 'disabled' ? theme.color[colorVal].disabled : theme.color[colorVal].normal)
-
-      const calculatedHoverColor = colorVal === 'default' ?
-        theme.color.text.dark :
-        colorVal === 'white' ?
-          theme.color.grey[200] :
-          theme.color[colorVal].dark
-
-      const calculatedActiveColor = colorVal === 'default' ?
-        theme.color.text.light :
-        colorVal === 'white' ?
-          theme.color.white :
-          theme.color[colorVal].light
-
-      styles.color = calculatedColor
-      if (disabledVal !== 'disabled') {
-        styles['&:hover'] = {
-          color: calculatedHoverColor,
-        }
-        styles['&:active'] = {
-          color: calculatedActiveColor,
-        }
-        styles['&:visited'] = {
-          color: calculatedColor,
-        }
+const colorClasses = theme => colors.reduce((acc, color) => ({
+  ...acc,
+  ...disableds.reduce((acc, disabled) => {
+    const styles = {}
+    if (disabled !== 'disabled') {
+      styles.color = theme.color[color].normal
+      styles['&:hover'] = {
+        color: theme.color[color].dark
       }
-
-      disabledAcc = {
-        ...disabledAcc,
-        [`root-${colorVal}-${disabledVal}`]: {
-          ...styles,
-          '& a': {
-            ...styles
-          }
-        },
+      styles['&:active'] = {
+        color: theme.color[color].light
       }
-      return disabledAcc
-    }, {})
-  }
-  return colorAcc
-}, {})
+    }
+    else {
+      styles.color = theme.color[color].disabled
+    }
 
+    return {
+      ...acc,
+      [`${color}-${disabled}`]: {
+        ...styles,
+        '& a': {
+          ...styles
+        }
+      },
+    }
+  }, {})
+}), {})
 
-const styles = theme => {
-
-  return {
-    root: {
-
-    },
-    'root-disabled': {
-      pointerEvents: 'none',
-    },
-    ...rootStyles(theme)
-  }
-}
+const styles = theme => ({
+  anchor: {
+    display: 'inline-block',
+    textDecoration: 'none'
+  },
+  'disabled': {
+    pointerEvents: 'none',
+  },
+  ...colorClasses(theme)
+})
 
 const Anchor = props => {
   const {
@@ -81,26 +57,26 @@ const Anchor = props => {
     disabled,
     className,
     href,
-    /* eslint-disable */
-    //Just to catch ...others properly, theme prop is extracted.
-    theme,
-    /* eslint-enable */
     ...others
   } = props
 
-  const rootClasses = classNames({
-    [classes.root]: true,
-    [classes[`root-${color}-${disabled ? 'disabled' : 'enabled'}`]]: true,
-    [classes['root-disabled']]: disabled,
-    [className]: true
-  })
+  delete others['theme']
+
+  const elementClasses = {
+    anchor: classNames({
+      [classes.anchor]: true,
+      [classes[`${color}-${disabled ? 'disabled' : 'enabled'}`]]: true,
+      [classes['disabled']]: disabled,
+      [className]: true
+    })
+  }
 
   return (
     typeof children !== 'string' ?
-      <span {...others} className={rootClasses}>
+      <span {...others} className={elementClasses.anchor}>
         {children}
       </span> :
-      <a href={href} {...others} className={rootClasses}>
+      <a href={href} {...others} className={elementClasses.anchor}>
         {children}
       </a>
   )
@@ -108,11 +84,11 @@ const Anchor = props => {
 
 Anchor.propTypes = {
   classes: PropTypes.object.isRequired,
-  children: PropTypes.any.isRequired,
+  children: childChecker([{ type: 'string' }, { type: 'a' }]),
   className: PropTypes.string,
-  color: PropTypes.oneOf(color),
+  color: PropTypes.oneOf(colors),
   disabled: PropTypes.bool,
-  href: PropTypes.string,
+  href: PropTypes.string.isRequired,
 }
 
 Anchor.defaultProps = {

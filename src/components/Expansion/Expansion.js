@@ -8,8 +8,9 @@ const Button = require('../Button')
 const { CSSTransition } = require('react-transition-group')
 
 
-const color = ['default', 'primary', 'secondary']
-const type = ['light', 'outlined', 'filled']
+const colors = ['grey', 'darkgrey', 'primary', 'success', 'warning', 'error']
+const types = ['light', 'filled', 'transparent']
+const radiuses = [0, 1, 2, 3]
 
 const AnimatedContentStyles = theme => ({
   'root': {
@@ -20,14 +21,14 @@ const AnimatedContentStyles = theme => ({
   },
   'root-enter-active': {
     height: props => `${props.calculatedHeight}px!important`,
-    transition: theme.transition('all')
+    transition: theme.transition()
   },
   'root-exit': {
     height: props => props.calculatedHeight,
   },
   'root-exit-active': {
     height: '0px!important',
-    transition: theme.transition('all')
+    transition: theme.transition()
   }
 })
 
@@ -60,7 +61,6 @@ const AnimatedContent = withStyles(AnimatedContentStyles)(props => {
   )
 })
 
-
 const styles = theme => ({
   root: {
     display: 'flex',
@@ -75,11 +75,10 @@ const styles = theme => ({
   },
   'toggle-icon': {
     fontSize: '1.5rem',
-    marginLeft: 15
   },
   'toggle-icon-enter': {
     ...theme.transform('rotate(0deg)'),
-    transition: theme.transition('all')
+    transition: theme.transition()
   },
   'toggle-icon-enter-active': {
     ...theme.transform('rotate(180deg)'),
@@ -89,7 +88,7 @@ const styles = theme => ({
   },
   'toggle-icon-exit': {
     ...theme.transform('rotate(180deg)'),
-    transition: theme.transition('all')
+    transition: theme.transition()
   },
   'toggle-icon-exit-active': {
     ...theme.transform('rotate(0deg)'),
@@ -111,6 +110,7 @@ class Expansion extends React.Component {
   contentRef = React.createRef()
 
   componentDidMount() {
+    console.log(this.contentRef.current.offsetHeight)
     this.setState({
       open: this.props.open,
       ready: true,
@@ -145,13 +145,12 @@ class Expansion extends React.Component {
       animate,
       buttonProps,
       style,
-      /* eslint-disable */
-      //Just to catch ...others properly, theme prop is extracted.
-      onChange,
-      theme,
-      /* eslint-enable */
+      radius,
       ...others
     } = this.props
+
+    delete others['onChange']
+    delete others['theme']
 
     const {
       open,
@@ -176,15 +175,14 @@ class Expansion extends React.Component {
 
     const content = <div ref={this.contentRef}>{children}</div>
 
-    const tempRootStyle = ready ? {} : { position: 'absolute', zIndex: -1, visibility: 'hidden' }
+    const tempRootStyle = ready ? {} : { visibility: 'hidden' }
 
     return (
       <div style={{ ...style, ...tempRootStyle }} {...others} className={rootClasses} >
         <Button
           onClick={this.handleClick}
           type={type}
-          size={3}
-          radius={0}
+          radius={radius}
           className={classes['toggle']}
           contentClassName={classes['toggle-content']}
           color={color}
@@ -221,8 +219,9 @@ Expansion.propTypes = {
   children: PropTypes.any.isRequired,
   classes: PropTypes.object.isRequired,
   className: PropTypes.string,
-  type: PropTypes.oneOf(type),
-  color: PropTypes.oneOf(color),
+  type: PropTypes.oneOf(types),
+  color: PropTypes.oneOf(colors),
+  radius: PropTypes.oneOf(radiuses),
   label: PropTypes.string.isRequired,
   animate: PropTypes.bool,
   onChange: PropTypes.func,
@@ -234,7 +233,8 @@ Expansion.propTypes = {
 Expansion.defaultProps = {
   className: '',
   type: 'light',
-  color: 'default',
+  color: 'primary',
+  radius: 2,
   animate: true,
   buttonProps: {},
   style: {},

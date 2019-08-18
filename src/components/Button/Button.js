@@ -9,7 +9,7 @@ const Spinner = require('../Spinner')
 const types = ['light', 'filled', 'transparent']
 const colors = ['darkgrey', 'primary', 'success', 'warning', 'error']
 const sizes = ['small', 'normal', 'big']
-const sizeToNumber = { small: 1, normal: 2, big: 3 }
+const sizeNumberMapping = { small: 1, normal: 2, big: 3 }
 const radiuses = [0, 1, 2, 3]
 const justifies = ['center', 'left', 'right']
 const disableds = ['enabled', 'disabled']
@@ -74,7 +74,7 @@ const paddingClasses = () => sizes.reduce((acc, size) => {
   }
   else if (size === 'big') {
     buttonPadding = '0 15px'
-    textPadding = '4px 0'
+    textPadding = '5px 0'
   }
   return {
     ...acc,
@@ -113,7 +113,6 @@ const styles = theme => {
       textTransform: 'uppercase',
       border: 'none',
       fontFamily: 'inherit',
-      fontWeight: 600,
       transition: theme.transition(['background', 'color']),
       cursor: 'pointer',
       padding: 0,
@@ -206,7 +205,7 @@ const Button = props => {
   } = props
 
   const { text, headIcons, tailIcons } = resolveChildren(children)
-  const elClasses = {
+  const elementClasses = {
     button: classNames({
       [classes.button]: true,
       [classes[`button-color-${type}-${color}-${disabled || busy ? 'disabled' : 'enabled'}`]]: true,
@@ -241,15 +240,15 @@ const Button = props => {
   }
 
   return (
-    <button ref={rootRef} {...others} className={elClasses.button} disabled={disabled}>
+    <button ref={rootRef} {...others} className={elementClasses.button} disabled={disabled}>
       {badge}
-      <div className={elClasses.content}>
+      <div className={elementClasses.content}>
         <div className={classes['loader-container']}>
-          <Spinner visible={busy} size={text === undefined ? sizeToNumber[size] : sizeToNumber[size]} color={color} />
+          <Spinner visible={busy} size={sizeNumberMapping[size]} color={color} />
         </div>
-        {headIcons.length > 0 && <div className={elClasses.headIcon}>{headIcons}</div>}
-        {text && <div data-role="button-text" className={elClasses.buttonText}>{text}</div>}
-        {tailIcons.length > 0 && <div className={elClasses.tailIcon}>{tailIcons}</div>}
+        {headIcons.length > 0 && <div className={elementClasses.headIcon}>{headIcons}</div>}
+        {text && <div data-role="button-text" className={elementClasses.buttonText}>{text}</div>}
+        {tailIcons.length > 0 && <div className={elementClasses.tailIcon}>{tailIcons}</div>}
       </div>
     </button>
   )

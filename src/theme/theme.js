@@ -43,7 +43,7 @@ const text = {
   h6: 18,
   small: 14,
   normal: 18,
-  big: 20
+  big: 22
 }
 
 const primary = Color('#00A6FF')
@@ -62,7 +62,7 @@ const themeColor = {
   primary: {
     normal: primary.hex(),
     light: primary.lighten(.3).hex(),
-    dark: primary.darken(.2).hex(),
+    dark: primary.darken(.1).hex(),
     disabled: primary.lighten(.6).hex(),
   },
   grey: {

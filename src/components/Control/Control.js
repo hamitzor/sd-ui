@@ -2,210 +2,124 @@ const React = require('react')
 const PropTypes = require('prop-types')
 const withStyles = require('react-jss').default
 const classNames = require('classnames')
-const crypto = require('crypto')
-const { FaRegCheckSquare, FaRegSquare, FaDotCircle, FaRegCircle } = require('react-icons/fa')
+const { MdDone, MdFiberManualRecord } = require('react-icons/md')
 
+const kinds = ['radio', 'checkbox']
+const colors = ['darkgrey', 'primary', 'success', 'warning', 'error']
+const disableds = ['disabled', 'enabled']
 
-const color = ['default', 'primary', 'secondary']
-const disabled = ['disabled', 'enabled']
+const colorClasses = theme => colors.reduce((acc, color) => ({
+  ...acc,
+  ...disableds.reduce((acc, disabled) => {
+    const styles = {}
 
-const iconStyles = theme => [...color, 'error'].reduce((colorAcc, colorVal) => {
-  colorAcc = {
-    ...colorAcc,
-    ...disabled.reduce((disabledAcc, disabledVal) => {
-
-      let styles = {}
-      const calculatedColor = colorVal === 'default' ?
-        (disabledVal === 'disabled' ? theme.color.text.disabled : theme.color.text.normal) :
-        (disabledVal === 'disabled' ? theme.color[colorVal].disabled : theme.color[colorVal].normal)
-
-      const calculatedHoverColor = colorVal === 'default' ?
-        (disabledVal === 'disabled' ? theme.color.text.disabled : theme.color.text.dark) :
-        (disabledVal === 'disabled' ? theme.color[colorVal].disabled : theme.color[colorVal].dark)
-
-      const calculatedActiveColor = colorVal === 'default' ?
-        (disabledVal === 'disabled' ? theme.color.text.disabled : theme.color.text.light) :
-        (disabledVal === 'disabled' ? theme.color[colorVal].disabled : theme.color[colorVal].light)
-
-      styles.color = calculatedColor
-      if (disabledVal !== 'disabled') {
-        styles['&:hover'] = {
-          color: calculatedHoverColor,
-        }
-        styles['&:active'] = {
-          color: calculatedActiveColor,
-        }
+    if (disabled !== 'disabled') {
+      styles.color = theme.color[color].normal
+      styles.borderColor = theme.color[color].normal
+      styles['&:hover'] = {
+        color: theme.color[color].dark
       }
-
-      disabledAcc = {
-        ...disabledAcc,
-        [`icon-${colorVal}-${disabledVal}`]: styles
+      styles['&:active'] = {
+        color: theme.color[color].light
       }
-      return disabledAcc
-    }, {})
+    }
+    else {
+      styles.color = theme.color[color].disabled
+      styles.borderColor = theme.color[color].disabled
+    }
+
+    return {
+      ...acc,
+      [`${color}-${disabled}`]: styles
+    }
+  }, {})
+}), {})
+
+const kindClasses = () => kinds.reduce((acc, kind) => ({
+  ...acc,
+  [kind]: {
+    borderRadius: kind === 'radio' ? '50%' : 2
   }
-  return colorAcc
-}, {})
+}), {})
 
+const styles = theme => ({
+  container: {
+    display: 'inline-block',
+    width: theme.unit * 4,
+    height: theme.unit * 4
+  },
+  disabled: {
+    pointerEvents: 'none'
+  },
+  control: {
+    display: 'flex',
+    width: '100%',
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 2,
+    borderStyle: 'solid',
+    transition: theme.transition(['color']),
+    cursor: 'pointer'
+  },
+  icon: {
+    fontSize: 18,
+  },
+  ...colorClasses(theme),
+  'not-checked': {
+    color: 'transparent',
+    '&:hover': {
+      color: 'transparent'
+    },
+    '&:active': {
+      color: 'transparent'
+    }
+  },
+  ...kindClasses()
+})
 
-const styles = theme => {
-
-  return {
-    root: {
-      display: 'inline-block',
-      fontSize: '0.9rem'
-    },
-    content: {
-      display: 'flex',
-      alignItems: 'center',
-      position: 'relative',
-      minHeight: 20
-    },
-    input: {
-      position: 'absolute',
-      zIndex: -1,
-      opacity: 0
-    },
-    icon: {
-      fontSize: 20,
-      cursor: 'pointer',
-      transition: theme.transition('color'),
-    },
-    label: {
-      paddingLeft: 5,
-      zIndex: 2,
-      display: 'flex',
-      alignItems: 'center',
-      minHeight: 20,
-      lineHeight: '100%',
-      color: theme.color.text.normal,
-      cursor: 'pointer',
-      transition: theme.transition('color'),
-      '&:hover': {
-        color: theme.color.text.light,
-      },
-      '&::selection': {
-        backgroundColor: 'transparent'
-      }
-    },
-    'label-disabled': {
-      color: theme.color.text.disabled,
-      '&:hover': {
-        color: theme.color.text.disabled,
-      },
-      cursor: 'not-allowed',
-    },
-    error: {
-      color: theme.color.error.normal,
-      fontSize: '.7rem',
-      marginTop: theme.unit / 2
-    },
-    ...iconStyles(theme)
+const Control = ({ classes, kind, color, disabled, className, checked, ...others }) => {
+  delete others['theme']
+  const elementClasses = {
+    container: classNames({
+      [classes.container]: true,
+      [classes.disabled]: disabled
+    }),
+    control: classNames({
+      [classes.control]: true,
+      [classes[`${color}-${disabled ? 'disabled' : 'enabled'}`]]: true,
+      [className]: true,
+      [classes['not-checked']]: !checked,
+      [classes[kind]]: true
+    })
   }
-}
-
-class Control extends React.Component {
-
-  input = React.createRef()
-  inputId = crypto.randomBytes(1).toString('hex')
-
-  render() {
-    const {
-      classes,
-      control,
-      color,
-      disabled,
-      value,
-      inputLabel,
-      error,
-      errorMessage,
-      className,
-      inputProps,
-      checked,
-      onChange,
-      /* eslint-disable */
-      //Just to catch ...others properly, theme prop is extracted.
-      theme,
-      /* eslint-enable */
-      ...others
-    } = this.props
-
-    const rootClasses = classNames({
-      [classes.root]: true,
-      [classes['root-disabled']]: disabled,
-      [className]: true
-    })
-
-    const labelClasses = classNames({
-      [classes.label]: true,
-      [classes[`label-disabled`]]: disabled,
-    })
-
-    const contentClasses = classNames({
-      [classes.content]: true,
-    })
-
-    const inputClasses = classNames({
-      [classes.input]: true,
-    })
-
-    const iconClasses = classNames({
-      [classes.icon]: true,
-      [classes[`icon-${color}-${disabled ? 'disabled' : 'enabled'}`]]: true,
-      [classes[`icon-error-${disabled ? 'disabled' : 'enabled'}`]]: error
-    })
-
-    const errorClasses = classNames({
-      [classes.error]: true
-    })
-
-    const ControlIcon = control === 'checkbox' ? (checked ? FaRegCheckSquare : FaRegSquare) :
-      (checked ? FaDotCircle : FaRegCircle)
-
-    return (
-      <div {...others} className={rootClasses} >
-        <div className={contentClasses}>
-          {<label style={{ display: 'flex', alignItems: 'center' }} htmlFor={this.inputId}><ControlIcon className={iconClasses}></ControlIcon></label>}
-          <input ref={this.input} name={name} disabled={disabled} className={inputClasses} onChange={onChange} checked={checked} id={this.inputId} {...inputProps} type={control} value={value} ></input>
-          <label className={labelClasses} htmlFor={this.inputId} >{inputLabel}</label>
-        </div>
-        {error && <div className={errorClasses}>{errorMessage}</div>}
+  return (
+    <div className={elementClasses.container} {...others}>
+      <div className={elementClasses.control}>
+        {kind === 'radio' ? <MdFiberManualRecord className={classes.icon} /> : <MdDone className={classes.icon} />}
       </div>
-    )
-  }
+    </div>
+  )
 }
 
 Control.propTypes = {
   classes: PropTypes.object.isRequired,
   className: PropTypes.string,
-  control: PropTypes.oneOf(['checkbox', 'radio']),
-  color: PropTypes.oneOf(color),
+  kind: PropTypes.oneOf(['checkbox', 'radio']),
+  color: PropTypes.oneOf(colors),
   disabled: PropTypes.bool,
-  value: PropTypes.string.isRequired,
   checked: PropTypes.bool.isRequired,
-  error: PropTypes.bool,
-  errorMessage: PropTypes.string,
-  onChange: PropTypes.func.isRequired,
-  inputProps: PropTypes.object,
-  inputLabel: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.element,
-  ])
 }
 
 Control.defaultProps = {
   className: '',
-  control: 'checkbox',
+  kind: 'checkbox',
   color: 'primary',
   disabled: false,
-  error: false,
-  errorMessage: '',
-  inputProps: {},
-  inputLabel: '\u00A0',
 }
 
-const styledControl = withStyles(styles)(Control)
+const styled = withStyles(styles)(Control)
 
-styledControl.displayName = 'Control'
+styled.displayName = 'Control'
 
-module.exports = styledControl
+module.exports = styled

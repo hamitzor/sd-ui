@@ -4,7 +4,7 @@ const withStyles = require('react-jss').default
 const classNames = require('classnames')
 const { breakpointNames } = require('../../theme/breakpoints')
 
-const propToCssValue = (val) => {
+const propCssValueMap = (val) => {
   if (typeof val === 'string') {
     if (val.includes('-r')) {
       return val.replace('-r', '-reverse')
@@ -20,7 +20,7 @@ const propToCssValue = (val) => {
   return val
 }
 
-const propToCssProperty = (val) => {
+const propCssPropertyMap = (val) => {
   if (typeof val === 'string') {
     if (val.includes('direction')) {
       return 'flexDirection'
@@ -45,62 +45,48 @@ const parentProps = {
   alignContent: ['stretch', 'center', 'start', 'end', 'between', 'around', 'initial', 'inherit'],
 }
 
-const size = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+const sizes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 
 
-const spacingStyles = theme => parentProps.spacing.reduce((acc, val) => {
-  acc = {
-    ...acc,
-    [`spacing-${val}`]: { paddingLeft: theme.unit * val * 2 }
+const spacingClasses = theme => parentProps.spacing.reduce((acc, val) => ({
+  ...acc,
+  [`spacing-${val}`]: { paddingLeft: theme.unit * val * 2 }
+}), {})
+
+
+const parentClasses = () => Object.keys(parentProps).reduce((acc, propName) => {
+  if (propName !== 'spacing') {
+    acc = {
+      ...acc,
+      ...parentProps[propName].reduce((acc, val) => {
+        acc = {
+          ...acc,
+          [`${propName}-${val}`]: { [propCssPropertyMap(propName)]: propCssValueMap(val) }
+        }
+        return acc
+      }, {})
+    }
   }
   return acc
 }, {})
 
-
-const parentStyles = () => Object.keys(parentProps).reduce((propAcc, propName) => {
-  if (propName !== 'spacing') {
-    propAcc = {
-      ...propAcc,
-      ...parentProps[propName].reduce((classAcc, val) => {
-        classAcc = {
-          ...classAcc,
-          [`${propName}-${val}`]: { [propToCssProperty(propName)]: propToCssValue(val) }
+const childClasses = theme => breakpointNames.reduce((acc, breakpointName) => ({
+  ...acc,
+  ...sizes.reduce((acc, size) => ({
+    ...acc,
+    ...parentProps.spacing.reduce((acc, spacing) => ({
+      ...acc,
+      [`${breakpointName}-${size}-spacing-${spacing}`]:
+      {
+        [theme.bigger(breakpointName)]:
+        {
+          width: `calc( ${(size / 12 * 100).toFixed(6)}% - ${theme.unit * 2 * spacing}px )`,
+          marginRight: theme.unit * 2 * spacing
         }
-        return classAcc
-      }, {})
-    }
-  }
-  return propAcc
-}, {})
-
-
-const childStyles = theme => breakpointNames.reduce((propAcc, breakpoint) => {
-  propAcc = {
-    ...propAcc,
-    ...size.reduce((classAcc, val) => {
-      classAcc = {
-        ...classAcc,
-        ...parentProps.spacing.reduce((spacingAcc, spacing) => {
-          spacingAcc = {
-            ...spacingAcc,
-            [`${breakpoint}-${val}-spacing-${spacing}`]:
-            {
-              [theme.bigger(breakpoint)]:
-              {
-                width: `calc( ${(val / 12 * 100).toFixed(6)}% - ${theme.unit * 2 * spacing}px )`,
-                marginRight: theme.unit * 2 * spacing
-              }
-            }
-          }
-          return spacingAcc
-        }, {})
       }
-      return classAcc
-    }, {})
-  }
-  return propAcc
-}, {})
-
+    }), {})
+  }), {})
+}), {})
 
 const styles = theme => {
   return {
@@ -113,9 +99,9 @@ const styles = theme => {
     'full-height': {
       height: '100%'
     },
-    ...spacingStyles(theme),
-    ...parentStyles(),
-    ...childStyles(theme)
+    ...spacingClasses(theme),
+    ...parentClasses(),
+    ...childClasses(theme)
   }
 }
 
@@ -140,15 +126,10 @@ const Flex = props => {
     xxl,
     fullHeight,
     fullWidth,
-    /* eslint-disable */
-    //Just to catch ...others properly, theme prop is extracted.
-    theme,
-    /* eslint-enable */
     ...others
-
   } = props
 
-
+  delete others['theme']
 
   const essentialProps = { spacing, direction, wrap, justify, alignItems, alignContent, xs, sm, md, lg, xl, xxl }
 
@@ -176,7 +157,6 @@ const Flex = props => {
     [className]: true,
     [classes['full-height']]: fullHeight
   })
-
 
   return (
     <div className={rootClasses} {...others}>
@@ -207,12 +187,12 @@ Flex.propTypes = {
   justify: PropTypes.oneOf(parentProps.justify),
   alignItems: PropTypes.oneOf(parentProps.alignItems),
   alignContent: PropTypes.oneOf(parentProps.alignContent),
-  xs: PropTypes.oneOf(size),
-  sm: PropTypes.oneOf(size),
-  md: PropTypes.oneOf(size),
-  lg: PropTypes.oneOf(size),
-  xl: PropTypes.oneOf(size),
-  xxl: PropTypes.oneOf(size),
+  xs: PropTypes.oneOf(sizes),
+  sm: PropTypes.oneOf(sizes),
+  md: PropTypes.oneOf(sizes),
+  lg: PropTypes.oneOf(sizes),
+  xl: PropTypes.oneOf(sizes),
+  xxl: PropTypes.oneOf(sizes),
   fullHeight: PropTypes.bool,
   fullWidth: PropTypes.bool,
 }
@@ -231,8 +211,8 @@ Flex.defaultProps = {
   fullWidth: true
 }
 
-const StyledFlex = withStyles(styles)(Flex)
+const styled = withStyles(styles)(Flex)
 
-StyledFlex.displayName = 'Flex'
+styled.displayName = 'Flex'
 
-module.exports = StyledFlex
+module.exports = styled

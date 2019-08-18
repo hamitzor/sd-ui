@@ -25,8 +25,7 @@ const styles = theme => {
     alert: {
       backgroundColor: theme.color.white,
       cursor: 'pointer',
-      fontWeight: 600,
-      fontSize: 16,
+      fontSize: theme.text.normal,
       padding: `${theme.unit * 2}px ${theme.unit * 3}px`,
       borderRadius: theme.unit,
       boxShadow: theme.shadow[2],
@@ -92,7 +91,7 @@ const Alert = props => {
 
   delete others['theme']
 
-  const elClasses = {
+  const elementClasses = {
     alert: classNames({
       [classes.alert]: true,
       [classes['full-width']]: fullWidth,
@@ -113,7 +112,7 @@ const Alert = props => {
   }
 
   const alert = (
-    <div className={elClasses.alert} {...others}>
+    <div className={elementClasses.alert} {...others}>
       <div className={classes.content}>
         <Icon>
           {icon[type]}
