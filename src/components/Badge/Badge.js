@@ -51,8 +51,20 @@ const styles = theme => {
   }
 }
 
-// eslint-disable-next-line no-unused-vars
-const Badge = ({ classes, color, className, value, maxValue, shine, theme, ...others }) => {
+const Badge = props => {
+
+  const {
+    classes,
+    color,
+    className,
+    value,
+    maxValue,
+    shine,
+    ...others
+  } = props
+
+  delete props.theme
+
   const badgeClasses = classNames({
     [classes.badge]: true,
     [classes[`badge-color-${color}`]]: true,

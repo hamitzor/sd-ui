@@ -60,7 +60,7 @@ const Anchor = props => {
     ...others
   } = props
 
-  delete others['theme']
+  delete others.theme
 
   const elementClasses = {
     anchor: classNames({

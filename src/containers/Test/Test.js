@@ -13,7 +13,7 @@ const Alert = require('../../components/Alert')
 const Anchor = require('../../components/Anchor')
 const Control = require('../../components/Control')
 const Expansion = require('../../components/Expansion')
-const Container = require('../../components/Container')
+const Flex = require('../../components/Flex')
 
 const styles = theme => ({
   content: {
@@ -23,7 +23,7 @@ const styles = theme => ({
   }
 })
 
-const containerProps = {
+const flexProps = {
   spacing: [0, 1, 2, 3],
   direction: ['row', 'row-r', 'column', 'column-r', 'initial', 'inherit'],
   wrap: ['nowrap', 'wrap', 'wrap-r', 'initial', 'inherit'],
@@ -325,22 +325,21 @@ class Test extends React.Component {
       </div>
     )
 
-    const containers = <Container style={{ backgroundColor: theme.color.primary.normal, height: 70 }}>
+    const flexes = <Flex container spacing={2} style={{ backgroundColor: theme.color.primary.normal, height: 150 }}>
       {[1, 2, 3, 4].map(num => (
-        <div key={num} style={{ width: 50, backgroundColor: theme.color.warning.normal, margin: 10, fontSize: 40, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{num}</div>
+        <Flex style={{ backgroundColor: theme.color.warning.normal, padding: 10 }} key={num} item xs={12} sm={6} lg={3} container direction="column">
+          {[1, 2, 3, 4].map(num2 => (
+            <Flex style={{ backgroundColor: theme.color.error.normal }} key={num2 + "child" + num} item>
+              {num2}
+            </Flex>
+          ))}
+        </Flex>
       ))}
-    </Container>
+    </Flex>
 
     return (
       <div className={classes.content} style={{ position: 'relative' }}>
-        {alertsToggle}
-        {busyButton}
-        {alerts}
-        {anchors}
-        {paragraph}
-        {checkboxes}
-        {radios}
-        {expension}
+        {flexes}
       </div>
     )
   }

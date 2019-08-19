@@ -150,7 +150,7 @@ class Expansion extends React.Component {
       ...others
     } = this.props
 
-    delete others['onChange']
+    delete others.onChange
 
     const {
       open,

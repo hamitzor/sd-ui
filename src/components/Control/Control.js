@@ -78,8 +78,19 @@ const styles = theme => ({
   ...kindClasses()
 })
 
-const Control = ({ classes, kind, color, disabled, className, checked, ...others }) => {
-  delete others['theme']
+const Control = props => {
+
+  const {
+    classes,
+    kind,
+    color,
+    disabled,
+    className,
+    checked,
+    ...others
+  } = props
+
+  delete others.theme
   const elementClasses = {
     container: classNames({
       [classes.container]: true,

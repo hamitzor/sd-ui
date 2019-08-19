@@ -197,12 +197,10 @@ const Button = props => {
     justify,
     fullWidth,
     rootRef,
-    /* eslint-disable */
-    //Just to catch ...others properly, theme prop is extracted.
-    theme,
-    /* eslint-enable */
     ...others
   } = props
+
+  delete others.theme
 
   const { text, headIcons, tailIcons } = resolveChildren(children)
   const elementClasses = {
