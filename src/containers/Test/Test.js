@@ -13,6 +13,7 @@ const Alert = require('../../components/Alert')
 const Anchor = require('../../components/Anchor')
 const Control = require('../../components/Control')
 const Expansion = require('../../components/Expansion')
+const Container = require('../../components/Container')
 
 const styles = theme => ({
   content: {
@@ -21,6 +22,15 @@ const styles = theme => ({
     backgroundColor: theme.color.panel
   }
 })
+
+const containerProps = {
+  spacing: [0, 1, 2, 3],
+  direction: ['row', 'row-r', 'column', 'column-r', 'initial', 'inherit'],
+  wrap: ['nowrap', 'wrap', 'wrap-r', 'initial', 'inherit'],
+  justify: ['start', 'end', 'center', 'between', 'around', 'initial', 'inherit'],
+  alignItems: ['stretch', 'center', 'start', 'end', 'baseline', 'initial', 'inherit'],
+  alignContent: ['stretch', 'center', 'start', 'end', 'between', 'around', 'initial', 'inherit'],
+}
 
 const buttonProps = {
   types: ['light', 'filled', 'transparent'],
@@ -315,6 +325,11 @@ class Test extends React.Component {
       </div>
     )
 
+    const containers = <Container style={{ backgroundColor: theme.color.primary.normal, height: 70 }}>
+      {[1, 2, 3, 4].map(num => (
+        <div key={num} style={{ width: 50, backgroundColor: theme.color.warning.normal, margin: 10, fontSize: 40, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{num}</div>
+      ))}
+    </Container>
 
     return (
       <div className={classes.content} style={{ position: 'relative' }}>

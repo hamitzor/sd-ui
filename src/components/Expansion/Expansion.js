@@ -38,6 +38,7 @@ const AnimatedContent = withStyles(AnimatedContentStyles)(props => {
   const {
     open,
     classes,
+    theme,
     children
   } = props
   /* eslint-enable */
@@ -52,7 +53,7 @@ const AnimatedContent = withStyles(AnimatedContentStyles)(props => {
   return (
     <CSSTransition
       in={open}
-      timeout={200}
+      timeout={theme.duration}
       unmountOnExit
       classNames={rootAnimateClasses}
     >
@@ -110,7 +111,6 @@ class Expansion extends React.Component {
   contentRef = React.createRef()
 
   componentDidMount() {
-    console.log(this.contentRef.current.offsetHeight)
     this.setState({
       open: this.props.open,
       ready: true,
@@ -146,11 +146,11 @@ class Expansion extends React.Component {
       buttonProps,
       style,
       radius,
+      theme,
       ...others
     } = this.props
 
     delete others['onChange']
-    delete others['theme']
 
     const {
       open,
@@ -192,7 +192,7 @@ class Expansion extends React.Component {
             {animate ?
               <CSSTransition
                 in={open}
-                timeout={200}
+                timeout={theme.duration}
                 classNames={toggleAnimateClasses}
                 {...this.animateBusyHandlers}
               >
@@ -219,6 +219,7 @@ Expansion.propTypes = {
   children: PropTypes.any.isRequired,
   classes: PropTypes.object.isRequired,
   className: PropTypes.string,
+  theme: PropTypes.object.isRequired,
   type: PropTypes.oneOf(types),
   color: PropTypes.oneOf(colors),
   radius: PropTypes.oneOf(radiuses),

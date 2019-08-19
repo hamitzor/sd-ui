@@ -86,10 +86,10 @@ const Alert = props => {
     type,
     fixed,
     absolute,
+    theme,
     ...others
   } = props
 
-  delete others['theme']
 
   const elementClasses = {
     alert: classNames({
@@ -136,7 +136,7 @@ const Alert = props => {
       <CSSTransition
         in={open}
         unmountOnExit
-        timeout={200}
+        timeout={theme.duration}
         classNames={alertAnimateClasses}
       >
         {alert}
@@ -148,6 +148,7 @@ Alert.propTypes = {
   children: PropTypes.any.isRequired,
   classes: PropTypes.object.isRequired,
   className: PropTypes.string,
+  theme: PropTypes.object.isRequired,
   open: PropTypes.bool,
   fullWidth: PropTypes.bool,
   animate: PropTypes.bool,
