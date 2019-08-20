@@ -242,8 +242,8 @@ Expansion.defaultProps = {
   open: false
 }
 
-const styledExpansion = withStyles(styles)(Expansion)
+const StyledExpansion = withStyles(styles)(Expansion)
 
-styledExpansion.displayName = 'Expansion'
+StyledExpansion.displayName = 'Expansion'
 
-module.exports = styledExpansion
+module.exports = StyledExpansion

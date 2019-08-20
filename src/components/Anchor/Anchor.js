@@ -97,8 +97,8 @@ Anchor.defaultProps = {
   disabled: false
 }
 
-const styledAnchor = withStyles(styles)(Anchor)
+const StyledAnchor = withStyles(styles)(Anchor)
 
-styledAnchor.displayName = 'Anchor'
+StyledAnchor.displayName = 'Anchor'
 
-module.exports = styledAnchor
+module.exports = StyledAnchor

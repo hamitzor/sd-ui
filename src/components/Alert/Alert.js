@@ -167,8 +167,8 @@ Alert.defaultProps = {
   absolute: false
 }
 
-const styledAlert = withStyles(styles)(Alert)
+const StyledAlert = withStyles(styles)(Alert)
 
-styledAlert.displayName = 'Alert'
+StyledAlert.displayName = 'Alert'
 
-module.exports = styledAlert
+module.exports = StyledAlert

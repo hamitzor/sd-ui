@@ -129,8 +129,8 @@ Control.defaultProps = {
   disabled: false,
 }
 
-const styled = withStyles(styles)(Control)
+const StyledControl = withStyles(styles)(Control)
 
-styled.displayName = 'Control'
+StyledControl.displayName = 'Control'
 
-module.exports = styled
+module.exports = StyledControl

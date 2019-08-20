@@ -95,8 +95,8 @@ Badge.defaultProps = {
   shine: false
 }
 
-const styled = withStyles(styles)(Badge)
+const StyledBadge = withStyles(styles)(Badge)
 
-styled.displayName = 'Badge'
+StyledBadge.displayName = 'Badge'
 
-module.exports = styled
+module.exports = StyledBadge

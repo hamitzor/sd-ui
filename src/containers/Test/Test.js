@@ -327,10 +327,10 @@ class Test extends React.Component {
 
     const flexes = <Flex container spacing={2} style={{ backgroundColor: theme.color.primary.normal, height: 150 }}>
       {[1, 2, 3, 4].map(num => (
-        <Flex style={{ backgroundColor: theme.color.warning.normal, padding: 10 }} key={num} item xs={12} sm={6} lg={3} container direction="column">
+        <Flex style={{ backgroundColor: theme.color.warning.normal, padding: 10 }} key={num} item xs={12} sm={6} lg={3} container>
           {[1, 2, 3, 4].map(num2 => (
-            <Flex style={{ backgroundColor: theme.color.error.normal }} key={num2 + "child" + num} item>
-              {num2}
+            <Flex style={{ backgroundColor: theme.color.error.normal, padding: 10 }} key={num2 + "child" + num} xs={12} sm={6} lg={3} item container alignItems="center" justify="center">
+              <div style={{ backgroundColor: theme.color.success.normal, padding: 25 }}>{num2}</div>
             </Flex>
           ))}
         </Flex>

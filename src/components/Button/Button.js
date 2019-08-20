@@ -283,8 +283,8 @@ Button.defaultProps = {
   rootRef: null,
 }
 
-const styled = withStyles(styles)(Button)
+const StyledButton = withStyles(styles)(Button)
 
-styled.displayName = 'Button'
+StyledButton.displayName = 'Button'
 
-module.exports = styled
+module.exports = StyledButton
