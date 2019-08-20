@@ -325,7 +325,7 @@ class Test extends React.Component {
       </div>
     )
 
-    const flexes = <Flex container spacing={2} style={{ backgroundColor: theme.color.primary.normal, height: 150 }}>
+    const flexes = <Flex container spacing={2} style={{ backgroundColor: theme.color.primary.normal }}>
       {[1, 2, 3, 4].map(num => (
         <Flex style={{ backgroundColor: theme.color.warning.normal, padding: 10 }} key={num} item xs={12} sm={6} lg={3} container>
           {[1, 2, 3, 4].map(num2 => (
@@ -340,6 +340,9 @@ class Test extends React.Component {
     return (
       <div className={classes.content} style={{ position: 'relative' }}>
         {flexes}
+        {alertsToggle}
+        {alerts}
+        {expension}
       </div>
     )
   }

@@ -4,52 +4,67 @@ const withStyles = require('react-jss').default
 const classNames = require('classnames')
 const { MdDone, MdFiberManualRecord } = require('react-icons/md')
 
-const kinds = ['radio', 'checkbox']
-const colors = ['darkgrey', 'primary', 'success', 'warning', 'error']
-const disableds = ['disabled', 'enabled']
+// Props of the component
+const props = {
+  kind: ['radio', 'checkbox'],
+  color: ['darkgrey', 'primary', 'success', 'warning', 'error'],
+  disabled: ['disabled', 'enabled']
+}
 
-const colorClasses = theme => colors.reduce((acc, color) => ({
-  ...acc,
-  ...disableds.reduce((acc, disabled) => {
-    const styles = {}
+// Generate prop-related styles
+const dynamicStyles = theme => ({
+  ...props.color.reduce((acc, color) => ({
+    ...acc,
+    ...props.disabled.reduce((acc, disabled) => {
+      const styles = {}
 
-    if (disabled !== 'disabled') {
-      styles.color = theme.color[color].normal
-      styles.borderColor = theme.color[color].normal
-      styles['&:hover'] = {
-        color: theme.color[color].dark
+      if (disabled !== 'disabled') {
+        styles.color = theme.color[color].normal
+        styles.borderColor = theme.color[color].normal
+        styles['&:hover'] = {
+          color: theme.color[color].dark
+        }
+        styles['&:active'] = {
+          color: theme.color[color].light
+        }
       }
-      styles['&:active'] = {
-        color: theme.color[color].light
+      else {
+        styles.color = theme.color[color].disabled
+        styles.borderColor = theme.color[color].disabled
       }
-    }
-    else {
-      styles.color = theme.color[color].disabled
-      styles.borderColor = theme.color[color].disabled
-    }
 
-    return {
-      ...acc,
-      [`${color}-${disabled}`]: styles
+      return {
+        ...acc,
+        [`${color}-${disabled}`]: styles
+      }
+    }, {})
+  }), {}),
+  ...props.kind.reduce((acc, kind) => ({
+    ...acc,
+    [kind]: {
+      borderRadius: kind === 'radio' ? '50%' : 2
     }
-  }, {})
-}), {})
-
-const kindClasses = () => kinds.reduce((acc, kind) => ({
-  ...acc,
-  [kind]: {
-    borderRadius: kind === 'radio' ? '50%' : 2
+  }), {}),
+  disabled: {
+    pointerEvents: 'none'
+  },
+  'not-checked': {
+    color: 'transparent',
+    '&:hover': {
+      color: 'transparent'
+    },
+    '&:active': {
+      color: 'transparent'
+    }
   }
-}), {})
+})
 
-const styles = theme => ({
+// Generate static styles
+const staticStyles = theme => ({
   container: {
     display: 'inline-block',
     width: theme.unit * 4,
     height: theme.unit * 4
-  },
-  disabled: {
-    pointerEvents: 'none'
   },
   control: {
     display: 'flex',
@@ -63,20 +78,12 @@ const styles = theme => ({
     cursor: 'pointer'
   },
   icon: {
-    fontSize: 18,
-  },
-  ...colorClasses(theme),
-  'not-checked': {
-    color: 'transparent',
-    '&:hover': {
-      color: 'transparent'
-    },
-    '&:active': {
-      color: 'transparent'
-    }
-  },
-  ...kindClasses()
+    fontSize: 18
+  }
 })
+
+// Combine styles
+const styles = theme => ({ ...staticStyles(theme), ...dynamicStyles(theme), })
 
 const Control = props => {
 
@@ -91,6 +98,7 @@ const Control = props => {
   } = props
 
   delete others.theme
+
   const elementClasses = {
     container: classNames({
       [classes.container]: true,
@@ -116,8 +124,8 @@ const Control = props => {
 Control.propTypes = {
   classes: PropTypes.object.isRequired,
   className: PropTypes.string,
-  kind: PropTypes.oneOf(['checkbox', 'radio']),
-  color: PropTypes.oneOf(colors),
+  kind: PropTypes.oneOf(props.kind),
+  color: PropTypes.oneOf(props.color),
   disabled: PropTypes.bool,
   checked: PropTypes.bool.isRequired,
 }

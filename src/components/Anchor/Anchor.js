@@ -4,50 +4,57 @@ const withStyles = require('react-jss').default
 const classNames = require('classnames')
 const childChecker = require('../../util/child-checker')
 
+// Props of the component
+const props = {
+  color: ['grey', 'darkgrey', 'primary', 'success', 'warning', 'error'],
+  disabled: ['enabled', 'disabled']
+}
 
-const colors = ['grey', 'darkgrey', 'primary', 'success', 'warning', 'error']
-const disableds = ['enabled', 'disabled']
-
-
-const colorClasses = theme => colors.reduce((acc, color) => ({
-  ...acc,
-  ...disableds.reduce((acc, disabled) => {
-    const styles = {}
-    if (disabled !== 'disabled') {
-      styles.color = theme.color[color].normal
-      styles['&:hover'] = {
-        color: theme.color[color].dark
-      }
-      styles['&:active'] = {
-        color: theme.color[color].light
-      }
-    }
-    else {
-      styles.color = theme.color[color].disabled
-    }
-
-    return {
-      ...acc,
-      [`${color}-${disabled}`]: {
-        ...styles,
-        '& a': {
-          ...styles
+// Generate prop-related styles
+const dynamicStyles = theme => ({
+  ...props.color.reduce((acc, color) => ({
+    ...acc,
+    ...props.disabled.reduce((acc, disabled) => {
+      const styles = {}
+      if (disabled !== 'disabled') {
+        styles.color = theme.color[color].normal
+        styles['&:hover'] = {
+          color: theme.color[color].dark
         }
-      },
-    }
-  }, {})
-}), {})
+        styles['&:active'] = {
+          color: theme.color[color].light
+        }
+      }
+      else {
+        styles.color = theme.color[color].disabled
+      }
 
-const styles = theme => ({
+      return {
+        ...acc,
+        [`${color}-${disabled}`]: {
+          ...styles,
+          '& a': {
+            ...styles
+          }
+        },
+      }
+    }, {})
+  }), {}),
+  'disabled': {
+    pointerEvents: 'none',
+  }
+})
+
+// Generate static styles
+const staticStyles = () => ({
   anchor: {
     display: 'inline-block',
     textDecoration: 'none'
-  },
-  'disabled': {
-    pointerEvents: 'none',
-  },
-  ...colorClasses(theme)
+  }
 })
+
+// Combine styles
+const styles = theme => ({ ...staticStyles(), ...dynamicStyles(theme) })
 
 const Anchor = props => {
   const {
@@ -66,7 +73,7 @@ const Anchor = props => {
     anchor: classNames({
       [classes.anchor]: true,
       [classes[`${color}-${disabled ? 'disabled' : 'enabled'}`]]: true,
-      [classes['disabled']]: disabled,
+      [classes.disabled]: disabled,
       [className]: true
     })
   }
@@ -85,10 +92,10 @@ const Anchor = props => {
 Anchor.propTypes = {
   classes: PropTypes.object.isRequired,
   children: childChecker([{ type: 'string' }, { type: 'a' }]),
-  className: PropTypes.string,
-  color: PropTypes.oneOf(colors),
-  disabled: PropTypes.bool,
   href: PropTypes.string.isRequired,
+  className: PropTypes.string,
+  color: PropTypes.oneOf(props.color),
+  disabled: PropTypes.bool
 }
 
 Anchor.defaultProps = {

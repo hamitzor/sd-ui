@@ -7,12 +7,7 @@ const { MdExpandMore, MdExpandLess } = require('react-icons/md')
 const Button = require('../Button')
 const { CSSTransition } = require('react-transition-group')
 
-
-const colors = ['grey', 'darkgrey', 'primary', 'success', 'warning', 'error']
-const types = ['light', 'filled', 'transparent']
-const radiuses = [0, 1, 2, 3]
-
-const AnimatedContentStyles = theme => ({
+const animatedContentStyles = theme => ({
   'root': {
     overflow: 'hidden'
   },
@@ -32,16 +27,14 @@ const AnimatedContentStyles = theme => ({
   }
 })
 
+const AnimatedContent = withStyles(animatedContentStyles)(props => {
 
-const AnimatedContent = withStyles(AnimatedContentStyles)(props => {
-  /* eslint-disable */
   const {
     open,
     classes,
     theme,
     children
   } = props
-  /* eslint-enable */
 
   const rootAnimateClasses = {
     enter: classes['root-enter'],
@@ -62,8 +55,16 @@ const AnimatedContent = withStyles(AnimatedContentStyles)(props => {
   )
 })
 
-const styles = theme => ({
-  root: {
+// Props of the component
+const props = {
+  color: ['grey', 'darkgrey', 'primary', 'success', 'warning', 'error'],
+  type: ['light', 'filled', 'transparent'],
+  radius: [0, 1, 2, 3]
+}
+
+// Generate static styles
+const staticStyles = () => ({
+  expension: {
     display: 'flex',
     flexDirection: 'column',
     width: '100%'
@@ -76,7 +77,11 @@ const styles = theme => ({
   },
   'toggle-icon': {
     fontSize: '1.5rem',
-  },
+  }
+})
+
+// Generate animate related styles
+const animateStyles = theme => ({
   'toggle-icon-enter': {
     ...theme.transform('rotate(0deg)'),
     transition: theme.transition()
@@ -98,6 +103,9 @@ const styles = theme => ({
     ...theme.transform('rotate(0deg)'),
   }
 })
+
+// Combine styles
+const styles = theme => ({ ...staticStyles(), ...animateStyles(theme) })
 
 class Expansion extends React.Component {
 
@@ -158,11 +166,9 @@ class Expansion extends React.Component {
       calculatedHeight
     } = this.state
 
-
-    const rootClasses = classNames(classes['root'], className)
-
-    const toggleIcon = <MdExpandMore className={classes['toggle-icon']} />
-    const toggleIconRotated = <MdExpandLess className={classes['toggle-icon']} />
+    const elementClasses = {
+      expension: classNames(classes.expension, className)
+    }
 
     const toggleAnimateClasses = {
       enter: classes['toggle-icon-enter'],
@@ -173,12 +179,8 @@ class Expansion extends React.Component {
       exitDone: classes['toggle-icon-exit-done']
     }
 
-    const content = <div ref={this.contentRef}>{children}</div>
-
-    const tempRootStyle = ready ? {} : { visibility: 'hidden' }
-
     return (
-      <div style={{ ...style, ...tempRootStyle }} {...others} className={rootClasses} >
+      <div style={{ ...style, visibility: ready ? 'unset' : 'hidden' }} {...others} className={elementClasses.expension} >
         <Button
           onClick={this.handleClick}
           type={type}
@@ -196,8 +198,9 @@ class Expansion extends React.Component {
                 classNames={toggleAnimateClasses}
                 {...this.animateBusyHandlers}
               >
-                {toggleIcon}
-              </CSSTransition> : open ? toggleIconRotated : toggleIcon}
+                {<MdExpandMore className={classes['toggle-icon']} />}
+              </CSSTransition> : open ? <MdExpandLess className={classes['toggle-icon']} /> :
+                <MdExpandMore className={classes['toggle-icon']} />}
           </Icon>
         </Button>
         {ready ?
@@ -207,8 +210,8 @@ class Expansion extends React.Component {
               calculatedHeight={calculatedHeight}>
               {children}
             </AnimatedContent> :
-            open && content :
-          content
+            open && <div ref={this.contentRef}>{children}</div> :
+          <div ref={this.contentRef}>{children}</div>
         }
       </div>
     )
@@ -220,9 +223,9 @@ Expansion.propTypes = {
   classes: PropTypes.object.isRequired,
   className: PropTypes.string,
   theme: PropTypes.object.isRequired,
-  type: PropTypes.oneOf(types),
-  color: PropTypes.oneOf(colors),
-  radius: PropTypes.oneOf(radiuses),
+  type: PropTypes.oneOf(props.type),
+  color: PropTypes.oneOf(props.color),
+  radius: PropTypes.oneOf(props.radius),
   label: PropTypes.string.isRequired,
   animate: PropTypes.bool,
   onChange: PropTypes.func,

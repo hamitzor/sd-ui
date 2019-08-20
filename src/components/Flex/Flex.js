@@ -4,8 +4,8 @@ const withStyles = require('react-jss').default
 const classNames = require('classnames')
 const { breakpointNames } = require('../../theme/breakpoints')
 
-
-const containerProps = {
+// Props of the component
+const props = {
   direction: ['row', 'row-r', 'column', 'column-r', 'initial', 'inherit'],
   wrap: ['nowrap', 'wrap', 'wrap-r', 'initial', 'inherit'],
   justify: ['start', 'end', 'center', 'between', 'around', 'initial', 'inherit'],
@@ -13,20 +13,18 @@ const containerProps = {
   alignContent: ['stretch', 'center', 'start', 'end', 'between', 'around', 'initial', 'inherit'],
 }
 
-const itemProps = {
-  size: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-}
+const size = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 
-const propNameToCssPropertyMap = Object.keys(containerProps).reduce((acc, propName) => ({
+const propNameToCssPropertyMap = Object.keys(props).reduce((acc, propName) => ({
   ...acc, [propName]: propName
     .replace('direction', 'flexDirection')
     .replace('wrap', 'flexWrap')
     .replace('justify', 'justifyContent')
 }), {})
 
-const propValueToCssValueMap = Object.keys(containerProps).reduce((acc, propName) => ({
+const propValueToCssValueMap = Object.keys(props).reduce((acc, propName) => ({
   ...acc,
-  ...containerProps[propName].reduce((acc, value) => ({
+  ...props[propName].reduce((acc, value) => ({
     ...acc,
     [value]: value
       .replace('-r', '-reverse')
@@ -35,29 +33,26 @@ const propValueToCssValueMap = Object.keys(containerProps).reduce((acc, propName
   }), {})
 }), {})
 
-const parentEssentialClasses = () => Object.keys(containerProps).reduce((acc, propName) => ({
-  ...acc,
-  ...containerProps[propName].reduce((acc, val) => ({
+// Generate prop-related styles
+const dynamicStyles = theme => ({
+  ...Object.keys(props).reduce((acc, propName) => ({
     ...acc,
-    [`${propName}-${val}`]: { [propNameToCssPropertyMap[propName]]: propValueToCssValueMap[val] }
-  }), {})
-}), {})
-
-const itemClasses = theme => breakpointNames.reduce((acc, breakpoint) => ({
-  ...acc,
-  ...itemProps.size.reduce((acc, size) => ({
+    ...props[propName].reduce((acc, val) => ({
+      ...acc,
+      [`${propName}-${val}`]: { [propNameToCssPropertyMap[propName]]: propValueToCssValueMap[val] }
+    }), {})
+  }), {}),
+  ...breakpointNames.reduce((acc, breakpoint) => ({
     ...acc,
-    [`${breakpoint}-${size}`]: {
-      [theme.bigger(breakpoint)]: {
-        width: `${(size / 12 * 100).toFixed(6)}%`,
+    ...size.reduce((acc, size) => ({
+      ...acc,
+      [`${breakpoint}-${size}`]: {
+        [theme.bigger(breakpoint)]: {
+          width: `${(size / 12 * 100).toFixed(6)}%`,
+        }
       }
-    }
-  }), {})
-}), {})
-
-const styles = theme => ({
-  ...parentEssentialClasses(),
-  ...itemClasses(theme),
+    }), {})
+  }), {}),
   container: {
     display: 'flex',
     flexWrap: 'wrap'
@@ -69,6 +64,9 @@ const styles = theme => ({
     height: '100%'
   },
 })
+
+// Combine styles
+const styles = theme => dynamicStyles(theme)
 
 const Flex = props => {
 
@@ -131,17 +129,17 @@ Flex.propTypes = {
   children: PropTypes.any,
   container: PropTypes.bool,
   item: PropTypes.bool,
-  direction: PropTypes.oneOf(containerProps.direction),
-  wrap: PropTypes.oneOf(containerProps.wrap),
-  justify: PropTypes.oneOf(containerProps.justify),
-  alignItems: PropTypes.oneOf(containerProps.alignItems),
-  alignContent: PropTypes.oneOf(containerProps.alignContent),
-  xs: PropTypes.oneOf(itemProps.size),
-  sm: PropTypes.oneOf(itemProps.size),
-  md: PropTypes.oneOf(itemProps.size),
-  lg: PropTypes.oneOf(itemProps.size),
-  xl: PropTypes.oneOf(itemProps.size),
-  xxl: PropTypes.oneOf(itemProps.size),
+  direction: PropTypes.oneOf(props.direction),
+  wrap: PropTypes.oneOf(props.wrap),
+  justify: PropTypes.oneOf(props.justify),
+  alignItems: PropTypes.oneOf(props.alignItems),
+  alignContent: PropTypes.oneOf(props.alignContent),
+  xs: PropTypes.oneOf(size),
+  sm: PropTypes.oneOf(size),
+  md: PropTypes.oneOf(size),
+  lg: PropTypes.oneOf(size),
+  xl: PropTypes.oneOf(size),
+  xxl: PropTypes.oneOf(size),
   fullHeight: PropTypes.bool,
   fullWidth: PropTypes.bool
 }

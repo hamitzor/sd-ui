@@ -6,74 +6,84 @@ const { CSSTransition } = require('react-transition-group')
 const Icon = require('../../components/Icon')
 const { FaInfoCircle, FaExclamationCircle, FaCheckCircle, FaExclamation } = require('react-icons/fa')
 
-const aligns = ['top', 'bottom', 'unset']
-const types = ['info', 'success', 'warning', 'error']
-
-const alignClasses = theme => aligns.reduce((acc, val) => ({
-  ...acc,
-  [`align-${val}`]: { [val !== 'unset' ? val : '']: theme.unit * 2 },
-  [`align-${val}-full-width`]: { [val !== 'unset' ? val : '']: 0 },
-}), {})
-const typeClasses = theme => types.reduce((acc, val) => ({
-  ...acc, [`type-${val}`]: {
-    color: val === 'info' ? theme.color.primary.normal : theme.color[val].normal
-  }
-}), {})
-
-const styles = theme => {
-  return {
-    alert: {
-      backgroundColor: theme.color.white,
-      cursor: 'pointer',
-      fontSize: theme.text.normal,
-      padding: `${theme.unit * 2}px ${theme.unit * 3}px`,
-      borderRadius: theme.unit,
-      boxShadow: theme.shadow[2],
-      zIndex: theme.z.Alert,
-      right: theme.unit * 3
-    },
-    content: {
-      display: 'flex',
-      alignItems: 'center'
-    },
-    text: {
-      marginLeft: 7
-    },
-    icon: {
-      fontSize: 20
-    },
-    'fixed': {
-      position: 'fixed'
-    },
-    'absolute': {
-      position: 'absolute'
-    },
-    'enter': {
-      opacity: 0,
-      transition: theme.transition()
-    },
-    'enter-active': {
-      opacity: 1,
-    },
-    'exit': {
-      opacity: 1,
-      transition: theme.transition()
-    },
-    'exit-active': {
-      opacity: 0,
-    },
-    ...alignClasses(theme),
-    ...typeClasses(theme),
-    'full-width': {
-      borderRadius: 0,
-      left: 0,
-      right: 0,
-      padding: `${theme.unit * 3}px ${theme.unit * 2}px`,
-      boxShadow: theme.shadow[1],
-      maxWidth: 'none'
-    },
-  }
+// Props of the component
+const props = {
+  align: ['top', 'bottom', 'unset'],
+  type: ['info', 'success', 'warning', 'error']
 }
+
+// Generate prop-related styles
+const dynamicStyles = theme => ({
+  ...props.align.reduce((acc, val) => ({
+    ...acc,
+    [`align-${val}`]: { [val !== 'unset' ? val : '']: theme.unit * 2 },
+    [`align-${val}-full-width`]: { [val !== 'unset' ? val : '']: 0 },
+  }), {}),
+  ...props.type.reduce((acc, val) => ({
+    ...acc, [`type-${val}`]: {
+      color: val === 'info' ? theme.color.primary.normal : theme.color[val].normal
+    }
+  }), {}),
+  'fixed': {
+    position: 'fixed'
+  },
+  'absolute': {
+    position: 'absolute'
+  },
+  'full-width': {
+    borderRadius: 0,
+    left: 0,
+    right: 0,
+    padding: `${theme.unit * 3}px ${theme.unit * 2}px`,
+    boxShadow: theme.shadow[1],
+    maxWidth: 'none'
+  }
+})
+
+// Generate static styles
+const staticStyles = theme => ({
+  alert: {
+    backgroundColor: theme.color.white,
+    cursor: 'pointer',
+    fontSize: theme.text.normal,
+    padding: `${theme.unit * 2}px ${theme.unit * 3}px`,
+    borderRadius: theme.unit,
+    boxShadow: theme.shadow[2],
+    zIndex: theme.z.Alert,
+    right: theme.unit * 3
+  },
+  content: {
+    display: 'flex',
+    alignItems: 'center'
+  },
+  text: {
+    marginLeft: 7
+  },
+  icon: {
+    fontSize: 20
+  }
+})
+
+// Generate animate related styles
+const animateStyles = theme => ({
+  'enter': {
+    opacity: 0,
+    transition: theme.transition()
+  },
+  'enter-active': {
+    opacity: 1,
+  },
+  'exit': {
+    opacity: 1,
+    transition: theme.transition()
+  },
+  'exit-active': {
+    opacity: 0,
+  }
+})
+
+// Combine styles
+const styles = theme => ({ ...staticStyles(theme), ...dynamicStyles(theme), ...animateStyles(theme) })
 
 const Alert = props => {
   const {
@@ -90,7 +100,6 @@ const Alert = props => {
     ...others
   } = props
 
-
   const elementClasses = {
     alert: classNames({
       [classes.alert]: true,
@@ -98,24 +107,24 @@ const Alert = props => {
       [classes[`type-${type}`]]: true,
       [classes[`align-${type === 'error' || type === 'info' ? 'top' : 'bottom'}-full-width`]]: fullWidth,
       [classes[`align-${type === 'error' || type === 'info' ? 'top' : 'bottom'}`]]: true,
-      [classes[`fixed`]]: fixed,
-      [classes[`absolute`]]: absolute,
+      [classes.fixed]: fixed,
+      [classes.absolute]: absolute,
       [className]: true
     })
   }
 
-  const icon = {
+  const icons = {
     info: <FaInfoCircle className={classes.icon} />,
     success: <FaCheckCircle className={classes.icon} />,
     warning: <FaExclamation className={classes.icon} />,
-    error: <FaExclamationCircle className={classes.icon} />,
+    error: <FaExclamationCircle className={classes.icon} />
   }
 
   const alert = (
     <div className={elementClasses.alert} {...others}>
       <div className={classes.content}>
         <Icon>
-          {icon[type]}
+          {icons[type]}
         </Icon>
         <div className={classes.text}>
           {children}
@@ -152,7 +161,7 @@ Alert.propTypes = {
   open: PropTypes.bool,
   fullWidth: PropTypes.bool,
   animate: PropTypes.bool,
-  type: PropTypes.oneOf(types),
+  type: PropTypes.oneOf(props.type),
   fixed: PropTypes.bool,
   absolute: PropTypes.bool,
 }
